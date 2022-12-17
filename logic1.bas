@@ -1,4 +1,3 @@
-Attribute VB_Name = "Module3"
 'create worksheets as global variables
 Dim wb As Workbook
 Dim D1schedule As Worksheet
@@ -9,7 +8,6 @@ Dim DBSchedule As Worksheet
 Dim PPCanSchedule As Worksheet
 Dim PPTippingStation As Worksheet
 Dim Silos As Worksheet
-' test
 Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
 
@@ -131,30 +129,30 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         Dim initialSiloConstraintViolation
         initialSiloConstraintViolation = Silos.Range("K1").Value
         
-        ' if the min of the time of insertion is after the initial silo constraint violation, run dryer blockage
-        If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then
-            If D1FirstCanStarveTime < D2FirstCanStarveTime Then
-                If checkSiloConstraint(mainSilo, otherSilo, D1schedule, D1FirstCanStarveTime, initialSiloConstraintViolation) = False Then
-                    Module4.dryerBlockDelayMain D1FirstCanStarveTime
-                    GoTo continueLoop
-                End If
-            Else
-                If checkSiloConstraint(mainSilo, otherSilo, D2Schedule, D2FirstCanStarveTime, initialSiloConstraintViolation) = False Then
-                    Module4.dryerBlockDelayMain D2FirstCanStarveTime
-                    GoTo continueLoop
-                End If
-            End If
-        ElseIf D2FirstCanStarveTime <> -1 Then
-            If checkSiloConstraint(mainSilo, otherSilo, D2Schedule, D2FirstCanStarveTime, initialSiloConstraintViolation) = False Then
-                    Module4.dryerBlockDelayMain D2FirstCanStarveTime
-                    GoTo continueLoop
-            End If
-        ElseIf D1FirstCanStarveTime <> -1 Then
-            If checkSiloConstraint(mainSilo, otherSilo, D1schedule, D1FirstCanStarveTime, initialSiloConstraintViolation) = False Then
-                    Module4.dryerBlockDelayMain D1FirstCanStarveTime
-                    GoTo continueLoop
-            End If
-        End If
+'        ' if the min of the time of insertion is after the initial silo constraint violation, run dryer blockage
+'        If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then
+'            If D1FirstCanStarveTime < D2FirstCanStarveTime Then
+'                If checkSiloConstraint(mainSilo, otherSilo, D1schedule, D1FirstCanStarveTime, initialSiloConstraintViolation) = False Then
+'                    Module4.dryerBlockDelayMain D1FirstCanStarveTime
+'                    GoTo continueLoop
+'                End If
+'            Else
+'                If checkSiloConstraint(mainSilo, otherSilo, D2Schedule, D2FirstCanStarveTime, initialSiloConstraintViolation) = False Then
+'                    Module4.dryerBlockDelayMain D2FirstCanStarveTime
+'                    GoTo continueLoop
+'                End If
+'            End If
+'        ElseIf D2FirstCanStarveTime <> -1 Then
+'            If checkSiloConstraint(mainSilo, otherSilo, D2Schedule, D2FirstCanStarveTime, initialSiloConstraintViolation) = False Then
+'                    Module4.dryerBlockDelayMain D2FirstCanStarveTime
+'                    GoTo continueLoop
+'            End If
+'        ElseIf D1FirstCanStarveTime <> -1 Then
+'            If checkSiloConstraint(mainSilo, otherSilo, D1schedule, D1FirstCanStarveTime, initialSiloConstraintViolation) = False Then
+'                    Module4.dryerBlockDelayMain D1FirstCanStarveTime
+'                    GoTo continueLoop
+'            End If
+'        End If
         
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
@@ -172,12 +170,24 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
+            If D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+                    Module4.dryerBlockDelayMain D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
+                    GoTo continueLoop
+            End If
             MsgBox "Adding PP campaign to dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
+           If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+                    Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    GoTo continueLoop
+            End If
             MsgBox "Adding PP campaign to dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
+            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+                    Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    GoTo continueLoop
+            End If
             MsgBox "Adding DB campaign to dryer 2"
             d2Skip = addDBCampaign(DBCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
@@ -218,6 +228,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         dryerSchedule.Range("A:M").Value = dryerDefaultSchedule.Range("A:M").Value
         Application.Calculate
         
+        ' check if the added campaign satisfies silo constraint
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
             DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete
@@ -229,7 +240,6 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         If i <= DBCampaignToInsert Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:M").Value = dryerDefaultSchedule.Range("A:M").Value
-            Application.Calculate
             Exit For
         End If
     Next
@@ -239,6 +249,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
+    
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
     decrementCounter = 0.5
@@ -269,10 +280,12 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         If i <= decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-            Application.Calculate
         End If
     Next
     Application.Calculate
+    
+    ' this is to ensure that the pivot table is updated after adding pp campaigns
+    wb.RefreshAll
     
     addPPCampaign = dryerSkipArray
 End Function
@@ -403,8 +416,6 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
 End Function
 
 Function getTippingStationAvailableStartTime() As Double
-
-    wb.RefreshAll
     Dim tippingStationAvailableTime As Double
     tippingStationAvailableTime = 0
     Dim PT As PivotTable
@@ -481,4 +492,5 @@ Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
     'no can starve time found
     findFirstCanStarveTime = -1
 End Function
+
 
