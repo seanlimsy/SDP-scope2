@@ -1,62 +1,49 @@
-Attribute VB_Name = "PPPouch_Initialization"
+Attribute VB_Name = "PPPouchInitialisation"
 Option Explicit
-Dim wb_PP As Workbook, wb_Main As Workbook
+Dim wb As Workbook
 Dim D2Schedule As Worksheet, PPPouchSchedule As Worksheet, PPTipStatSheet As Worksheet, PPRateDSSheet As Worksheet
-Dim D1TIPSTAT_PT As PivotTable, D2TIPSTAT_PT As PivotTable
-Dim D1TIPSTAT_START As Range, D1TIPSTAT_END As Range, D2TIPSTAT_START As Range, D2TIPSTAT_END As Range
-Dim Count_PouchCampaigns As Long
 
-Sub Initialize_PouchInsertion()
-    'turn off autosave
+Sub initializePouchInsertion()
+    Dim countPouchCampaigns As Long
+    
     Application.AutoRecover.Enabled = False
     
     initializeWorksheets
-    initializePouchWorksheet
-    initializePPWorksheet
+    countPouchCampaigns = initializePouchWorksheets
+    getPotentialSlots countPouchCampaigns
     
-    getTipStatIdleTimes
-    getPchLineIdleTimes
-    findIntersectionsOfIdleTimes
-
 End Sub
 
 Sub initializeWorksheets()
     'Without Initialising into same workbook
-    
-    'To adjust to hardcode onto user's path
-    'Can also consider moving sheets over to one main workbook
-    'Michael: Change reference to an cell value -- solve for this in instructions for documentation -- Lester's Preference KIV
-    Set wb_PP = Workbooks.Open("/Users/ben/Desktop/Scope 2/Postponement Creation for Slotting.xlsx")
-    Set wb_Main = Workbooks.Open("/Users/ben/Desktop/Model-Testing.xlsm")
+    Set wb = ThisWorkbook
 
-    setWorksheet D2Schedule, "D2B1L3B3B4L45T", wb_Main
-    setWorksheet PPPouchSchedule, "PP PCH", wb_PP
-    setWorksheet PPTipStatSheet, "Testing", wb_Main
-    'setWorksheet PPTipStatSheet, "PP", wb_Main
-    'To Change to PP Sheet after integration -- Sent to Testing for primarily testing -- can verify once initiation insert is completed (Post Stage 1)
-    setWorksheet PPRateDSSheet, "PPRateDS", wb_Main
+    setWorksheet D2Schedule, "D2B1L3B3B4L45T"
+    setWorksheet PPPouchSchedule, "PP PCH"
+    setWorksheet PPTipStatSheet, "PP"
+    setWorksheet PPRateDSSheet, "PPRateDS"
 End Sub
 
-Sub setWorksheet(Worksheet, worksheetName, Workbook)
+Sub setWorksheet(Worksheet, worksheetName)
     On Error GoTo Err
-        Set Worksheet = Workbook.Sheets(worksheetName)
+        Set Worksheet = wb.Sheets(worksheetName)
     Exit Sub
 Err:
     MsgBox worksheetName & " is not in current workbook"
     End
 End Sub
 
-Sub initializePouchWorksheet()
+Function initializePouchWorksheets()
     Dim Pouch_OriginalDetails As Range
-    Dim lastrow As Long
+    Dim lastrow As Long, countPouches As Long
     
     'Copy and Paste original data to the side
-    Count_PouchCampaigns = PPPouchSchedule.Cells(2, 1).End(xlDown).Row
+    countPouches = PPPouchSchedule.Cells(2, 1).End(xlDown).Row
     lastrow = PPPouchSchedule.Cells(2, 19).End(xlDown).Row
     PPPouchSchedule.Range("S2:AF" & lastrow).ClearContents
-    Set Pouch_OriginalDetails = PPPouchSchedule.Range("A2:N" & Count_PouchCampaigns)
+    Set Pouch_OriginalDetails = PPPouchSchedule.Range("A2:N" & countPouches)
     Pouch_OriginalDetails.Copy
-    PPPouchSchedule.Range("S2:AF" & Count_PouchCampaigns).PasteSpecial xlPasteValues
+    PPPouchSchedule.Range("S2:AF" & countPouches).PasteSpecial xlPasteValues
     
     'Calculate Pouch Fill Times
     Dim effective_fp_tonnes_perhr As Double
@@ -65,59 +52,62 @@ Sub initializePouchWorksheet()
     
     effective_fp_tonnes_perhr = Application.WorksheetFunction.Min(Pouch_Rates)
     PPPouchSchedule.Range("Q1").Value = "Effective FP Tonnes per Hour"
-    PPPouchSchedule.Range("Q2:Q" & Count_PouchCampaigns).Formula = "=J2/2.2/1000/" & effective_fp_tonnes_perhr
+    PPPouchSchedule.Range("Q2:Q" & countPouches).Formula = "=J2/2.2/1000/" & effective_fp_tonnes_perhr
+    
+    initializePouchWorksheets = countPouches
+End Function
+
+Sub getPotentialSlots(countPouches)
+    Dim D1TipStat_pivotTable As pivotTable, D2TipStat_pivotTable As pivotTable
+    Dim D1TipStat_start As Range, D1TipStat_end As Range, D2TipStat_start As Range, D2TipStat_end As Range
+    
+    Set D1TipStat_pivotTable = PPTipStatSheet.PivotTables("PivotTable16")
+    Set D2TipStat_pivotTable = PPTipStatSheet.PivotTables("PivotTable15")
+    
+    D1TipStat_pivotTable.RefreshTable
+    D2TipStat_pivotTable.RefreshTable
+    
+    Set D1TipStat_start = getPivotEntry(D1TipStat_pivotTable, 1)
+    Set D1TipStat_end = getPivotEntry(D1TipStat_pivotTable, 2)
+    Set D2TipStat_start = getPivotEntry(D2TipStat_pivotTable, 1)
+    Set D2TipStat_end = getPivotEntry(D2TipStat_pivotTable, 2)
+
+    getTipStatIdleTimes countPouches, D1TipStat_start, D1TipStat_end, D2TipStat_start, D2TipStat_end
+    getPchLineIdleTimes
+    findIntersectionsOfIdleTimes countPouches
+    
 End Sub
 
-Sub initializePPWorksheet()
-'    'D1 - Tip Station (40H Gap)
-'    Set D1TIPSTAT_PT = PPTipStatSheet.PivotTables("PivotTable16")
-'    'D2 - Tip Station (40H Gap)
-'    Set D2TIPSTAT_PT = PPTipStatSheet.PivotTables("PivotTable15")
+Function getPivotEntry(pivotTable, identity)
+    If identity = 1 Then
+       Set getPivotEntry = pivotTable.PivotFields("Sum of Silo Entry Hr").DataRange
+    ElseIf identity = 2 Then
+        Set getPivotEntry = pivotTable.PivotFields("Sum of Can After CO Hrs").DataRange
+    End If
 
-'    refreshPivotTables
-    getPivotTableEntries
+End Function
 
-End Sub
-
-Sub refreshPivotTables()
-    D1TIPSTAT_PT.RefreshTable
-    D2TIPSTAT_PT.RefreshTable
-End Sub
-
-Sub getPivotTableEntries()
-'    Set D1TIPSTAT_START = D1TIPSTAT_PT.PivotFields("Sum of Silo Entry Hr").DataRange
-'    Set D1TIPSTAT_END = D1TIPSTAT_PT.PivotFields("Sum of Can After CO Hrs").DataRange
-'    Set D2TIPSTATE_START = D2TIPSTAT_PT.PivotFields("Sum of Silo Entry Hr").DataRange
-'    Set D2TIPSTAT_END = D2TIPSTAT_PT.PivotFields("Sum of Can After CO Hrs").DataRange
-
-    ''Tipping Station Idle Times Tests
-     Set D1TIPSTAT_START = PPTipStatSheet.Range(PPTipStatSheet.Range("A5"), PPTipStatSheet.Range("A5").End(xlDown))
-     Set D1TIPSTAT_END = PPTipStatSheet.Range(PPTipStatSheet.Range("B5"), PPTipStatSheet.Range("B5").End(xlDown))
-     Set D2TIPSTAT_START = PPTipStatSheet.Range(PPTipStatSheet.Range("D5"), PPTipStatSheet.Range("D5").End(xlDown))
-     Set D2TIPSTAT_END = PPTipStatSheet.Range(PPTipStatSheet.Range("E5"), PPTipStatSheet.Range("E5").End(xlDown))
-     
-End Sub
-
-Sub getTipStatIdleTimes()
+Sub getTipStatIdleTimes(countPouches, D1TipStatStart, D1TipStatEnd, D2TipStatStart, D2TipStartEnd)
     Dim startRow As Integer, endRow As Integer
-    startRow = 5 'Insert Checker here -- generalised searcher
-    endRow = startRow + D1TIPSTAT_START.Count - 1
-    D1TIPSTAT_START.Copy
+    
+    startRow = 5
+    endRow = startRow + D1TipStatStart.Count - 1
+    D1TipStatStart.Copy
     PPTipStatSheet.Range("AA4:AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
-    endRow = startRow + D1TIPSTAT_END.Count
-    D1TIPSTAT_END.Copy
+    endRow = startRow + D1TipStatEnd.Count
+    D1TipStatEnd.Copy
     PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
-    endRow = startRow + D2TIPSTAT_START.Count
-    D2TIPSTAT_START.Copy
+    endRow = startRow + D2TipStatStart.Count
+    D2TipStatStart.Copy
     PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
-    endRow = startRow + D2TIPSTAT_END.Count
-    D2TIPSTAT_END.Copy
+    endRow = startRow + D2TipStartEnd.Count
+    D2TipStartEnd.Copy
     PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
@@ -128,7 +118,7 @@ Sub getTipStatIdleTimes()
     PPTipStatSheet.Range("J2").Value = "TipStation Idle"
     PPTipStatSheet.Range("J3").Value = "Start"
     PPTipStatSheet.Range("K3").Value = "End"
-    
+ 
     Dim i As Integer, j As Integer
     Dim positivetime_start As Double, positivetime_end As Double
     i = 4
@@ -153,6 +143,7 @@ Sub getTipStatIdleTimes()
     Loop
     PPTipStatSheet.Range("AA4:AA" & endRow).Clear
     PPTipStatSheet.Range("K" & j - 1).Value = 5000
+    
 End Sub
 
 Sub getPchLineIdleTimes()
@@ -200,7 +191,7 @@ Sub getPchLineIdleTimes()
     PPTipStatSheet.Range("Q9:Q" & PchLineIdle_End.Count).PasteSpecial xlPasteValues
     PchLineIdle_Start.Copy
     PPTipStatSheet.Range("P10:P" & PchLineIdle_Start.Count).PasteSpecial xlPasteValues
-    PPTipStatSheet.Range("Q" & PchLineIdle_Start.Count + 9).Value = wb_Main.Worksheets("Silos").Range("A1").End(xlDown)
+    PPTipStatSheet.Range("Q" & PchLineIdle_Start.Count + 9).Value = wb.Worksheets("Silos").Range("A1").End(xlDown)
     PPTipStatSheet.Range("W:X").ClearContents
 
     PPTipStatSheet.Range("R9:R" & PchLineIdle_Start.Count + 9).Formula = "=IF(P9=Q9, ""Yes"", ""No"")"
@@ -217,8 +208,8 @@ Sub getPchLineIdleTimes()
 
 End Sub
 
-Sub findIntersectionsOfIdleTimes()
-    PPTipStatSheet.Range("P1").Value = "Total Pouch Campaigns: " & Count_PouchCampaigns
+Sub findIntersectionsOfIdleTimes(countPouches)
+    PPTipStatSheet.Range("P1").Value = "Total Pouch Campaigns: " & countPouches
     PPTipStatSheet.Range("P2").Value = "Both Tip Station & Pouchline Idle"
     PPTipStatSheet.Range("P3").Value = "Potential Slot Point i"
     PPTipStatSheet.Range("Q3").Value = "Start"
