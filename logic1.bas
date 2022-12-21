@@ -231,7 +231,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         ' check if the added campaign satisfies silo constraint
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
-            DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete
+            DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete xlShiftUp
             Exit For
         End If
         
