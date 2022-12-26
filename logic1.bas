@@ -70,6 +70,14 @@ Sub initializeWorksheets()
             End Select
         Next PI
     Next PT
+
+    'Include Silo Constraint presense for SG
+    Silos.Range("R8:S8").Value = "PE"
+    Silos.Range("T8:U8").Value = "SG"
+    Silos.Range("T9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$2,D1B1L65T!AP:AP,"">=1"")"
+    Silos.Range("T10").Formula =  "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$2,D2B1L3B3B4L45T!AP:AP,"">=1"")"
+    Silos.Range("U9").Formula = "=IF(K2-T9<0.5,""YES"",""NO"")"
+    Silos.Range("U10").Formula = "=IF(K2-T10<0.5,""YES"",""NO"")"
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -117,7 +125,6 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         PPCampaignToInsert = findNextCampaignToInsert(PPCanSchedule)
         DBCampaignToInsert = findNextCampaignToInsert(DBSchedule)
         
-    
         ' get row of insertion in schedule
         ' -1 if there is no can starve
         Dim D1FirstCanStarveTime As Double
@@ -246,6 +253,11 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         
     Application.Calculate
     addDBCampaign = dryerSkipArray
+    
+    If dbWindow = 4 Then
+        End
+    End If
+
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
@@ -492,5 +504,3 @@ Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
     'no can starve time found
     findFirstCanStarveTime = -1
 End Function
-
-
