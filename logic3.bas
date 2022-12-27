@@ -1,18 +1,33 @@
 Attribute VB_Name = "PPPouchInitialisation"
 Option Explicit
 Dim wb As Workbook
-Dim D2Schedule As Worksheet, PPPouchSchedule As Worksheet, PPTipStatSheet As Worksheet, PPRateDSSheet As Worksheet
+Dim D2Schedule As Worksheet, PPPouchSchedule As Worksheet, PPTippingStation As Worksheet, PPRateDSSheet As Worksheet, pouchInsertSpace as Worksheet
 
-Sub initializePouchInsertion()
+Sub ppPouchMain()
+    Application.AutoRecover.Enabled = False
+    initializeWorksheets
+
+    Dim numberPouchCampaigns as Integer
+    numberPouchCampaigns = initializePouchInsertion
+
+    Dim isLogic3Feasible as Boolean
+    isLogic3Feasible = logic3(numberPouchCampaigns)
+    If isLogic3 = False Then 
+        MsgBox "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program."
+        End
+    End If
+
+End Sub
+
+Function initializePouchInsertion()
     Dim countPouchCampaigns As Long
     
-    Application.AutoRecover.Enabled = False
-    
-    initializeWorksheets
     countPouchCampaigns = initializePouchWorksheets
     getPotentialSlots countPouchCampaigns
-    
-End Sub
+
+    initializePouchInsertion = countPouchCampaigns
+
+End Function
 
 Sub initializeWorksheets()
     'Without Initialising into same workbook
@@ -20,8 +35,23 @@ Sub initializeWorksheets()
 
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
     setWorksheet PPPouchSchedule, "PP PCH"
-    setWorksheet PPTipStatSheet, "PP"
+    setWorksheet PPTippingStation, "PP"
     setWorksheet PPRateDSSheet, "PPRateDS"
+    setWorksheet pouchInsertSpace, "PP PCH SPACE" 'Create new sheet for finding idle times based on pivot tables
+
+    ' Update pivot table to correct setting PP sheet
+    Dim PT as PivotTable
+    For Each PT in PPTippingStation.PivotTables
+        On Error Resume Next
+        For Each PI in PT.PivotFields("Source (DR, DB, PP)").PivotItems
+            Select Case PI.Name
+                Case Is = "PP"
+                    PI.Visible = True
+                Case Else
+                    PI.Visible = False
+            End Select
+        Next PI
+    Next PT
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -61,8 +91,8 @@ Sub getPotentialSlots(countPouches)
     Dim D1TipStat_pivotTable As pivotTable, D2TipStat_pivotTable As pivotTable
     Dim D1TipStat_start As Range, D1TipStat_end As Range, D2TipStat_start As Range, D2TipStat_end As Range
     
-    Set D1TipStat_pivotTable = PPTipStatSheet.PivotTables("PivotTable16")
-    Set D2TipStat_pivotTable = PPTipStatSheet.PivotTables("PivotTable15")
+    Set D1TipStat_pivotTable = PPTippingStation.PivotTables("PivotTable16")
+    Set D2TipStat_pivotTable = PPTippingStation.PivotTables("PivotTable15")
     
     D1TipStat_pivotTable.RefreshTable
     D2TipStat_pivotTable.RefreshTable
@@ -93,56 +123,56 @@ Sub getTipStatIdleTimes(countPouches, D1TipStatStart, D1TipStatEnd, D2TipStatSta
     startRow = 5
     endRow = startRow + D1TipStatStart.Count - 1
     D1TipStatStart.Copy
-    PPTipStatSheet.Range("AA4:AA" & endRow).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA4:AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
     endRow = startRow + D1TipStatEnd.Count
     D1TipStatEnd.Copy
-    PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
     endRow = startRow + D2TipStatStart.Count
     D2TipStatStart.Copy
-    PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
     endRow = startRow + D2TipStartEnd.Count
     D2TipStartEnd.Copy
-    PPTipStatSheet.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
     Dim PPStatInUse As Range
-    Set PPStatInUse = PPTipStatSheet.Range("AA3:AA" & endRow)
-    PPStatInUse.Sort Key1:=PPTipStatSheet.Range("AA3"), Order1:=xlAscending, Header:=xlYes
+    Set PPStatInUse = pouchInsertSpace.Range("AA3:AA" & endRow)
+    PPStatInUse.Sort Key1:=pouchInsertSpace.Range("AA3"), Order1:=xlAscending, Header:=xlYes
     
-    PPTipStatSheet.Range("J2").Value = "TipStation Idle"
-    PPTipStatSheet.Range("J3").Value = "Start"
-    PPTipStatSheet.Range("K3").Value = "End"
+    pouchInsertSpace.Range("J2").Value = "TipStation Idle"
+    pouchInsertSpace.Range("J3").Value = "Start"
+    pouchInsertSpace.Range("K3").Value = "End"
  
     Dim i As Integer, j As Integer
     Dim positivetime_start As Double, positivetime_end As Double
     i = 4
     j = 4
     Do Until i >= endRow + 1
-        positivetime_start = PPTipStatSheet.Range("AA" & i).Value
+        positivetime_start = pouchInsertSpace.Range("AA" & i).Value
         If positivetime_start >= 0 Then
             If i = 4 Then
                 positivetime_end = positivetime_start
                 positivetime_start = 0
                 i = i + 1
             Else
-                positivetime_end = PPTipStatSheet.Range("AA" & i + 1).Value
+                positivetime_end = pouchInsertSpace.Range("AA" & i + 1).Value
                 i = i + 2
             End If
-            PPTipStatSheet.Range("J" & j).Value = positivetime_start
-            PPTipStatSheet.Range("K" & j).Value = positivetime_end
+            pouchInsertSpace.Range("J" & j).Value = positivetime_start
+            pouchInsertSpace.Range("K" & j).Value = positivetime_end
             j = j + 1
         Else
             i = i + 1
         End If
     Loop
-    PPTipStatSheet.Range("AA4:AA" & endRow).Clear
-    PPTipStatSheet.Range("K" & j - 1).Value = 5000
+    pouchInsertSpace.Range("AA4:AA" & endRow).Clear
+    pouchInsertSpace.Range("K" & j - 1).Value = 5000
     
 End Sub
 
@@ -161,94 +191,94 @@ Sub getPchLineIdleTimes()
     Set PchLine_Ends = D2Schedule.Range(D2Schedule.Range(PchLine_End_ColLetter), D2Schedule.Range(PchLine_End_ColLetter).End(xlDown))
     
     PchLine_Starts.Copy
-    PPTipStatSheet.Range("AA1").Value = "PouchLineInUse_Start"
-    PPTipStatSheet.Range("AA2:AA" & PchLine_Starts.Count + 1).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA1").Value = "PouchLineInUse_Start"
+    pouchInsertSpace.Range("AA2:AA" & PchLine_Starts.Count + 1).PasteSpecial xlPasteValues
     PchLine_Ends.Copy
-    PPTipStatSheet.Range("AB1").Value = "PouchLineInUse_End"
-    PPTipStatSheet.Range("AB2:AB" & PchLine_Ends.Count + 1).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AB1").Value = "PouchLineInUse_End"
+    pouchInsertSpace.Range("AB2:AB" & PchLine_Ends.Count + 1).PasteSpecial xlPasteValues
     
-    PPTipStatSheet.Range("AA1:AB1").Select
+    pouchInsertSpace.Range("AA1:AB1").Select
     Selection.AutoFilter Field:=1, Criteria1:="<>#N/A", Criteria2:="<> ", Operator:=xlAnd
-    PPTipStatSheet.Range(Selection, Selection.End(xlDown)).Select
+    pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
     Selection.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
     
-    PPTipStatSheet.Range("W8").PasteSpecial xlPasteValues
-    PPTipStatSheet.Range("AA1:AB1").Select
+    pouchInsertSpace.Range("W8").PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("AA1:AB1").Select
     Selection.AutoFilter
-    PPTipStatSheet.Range("AA:AB").ClearContents
+    pouchInsertSpace.Range("AA:AB").ClearContents
 
     Dim PchLineIdle_Start As Range, PchLineIdle_End As Range
-    Set PchLineIdle_Start = PPTipStatSheet.Range(PPTipStatSheet.Range("X9"), PPTipStatSheet.Range("X9").End(xlDown))
-    Set PchLineIdle_End = PPTipStatSheet.Range(PPTipStatSheet.Range("W9"), PPTipStatSheet.Range("W9").End(xlDown))
+    Set PchLineIdle_Start = pouchInsertSpace.Range(pouchInsertSpace.Range("X9"), pouchInsertSpace.Range("X9").End(xlDown))
+    Set PchLineIdle_End = pouchInsertSpace.Range(pouchInsertSpace.Range("W9"), pouchInsertSpace.Range("W9").End(xlDown))
 
-    PPTipStatSheet.Range("P8").Value = "Start"
-    PPTipStatSheet.Range("Q8").Value = "End"
-    PPTipStatSheet.Range("R8").Value = "same"
-    PPTipStatSheet.Range("P9").Value = 0
+    pouchInsertSpace.Range("P8").Value = "Start"
+    pouchInsertSpace.Range("Q8").Value = "End"
+    pouchInsertSpace.Range("R8").Value = "same"
+    pouchInsertSpace.Range("P9").Value = 0
 
     PchLineIdle_End.Copy
-    PPTipStatSheet.Range("Q9:Q" & PchLineIdle_End.Count).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("Q9:Q" & PchLineIdle_End.Count).PasteSpecial xlPasteValues
     PchLineIdle_Start.Copy
-    PPTipStatSheet.Range("P10:P" & PchLineIdle_Start.Count).PasteSpecial xlPasteValues
-    PPTipStatSheet.Range("Q" & PchLineIdle_Start.Count + 9).Value = wb.Worksheets("Silos").Range("A1").End(xlDown)
-    PPTipStatSheet.Range("W:X").ClearContents
+    pouchInsertSpace.Range("P10:P" & PchLineIdle_Start.Count).PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("Q" & PchLineIdle_Start.Count + 9).Value = wb.Worksheets("Silos").Range("A1").End(xlDown)
+    pouchInsertSpace.Range("W:X").ClearContents
 
-    PPTipStatSheet.Range("R9:R" & PchLineIdle_Start.Count + 9).Formula = "=IF(P9=Q9, ""Yes"", ""No"")"
-    PPTipStatSheet.Range("P8:R8").Select
+    pouchInsertSpace.Range("R9:R" & PchLineIdle_Start.Count + 9).Formula = "=IF(P9=Q9, ""Yes"", ""No"")"
+    pouchInsertSpace.Range("P8:R8").Select
     Selection.AutoFilter Field:=3, Criteria1:="No"
-    PPTipStatSheet.Range(Selection, Selection.End(xlDown)).Select
+    pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
     Selection.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
-    PPTipStatSheet.Range("M2").Value = "PouchLine Idle"
-    PPTipStatSheet.Range("M3").PasteSpecial xlPasteValues
-    PPTipStatSheet.Range("P8:R8").Select
+    pouchInsertSpace.Range("M2").Value = "PouchLine Idle"
+    pouchInsertSpace.Range("M3").PasteSpecial xlPasteValues
+    pouchInsertSpace.Range("P8:R8").Select
     Selection.AutoFilter
-    PPTipStatSheet.Range("O:R").ClearContents
+    pouchInsertSpace.Range("O:R").ClearContents
 
 End Sub
 
 Sub findIntersectionsOfIdleTimes(countPouches)
-    PPTipStatSheet.Range("P1").Value = "Total Pouch Campaigns: " & countPouches
-    PPTipStatSheet.Range("P2").Value = "Both Tip Station & Pouchline Idle"
-    PPTipStatSheet.Range("P3").Value = "Potential Slot Point i"
-    PPTipStatSheet.Range("Q3").Value = "Start"
-    PPTipStatSheet.Range("R3").Value = "End"
+    pouchInsertSpace.Range("P1").Value = "Total Pouch Campaigns: " & countPouches
+    pouchInsertSpace.Range("P2").Value = "Both Tip Station & Pouchline Idle"
+    pouchInsertSpace.Range("P3").Value = "Potential Slot Point i"
+    pouchInsertSpace.Range("Q3").Value = "Start"
+    pouchInsertSpace.Range("R3").Value = "End"
     
     Dim TipIdleStart As Double, TipIdleEnd As Double, PchIdleStart_next As Double, PchIdleEnd_next As Double
     Dim i As Integer, j As Integer, k As Integer
     Dim PchLineIdle_Start As Range
     Dim PchIdleStart As Double, PchIdleEnd As Double
     
-    Set PchLineIdle_Start = PPTipStatSheet.Range(PPTipStatSheet.Range("N4"), PPTipStatSheet.Range("N4").End(xlDown))
+    Set PchLineIdle_Start = pouchInsertSpace.Range(pouchInsertSpace.Range("N4"), pouchInsertSpace.Range("N4").End(xlDown))
     
     i = 1
-    Do Until i > PPTipStatSheet.Range(PPTipStatSheet.Range("K4"), PPTipStatSheet.Range("K4").End(xlDown)).Count
+    Do Until i > pouchInsertSpace.Range(pouchInsertSpace.Range("K4"), pouchInsertSpace.Range("K4").End(xlDown)).Count
         j = i + 3
-        PPTipStatSheet.Range("P" & j).Value = i
+        pouchInsertSpace.Range("P" & j).Value = i
     
-        TipIdleStart = PPTipStatSheet.Range("J" & j)
-        TipIdleEnd = PPTipStatSheet.Range("K" & j)
+        TipIdleStart = pouchInsertSpace.Range("J" & j)
+        TipIdleEnd = pouchInsertSpace.Range("K" & j)
     
         k = 4
         Do Until k > PchLineIdle_Start.Count + 4
-            PchIdleStart = PPTipStatSheet.Range("M" & k)
-            PchIdleStart_next = PPTipStatSheet.Range("M" & k + 1)
-            PchIdleEnd = PPTipStatSheet.Range("N" & k)
-            PchIdleEnd_next = PPTipStatSheet.Range("N" & k + 1)
+            PchIdleStart = pouchInsertSpace.Range("M" & k)
+            PchIdleStart_next = pouchInsertSpace.Range("M" & k + 1)
+            PchIdleEnd = pouchInsertSpace.Range("N" & k)
+            PchIdleEnd_next = pouchInsertSpace.Range("N" & k + 1)
     
             If TipIdleStart >= PchIdleStart And TipIdleStart < PchIdleStart_next Then
                 If TipIdleStart > PchIdleEnd Then
-                    PPTipStatSheet.Range("Q" & j).Value = PchIdleStart_next
-                    PPTipStatSheet.Range("R" & j).Value = WorksheetFunction.Min(PchIdleEnd_next, TipIdleEnd)
+                    pouchInsertSpace.Range("Q" & j).Value = PchIdleStart_next
+                    pouchInsertSpace.Range("R" & j).Value = WorksheetFunction.Min(PchIdleEnd_next, TipIdleEnd)
                     Exit Do
                 ElseIf TipIdleEnd < PchIdleEnd Then
-                    PPTipStatSheet.Range("Q" & j).Value = TipIdleStart
-                    PPTipStatSheet.Range("R" & j).Value = TipIdleEnd
+                    pouchInsertSpace.Range("Q" & j).Value = TipIdleStart
+                    pouchInsertSpace.Range("R" & j).Value = TipIdleEnd
                     Exit Do
                 ElseIf TipIdleEnd > PchIdleEnd Then
-                    PPTipStatSheet.Range("Q" & j).Value = TipIdleStart
-                    PPTipStatSheet.Range("R" & j).Value = PchIdleEnd
+                    pouchInsertSpace.Range("Q" & j).Value = TipIdleStart
+                    pouchInsertSpace.Range("R" & j).Value = PchIdleEnd
                     Exit Do
                 End If
             End If
@@ -260,13 +290,13 @@ Sub findIntersectionsOfIdleTimes(countPouches)
     k = k + 1
     j = j + 1
     Dim Count_PchIdleRemaining As Long, PchIdleRemaining As Range
-    Set PchIdleRemaining = PPTipStatSheet.Range(PPTipStatSheet.Range("M" & k), PPTipStatSheet.Range("M" & k).End(xlDown))
+    Set PchIdleRemaining = pouchInsertSpace.Range(pouchInsertSpace.Range("M" & k), pouchInsertSpace.Range("M" & k).End(xlDown))
     Count_PchIdleRemaining = PchIdleRemaining.Count
 
     Do Until Count_PchIdleRemaining = 0
-        PPTipStatSheet.Range("P" & j).Value = i
-        PPTipStatSheet.Range("Q" & j).Value = PPTipStatSheet.Range("M" & k)
-        PPTipStatSheet.Range("R" & j).Value = PPTipStatSheet.Range("N" & k)
+        pouchInsertSpace.Range("P" & j).Value = i
+        pouchInsertSpace.Range("Q" & j).Value = pouchInsertSpace.Range("M" & k)
+        pouchInsertSpace.Range("R" & j).Value = pouchInsertSpace.Range("N" & k)
 
         i = i + 1
         j = j + 1
@@ -275,3 +305,107 @@ Sub findIntersectionsOfIdleTimes(countPouches)
     Loop
 
 End Sub
+
+Function logic3(countPouchCampaigns)
+    Dim mainSilo as Integer
+    Dim otherSilo as Integer
+    mainSilo = 16
+    otherSilo = 6
+
+    Dim isFeasible As Boolean
+    isFeasible = insertPPPouchCampaigns(mainSilo, otherSilo)
+    logic3 = isFeasible
+
+End Function
+
+Function insertPPPouchCampaigns(mainSilo, otherSilo) As Boolean
+    Dim d2Skip() As Integer
+    ReDim d2Skip(1)
+    d2Skip(0) = 0
+
+    Do While True
+        ' get row of campaign to insert
+        ' -1 if there is no campaign
+        Dim PPCampaignToInsert As Double
+        PPCampaignToInsert = findNextCampaignToInsert(PPPouchSchedule)
+
+        ' get row of insertion in schedule
+        ' -1 if there is no intersection of idle times
+        Dim D2FirstPchAvailHrs as Double 
+        D2FirstPchAvailHrs = findFirstPchAvailHrs(D2Schedule, d2Skip)
+
+        Dim dryerCampaign As Integer
+        dryerCampaign = determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
+
+        
+    Loop
+End Function
+
+Function findNextCampaignToInsert(Worksheet) As Integer
+    If Worksheet.Range("A1").End(xlDown).Value = "" Then
+        findNextCampaignToInsert = -1
+        Exit Function
+    End If
+    Dim cell As Range
+        For Each cell in Worksheet.Range("A2:A" & Worksheete.Range("A" & Rows.Count).End(xlUp).Row)
+            If cell.Value <> "" Then 
+                findNextCampaignToInsert = cell.Row
+                Exit Function
+            End If
+        Next cell
+End Function
+
+Function isCanStarveInArray(canStarve, dryerSkipArray) As Boolean
+    Dim i As Integer
+    For i = LBound(dryerSkipArray) To UBound(dryerSkipArray)
+        If dryerSkipArray(i) = canStarve Then
+            isCanStarveInArray = True
+            Exit Function
+        End If
+    Next
+    isCanStarveInArray = False
+End Function
+
+Function addItemToArray(item, dryerSkipArray) As Integer()
+    ReDim Preserve dryerSkipArray(LBound(dryerSkipArray) To UBound(dryerSkipArray) + 1)
+    dryerSkipArray(UBound(dryerSkipArray)) = item
+    addItemToArray = dryerSkipArray
+End Function
+
+Function findFirstPchAvailHrs(Worksheet, dryerSkipArray) As Double
+    ' ensure column BX is Pch Avail Hrs
+    If IsNumeric("BX1") Or Worksheet.Range("BX1").Value <> "Pch Avail Hrs" Then 
+        MsgBox "Cell BX1 is not set to Pch Avail Hrs for " & Worksheet.Name
+    End If
+    ' ensure column BL is Pch Start
+    If IsNumeric("BL1") Or Worksheet.Range("BL1").Value <> "Pch Start" Then 
+        MsgBox "Cell BL1 is not set to Pch Start for " & Worksheet.Name
+    End If
+
+    ' return first pouch available hours 
+    Dim pchAvailHrsCell as Range
+    Dim nextPchStartCell as Range
+    For Each pchAvailHrsCell in Worksheet.Range("BX:BX")
+        If pchAvailHrsCell.Value > 0 and IsNumeric(pchAvailHrsCell.Value) And isCanStarveInArray(pchAvailHrsCell.Row, dryerSkipArray) = False Then 
+            Set nextPchStartCell = Worksheet.Range("BL" & pchAvailHrsCell.Row + 1)
+            If nextPchStartCell.Value <> pchAvailHrsCell.Value and IsNumeric(nextPchStartCell.Value) and containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value) Then
+                findFirstPchAvailHrs = pchAvailHrsCell.Row
+                Exit Function
+            End If
+        End If
+        If pchAvailHrsCell.Value = "" Then 
+            Exit For
+        End If
+    Next pchAvailHrsCell
+
+    'No Can Starve Time Found 
+    findFirstPchAvailHrs = -1
+End Function
+
+Function containedInIntersection(pchAvailHrsCell, nextPchStartCell) as Boolean
+    
+End Function
+
+Function determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
+
+End Function
