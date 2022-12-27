@@ -253,11 +253,6 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         
     Application.Calculate
     addDBCampaign = dryerSkipArray
-    
-    If dbWindow = 4 Then
-        End
-    End If
-
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
