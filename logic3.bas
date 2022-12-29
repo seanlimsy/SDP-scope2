@@ -1,7 +1,12 @@
 Attribute VB_Name = "PPPouchInitialisation"
 Option Explicit
 Dim wb As Workbook
-Dim D2Schedule As Worksheet, PPPouchSchedule As Worksheet, PPTippingStation As Worksheet, PPRateDSSheet As Worksheet, pouchInsertSpace as Worksheet
+Dim D2Schedule As Worksheet 
+Dim PPPouchSchedule As Worksheet
+Dim PPTippingStation As Worksheet
+Dim PPRateDSSheet As Worksheet
+Dim pouchInsertSpace as Worksheet
+Dim D2Default As Worksheet
 
 Sub ppPouchMain()
     Application.AutoRecover.Enabled = False
@@ -34,6 +39,7 @@ Sub initializeWorksheets()
     Set wb = ThisWorkbook
 
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
+    setWorksheet D2Default, "D2Sched"
     setWorksheet PPPouchSchedule, "PP PCH"
     setWorksheet PPTippingStation, "PP"
     setWorksheet PPRateDSSheet, "PPRateDS"
@@ -333,15 +339,16 @@ Function insertPPPouchCampaigns(mainSilo, otherSilo) As Boolean
         ' -1 if there is no intersection of idle times
         Dim D2FirstPchAvailHrs as Integer 
         D2FirstPchAvailHrs = findFirstPchAvailHrs(D2Schedule, d2Skip, PPCampaignToInsert)
-
+        
         ' get which index to skip in d2Skip
         Dim dryerCampaign as Integer
         dryerCampaign = determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
 
 
         If dryerCampaign = -2 Then 'Case: pouch campaigns but no more d2 slots (infeasible solution)
+            insertPPPouchCampaigns = False
             MsgBox "PP-Pouch campaigns remaining but no more insertion points in dryer 2. Exiting Program."
-            End
+            Exit Function
         ElseIf dryerCampaign = -1 Then 'Case: no more campaigns left
             MsgBox "All pouches inserted"
             insertPPPouchCampaigns = True
@@ -366,15 +373,15 @@ Function findNextCampaignToInsert(Worksheet) As Integer
         Next cell
 End Function
 
-Function isCanStarveInArray(canStarve, dryerSkipArray) As Boolean
+Function isPchAvailInArray(pchAvail, dryerSkipArray) As Boolean
     Dim i As Integer
     For i = LBound(dryerSkipArray) To UBound(dryerSkipArray)
-        If dryerSkipArray(i) = canStarve Then
-            isCanStarveInArray = True
+        If dryerSkipArray(i) = pchAvail Then
+            isPchAvailInArray = True
             Exit Function
         End If
     Next
-    isCanStarveInArray = False
+    isPchAvailInArray = False
 End Function
 
 Function addItemToArray(item, dryerSkipArray) As Integer()
@@ -397,7 +404,7 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray, PPCampaignToInsert) As 
     Dim pchAvailHrsCell as Range
     Dim nextPchStartCell as Range
     For Each pchAvailHrsCell in Worksheet.Range("BX:BX")
-        If pchAvailHrsCell.Value > 0 and IsNumeric(pchAvailHrsCell.Value) And isCanStarveInArray(pchAvailHrsCell.Row, dryerSkipArray) = False Then 
+        If pchAvailHrsCell.Value > 0 and IsNumeric(pchAvailHrsCell.Value) And isPchAvailInArray(pchAvailHrsCell.Row, dryerSkipArray) = False Then 
             Set nextPchStartCell = Worksheet.Range("BL" & pchAvailHrsCell.Row + 1)
             If nextPchStartCell.Value <> pchAvailHrsCell.Value And IsNumeric(nextPchStartCell.Value) Then
                 If containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value) And moreThanPouchFill(pchAvailHrsCell.Value, nextPchStartCell.Value, PPCampaignToInsert) Then
@@ -464,6 +471,42 @@ Function determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
     End If
 End Function
 
-Function addPouchCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstPchAvailHrs, mainSilo, otherSilo, d2Skip)
-    
+Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, D2FirstPchAvailHrs, mainSilo, otherSilo, dryerSkipArray) as Integer()
+    PPPouchSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
+    dryerDefaultSchedule.Range("A" & D2FirstPchAvailHrs).Insert xlShiftDown
+    dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+    Application.CalculateFull
+
+    canAdd = checkSiloConstraint(mainSilo, otherSilo)
+    If canAdd = True Then 
+        PPPouchSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete
+    Else
+        dryerDefaultSchedule.Rows(D2FirstPchAvailHrs).EntireRow.Delete
+        
+        dryerSkipArray = addItemToArray(D2FirstPchAvailHrs, dryerSkipArray)
+        addPouchCampaign = dryerSkipArray
+        Application.CalculateFull
+    End If
+    ' to ensure all pivottables are updated after adding pouch campaigns
+    wb.RefreshAll
+End Function
+
+Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
+    Dim effectOnMainSilo As Double
+    Dim effectOnOtherSilo As Double
+
+    effectOnMainSilo = Silos.Range("J1").Value
+    effectOnOtherSilo = Silos.Range("J2").Value
+
+    If effectOnMainSilo <= mainSilo And effectOnOtherSilo <= otherSilo Then 
+        checkSiloConstraint = True
+    Else
+        checkSiloConstraint = False
+    End If
+End Function
+
+Function addItemToArray(item, dryerSkipArray) As Integer()
+    ReDim Preserve dryerSkipArray(LBound(dryerSkipArray) To UBound(dryerSkipArray) + 1)
+    dryerSkipArray(UBound(dryerSkipArray)) = item
+    addItemToArray = dryerSkipArray
 End Function
