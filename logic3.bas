@@ -1,4 +1,3 @@
-Attribute VB_Name = "PPPouchInitialisation"
 Option Explicit
 Dim wb As Workbook
 Dim D2Schedule As Worksheet 
