@@ -1,36 +1,33 @@
-Attribute VB_Name = "PPCanStretchInitialization"
 Option Explicit
 Dim wb As Workbook
-Dim D1Schedule As Worksheet, D2Schedule As Worksheet, PPThreshold As Worksheet, PPTippingStation As Worksheet
+Dim D1Schedule As Worksheet
+Dim D2Schedule As Worksheet
+Dim PPThreshold As Worksheet
+Dim PPTippingStation As Worksheet
 Dim workingDryerSchedule As Worksheet
 
-Sub stretchingCampaigns()
-    Dim PPCanStretching As Range
-    Dim D1TipStat_pivotTable As pivotTable, D2TipStat_pivotTable As pivotTable
-    Dim D1TipStat_canCOMax As Long, D2TipStat_canCOMax As Long, TipStat_canCOMax As Long
-    
+Sub logic4Start()
     Application.AutoRecover.Enabled = False
     initializeWorksheets
-    
-    Set PPCanStretching = stretchingInitialisation
-    
-    Set D1TipStat_pivotTable = pivotFromDryers(1)
-    Set D2TipStat_pivotTable = pivotFromDryers(2)
-    D1TipStat_pivotTable.RefreshTable
-    D2TipStat_pivotTable.RefreshTable
-    
-    D1TipStat_canCOMax = infoFromDryers(D1TipStat_pivotTable)
-    D2TipStat_canCOMax = infoFromDryers(D2TipStat_pivotTable)
-        
-    
+
+    If InStr(wb.Name, " - (Original LTP w Additional PPCAN)") = False Then
+        MsgBox "Making a copy of BaseFile and Saving as alternate file."
+        makeCopies wb
+        MsgBox "Duplication complete. Run PPCan Stretch on new File in Folder with tag ""(Original LTP w Additional PPCAN)""."
+        End
+    Else
+        MsgBox "Running PPCan Stretching."
+    End If
+
+    Dim isLogic4Feasible As Boolean
+    isLogic4Feasible = logic4()
+    If isLogic4Feasible = False Then 
+        MsgBox "No additional PP Can Campaigns can be inserted by automated process. Terminating Program"
+    End If 
+
 End Sub
 
 Sub initializeWorksheets()
-    'Without Initialising into same workbook
-    
-    'To adjust to hardcode onto user's path
-    'Can also consider moving sheets over to one main workbook
-    'Michael: Change reference to an cell value -- solve for this in instructions for documentation -- Lester's Preference KIV
     Set wb = ThisWorkbook
 
     setWorksheet D1Schedule, "D1B1L65T"
@@ -47,6 +44,100 @@ Err:
     MsgBox worksheetName & " is not in current workbook"
     End
 End Sub
+
+Sub makeCopies(file)
+    Dim p As Long
+    ' saving base LTP
+    With file
+        p = InStrRev(.FullName, ".")
+        .SaveCopyAs Left(.FullName, p - 1) & " - (Original LTP wo Additional PPCAN)" & Mid(.FullName, p)
+    End With
+    ' saving new LTP for working on PPCAN stretching
+    With file
+        p = InStrRev(.FullName, ".")
+        .SaveCopyAs Left(.FullName, p - 1) & " - (Original LTP w Additional PPCAN)" & Mid(.FullName, p)
+    End With
+End Sub
+
+Function logic4()
+    Dim mainSilo As Integer
+    Dim otherSilo As Integer
+
+    mainSilo = 16
+    otherSilo = 6
+
+    Dim isFeasible As Boolean 
+    isFeasible = stretchingCampaigns(mainSilo, otherSilo)
+    logic4 = isFeasible
+
+End Function 
+
+Function stretchingCampaigns(mainSilo, otherSilo)
+    Dim PPCanStretching As Range
+    Dim D1TipStatPivotTable As pivotTable, D2TipStatPivotTable As pivotTable
+    Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long, TipStatCanCOMax As Long
+    Application.CalculateFull   
+
+    Set PPCanStretching = stretchingInitialisation
+    Set D1TipStatPivotTable = pivotFromDryers(1)
+    Set D2TipStatPivotTable = pivotFromDryers(2)
+    D1TipStatPivotTable.RefreshTable
+    D2TipStatPivotTable.RefreshTable
+    wb.RefreshAll
+
+    D1TipStatCanCOMax = infoFromDryers(D1TipStatPivotTable)
+    D2TipStatCanCOMax = infoFromDryers(D2TipStatPivotTable)
+    
+    ' arrays for determining which can starve to skip
+    Dim d1Skip() As Integer
+    Dim d2Skip() As Integer
+    ReDim d1Skip(1)
+    ReDim d2Skip(1)
+    d1Skip(0) = 0
+    d2Skip(0) = 0
+
+    Do While True
+        ' get row of campaign to insert
+        ' -1 if there is no campaign
+        Dim PPCampaignToInsert As Double
+        PPCampaignToInsert = findNextCampaignToInsert(PPCanSchedule)
+        
+        ' get row of insertion in schedule
+        ' -1 if there is no can starve
+        Dim D1FirstCanStarveTime As Double
+        Dim D2FirstCanStarveTime As Double
+        D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
+        D2FirstCanStarveTime = findFirstCanStarveTime(D2Schedule, d2Skip)
+        
+        ' get initial silo constraint violation time
+        Dim initialSiloConstraintViolation
+        initialSiloConstraintViolation = Silos.Range("K1").Value
+
+        Dim dryerCampaign As Integer
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert)
+        
+        If dryerCampaign = 0 Then 
+            MsgBox "All can starve slots used. Terminating Program"
+            stretchingCampaigns = True
+            Exit Function
+        ElseIf dryerCampaign = 1 Then 'case: d1 PP campaign
+            MsgBox "Add PPCan to Dryer 1"
+            d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
+        ElseIf dryerCampaign = 2 Then 'case: d2 PP campaign
+            MsgBox "Add PPCan to Dryer 2"
+            d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
+        ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
+            d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
+        ElseIf dryerCampaign = 5 Then 'case: skip d2 can starve time
+            d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
+        ElseIf dryerCampaign = 6 Then 'case: skip d1 and d2 can starve time
+            d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
+            d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
+        End If
+continueLoop:
+    Loop
+    stretchingCampaigns = True
+End Function
 
 Function stretchingInitialisation()
     Dim stretchDetails As Range
@@ -70,13 +161,60 @@ Function pivotFromDryers(identity)
 End Function
 
 Function infoFromDryers(pivotTable)
-    Dim TipStat_canCORange As Range
-    Dim TipStat_canCOMax As Long
+    Dim TipStatCanCORange As Range
+    Dim TipStatCanCOMax As Long
     
-    Set TipStat_canCORange = pivotTable.PivotFields("Sum of Can After CO Hrs").DataRange
-    TipStat_canCOMax = Application.WorksheetFunction.Max(TipStat_canCORange)
+    Set TipStatCanCORange = pivotTable.PivotFields("Sum of Can After CO Hrs").DataRange
+    TipStatCanCOMax = Application.WorksheetFunction.Max(TipStatCanCORange)
     
-    infoFromDryers = TipStat_canCOMax
+    infoFromDryers = TipStatCanCOMax
 End Function
+
+' Incomplete adjustment
+Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
+    
+    ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
+    Dim decrementCounter As Double
+    decrementCounter = 0.5
+
+    ' boolean flag to determine if silo constraint is being violated
+    Dim canAdd As Boolean
+    canAdd = False
+
+    Dim i As Double
+    For i = 1 To decrementCounter Step -decrementCounter
+        ' insert to the row before the can starvation time
+        PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
+        dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
+        dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value = dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value * i
+        dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+        Application.CalculateFull
+
+        canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
+        If canAdd = True Then
+            If i = 1 Then
+                PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete
+            Else
+                PPCanSchedule.Range("J" & PPCampaignToInsert).Value = PPCanSchedule.Range("J" & PPCampaignToInsert).Value * (1 - i)
+            End If
+            Exit For
+        End If
+        dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
+        If i <= decrementCounter Then
+            dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+            dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+        End If
+    Next
+    Application.CalculateFull
+    
+    ' this is to ensure that the pivot table is updated after adding pp campaigns
+    wb.RefreshAll
+    
+    addPPCampaign = dryerSkipArray
+End Function
+
+
+
+
 
 
