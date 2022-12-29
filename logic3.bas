@@ -331,13 +331,24 @@ Function insertPPPouchCampaigns(mainSilo, otherSilo) As Boolean
 
         ' get row of insertion in schedule
         ' -1 if there is no intersection of idle times
-        Dim D2FirstPchAvailHrs as Double 
-        D2FirstPchAvailHrs = findFirstPchAvailHrs(D2Schedule, d2Skip)
+        Dim D2FirstPchAvailHrs as Integer 
+        D2FirstPchAvailHrs = findFirstPchAvailHrs(D2Schedule, d2Skip, PPCampaignToInsert)
 
-        Dim dryerCampaign As Integer
+        ' get which index to skip in d2Skip
+        Dim dryerCampaign as Integer
         dryerCampaign = determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
 
-        
+
+        If dryerCampaign = -2 Then 'Case: pouch campaigns but no more d2 slots (infeasible solution)
+            MsgBox "PP-Pouch campaigns remaining but no more insertion points in dryer 2. Exiting Program."
+            End
+        ElseIf dryerCampaign = -1 Then 'Case: no more campaigns left
+            MsgBox "All pouches inserted"
+            insertPPPouchCampaigns = True
+            Exit Function
+        Else
+            d2Skip = addPouchCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstPchAvailHrs, mainSilo, otherSilo, d2Skip)
+        End If        
     Loop
 End Function
 
@@ -372,7 +383,7 @@ Function addItemToArray(item, dryerSkipArray) As Integer()
     addItemToArray = dryerSkipArray
 End Function
 
-Function findFirstPchAvailHrs(Worksheet, dryerSkipArray) As Double
+Function findFirstPchAvailHrs(Worksheet, dryerSkipArray, PPCampaignToInsert) As Double
     ' ensure column BX is Pch Avail Hrs
     If IsNumeric("BX1") Or Worksheet.Range("BX1").Value <> "Pch Avail Hrs" Then 
         MsgBox "Cell BX1 is not set to Pch Avail Hrs for " & Worksheet.Name
@@ -388,9 +399,11 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray) As Double
     For Each pchAvailHrsCell in Worksheet.Range("BX:BX")
         If pchAvailHrsCell.Value > 0 and IsNumeric(pchAvailHrsCell.Value) And isCanStarveInArray(pchAvailHrsCell.Row, dryerSkipArray) = False Then 
             Set nextPchStartCell = Worksheet.Range("BL" & pchAvailHrsCell.Row + 1)
-            If nextPchStartCell.Value <> pchAvailHrsCell.Value and IsNumeric(nextPchStartCell.Value) and containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value) Then
-                findFirstPchAvailHrs = pchAvailHrsCell.Row
-                Exit Function
+            If nextPchStartCell.Value <> pchAvailHrsCell.Value And IsNumeric(nextPchStartCell.Value) Then
+                If containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value) And moreThanPouchFill(pchAvailHrsCell.Value, nextPchStartCell.Value, PPCampaignToInsert) Then
+                    findFirstPchAvailHrs = pchAvailHrsCell.Row
+                    Exit Function
+                End If
             End If
         End If
         If pchAvailHrsCell.Value = "" Then 
@@ -402,10 +415,55 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray) As Double
     findFirstPchAvailHrs = -1
 End Function
 
-Function containedInIntersection(pchAvailHrsCell, nextPchStartCell) as Boolean
+Function containedInIntersection(pchAvailHrs, nextPchStart) As Boolean
+    Dim idleStartCell As Range, idleEndCell As Range
+    Dim lastRow As Integer
+    Dim afterStart as Boolean, beforeEnd as Boolean
+    lastRow = pouchInsertSpace.Range("Q4").End(xlDown).Row
+
+    For Each idleStartCell In pouchInsertSpace.Range("Q4:Q" & lastRow)
+        Set idleEndCell = pouchInsertSpace.Range("R" & idleStartCell.Row)
+        If betweenIntersected(idleStartCell.Value, idleEndCell.Value, pchAvailHrs, nextPchStart) Then
+            containedInIntersection = True
+            Exit Function
+        End If
+        
+        If idleStartCell.Value = "" Then
+            Exit For
+        End If
+    Next idleStartCell
+    containedInIntersection = False
+End Function
+
+Function betweenIntersected(idleStart, idleEnd, pchAvailHrs, nextPchStart) As Boolean
+    If pchAvailHrs >= idleStart And nextPchStart <= idleEnd Then 
+        betweenIntersected = True
+    Else
+        betweenIntersected = False
+    End If
+End Function
+
+Function moreThanPouchFill(pchAvailHrs, nextPchStart, PPCampaignToInsert) As Boolean
+    Dim pouchFillTime as Range
+    Set pouchFillTime = PPPouchSchedule.Range("Q" & PPCampaignToInsert)
     
+    If nextPchStart - pchAvailHrs > pouchFillTime.Value Then 
+        moreThanPouchFill = True
+    Else
+        moreThanPouchFill = False
+    End If
 End Function
 
 Function determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
+    If PPCampaignToInsert = -1 Then 
+        determineDryerCampaign = -1
+    ElseIf D2FirstPchAvailHrs = -1 Then 
+        determineDryerCampaign = -2
+    Else
+        determineDryerCampaign = 1
+    End If
+End Function
 
+Function addPouchCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstPchAvailHrs, mainSilo, otherSilo, d2Skip)
+    
 End Function
