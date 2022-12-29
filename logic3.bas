@@ -11,12 +11,12 @@ Sub ppPouchMain()
     Application.AutoRecover.Enabled = False
     initializeWorksheets
 
-    Dim numberPouchCampaigns as Integer
+    Dim numberPouchCampaigns As Integer
     numberPouchCampaigns = initializePouchInsertion
 
-    Dim isLogic3Feasible as Boolean
+    Dim isLogic3Feasible As Boolean
     isLogic3Feasible = logic3(numberPouchCampaigns)
-    If isLogic3 = False Then 
+    If isLogic3Feasible = False Then 
         MsgBox "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program."
         End
     End If
