@@ -4,26 +4,23 @@ Dim D1Schedule As Worksheet
 Dim D2Schedule As Worksheet
 Dim PPThreshold As Worksheet
 Dim PPTippingStation As Worksheet
+Dim PPRateDSSheet As Worksheet
 Dim workingDryerSchedule As Worksheet
+Dim Silos As Worksheet
 
-Sub logic4Start()
+Sub PPCanStretchMain()
     Application.AutoRecover.Enabled = False
     initializeWorksheets
+    'runOrDuplicateFile
 
-    If InStr(wb.Name, " - (Original LTP w Additional PPCAN)") = False Then
-        MsgBox "Making a copy of BaseFile and Saving as alternate file."
-        makeCopies wb
-        MsgBox "Duplication complete. Run PPCan Stretch on new File in Folder with tag ""(Original LTP w Additional PPCAN)""."
-        End
-    Else
-        MsgBox "Running PPCan Stretching."
-    End If
+    initializePPRateDS
+    End
 
     Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
-    If isLogic4Feasible = False Then 
+    If isLogic4Feasible = False Then
         MsgBox "No additional PP Can Campaigns can be inserted by automated process. Terminating Program"
-    End If 
+    End If
 
 End Sub
 
@@ -34,6 +31,37 @@ Sub initializeWorksheets()
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
     setWorksheet PPThreshold, "PP CAN ADDED THRESHOLD"
     setWorksheet PPTippingStation, "PP"
+    setWorksheet Silos, "Silos"
+    setWorksheet PPRateDSSheet, "PPRateDS"
+
+    ' Update pivot table to correct setting PP sheet
+    Dim PT As pivotTable, PI As PivotItem
+    For Each PT In PPTippingStation.PivotTables
+        On Error Resume Next
+        For Each PI In PT.PivotFields("Source (DR, DB, PP)").PivotItems
+            Select Case PI.Name
+                Case Is = "PP"
+                    PI.Visible = True
+                Case Else
+                    PI.Visible = False
+            End Select
+        Next PI
+    Next PT
+
+    'Include Silo Constraint presense for PE and SG
+    Silos.Range("R8:S8").Value = "PE"
+    Silos.Range("R9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$1,D1B1L65T!AP:AP,"">=1"")"
+    Silos.Range("R10").Formula = "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$1,D2B1L3B3B4L45T!AP:AP,"">=1"")"
+    Silos.Range("S9").Formula = "=IF(K1-R9<0.5,""YES"",""NO"")"
+    Silos.Range("S10").Formula = "=IF(K1-R10<0.5,""YES"",""NO"")"
+    
+    Silos.Range("T8:U8").Value = "SG"
+    Silos.Range("T9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$2,D1B1L65T!AP:AP,"">=1"")"
+    Silos.Range("T10").Formula = "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$2,D2B1L3B3B4L45T!AP:AP,"">=1"")"
+    Silos.Range("U9").Formula = "=IF(K2-T9<0.5,""YES"",""NO"")"
+    Silos.Range("U10").Formula = "=IF(K2-T10<0.5,""YES"",""NO"")"
+    
+    Application.CalculateFull
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -45,18 +73,74 @@ Err:
     End
 End Sub
 
-Sub makeCopies(file)
+Sub runOrDuplicateFile()
+    If InStr(wb.Name, " - (Original LTP w Additional PPCAN)") Then
+        MsgBox "Running PPCan Stretching on this file."
+    ElseIf InStr(wb.Name, " - (Original LTP wo Additional PPCAN)") = False Then
+        MsgBox "Making a copy of BaseFile and Saving into an alternate file."
+        makeCopy wb
+        MsgBox "Duplication complete. Running PPCan Stretching on this file."
+    End If
+End Sub
+
+Sub makeCopy(file)
     Dim p As Long
-    ' saving base LTP
+    ' duplicating base LTP
     With file
         p = InStrRev(.FullName, ".")
         .SaveCopyAs Left(.FullName, p - 1) & " - (Original LTP wo Additional PPCAN)" & Mid(.FullName, p)
     End With
-    ' saving new LTP for working on PPCAN stretching
+
+    ' Saving this file for PP Can Stretching
     With file
         p = InStrRev(.FullName, ".")
-        .SaveCopyAs Left(.FullName, p - 1) & " - (Original LTP w Additional PPCAN)" & Mid(.FullName, p)
+        .SaveAs Left(.FullName, p - 1) & " - (Original LTP w Additional PPCAN)" & Mid(.FullName, p)
     End With
+End Sub
+
+Function addToArray(item, valueArray) As Double()
+    ReDim Preserve valueArray(LBound(valueArray) To UBound(valueArray) + 1)
+    valueArray(UBound(valueArray)) = item
+    addToArray = valueArray
+End Function
+
+Sub initializePPRateDS()
+    Dim lastRow As Integer, canStretchRow As Integer
+    Dim tonPerHrOEEs() As Double, FPLbsPerSilos() As Double
+    ReDim tonPerHrOEEs(1)
+    ReDim FPLbsPerSilos(1)
+    lastRow = PPRateDSSheet.Range("B1").End(xlDown).Row
+    canStretchRow = lastRow + 1
+
+    Dim cell As Range
+    Dim canRow As Integer
+    For Each cell In PPRateDSSheet.Range("A2:A" & lastRow)
+        If InStr(cell.Value, "CAN") Then
+            canRow = cell.Row
+            tonPerHrOEEs = addToArray(PPRateDSSheet.Range("D" & canRow).Value, tonPerHrOEEs)
+            FPLbsPerSilos = addToArray(PPRateDSSheet.Range("E" & canRow).Value, FPLbsPerSilos)
+        End If
+    Next cell
+
+    Dim worstTonPerHourPOEE As Double, worstSA As Double, worstTonPerHourOEE As Double, worstFPLbsPerSilo As Double
+    Dim indexWorstTonePerHourOEE As Integer
+
+    ' worse case Ton per Hour OEE (smallest value)
+    worstTonPerHourOEE = Application.Min(tonPerHrOEEs)
+    indexWorstTonePerHourOEE = Application.Match(worstTonPerHourOEE, PPRateDSSheet.Range("D2:D" & lastRow), 0)
+    worstTonPerHourPOEE = PPRateDSSheet.Range("B" & indexWorstTonePerHourOEE).Value
+    worstSA = PPRateDSSheet.Range("C" & indexWorstTonePerHourOEE).Value
+
+    ' worse case FP lbs per silo (smallest value)
+    worstFPLbsPerSilo = Application.Min(FPLbsPerSilos)
+
+    ' build PP - CAN - 5
+    PPRateDSSheet.Range("A" & canStretchRow).Value = "PP - CAN - 5"
+    PPRateDSSheet.Range("B" & canStretchRow).Value = worstTonPerHourPOEE
+    PPRateDSSheet.Range("C" & canStretchRow).Value = FormatPercent(worstSA)
+    PPRateDSSheet.Range("D" & canStretchRow).Value = worstTonPerHourOEE
+    PPRateDSSheet.Range("E" & canStretchRow).Value = worstFPLbsPerSilo
+
 End Sub
 
 Function logic4()
@@ -66,17 +150,17 @@ Function logic4()
     mainSilo = 16
     otherSilo = 6
 
-    Dim isFeasible As Boolean 
+    Dim isFeasible As Boolean
     isFeasible = stretchingCampaigns(mainSilo, otherSilo)
     logic4 = isFeasible
 
-End Function 
+End Function
 
 Function stretchingCampaigns(mainSilo, otherSilo)
     Dim PPCanStretching As Range
     Dim D1TipStatPivotTable As pivotTable, D2TipStatPivotTable As pivotTable
     Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long, TipStatCanCOMax As Long
-    Application.CalculateFull   
+    Application.CalculateFull
 
     Set PPCanStretching = stretchingInitialisation
     Set D1TipStatPivotTable = pivotFromDryers(1)
@@ -116,7 +200,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert)
         
-        If dryerCampaign = 0 Then 
+        If dryerCampaign = 0 Then
             MsgBox "All can starve slots used. Terminating Program"
             stretchingCampaigns = True
             Exit Function
@@ -212,9 +296,5 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     
     addPPCampaign = dryerSkipArray
 End Function
-
-
-
-
 
 
