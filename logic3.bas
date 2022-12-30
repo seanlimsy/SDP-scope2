@@ -13,7 +13,10 @@ Sub ppPouchMain()
     initializeWorksheets
 
     Dim numberPouchCampaigns As Integer
-    numberPouchCampaigns = initializePouchInsertion
+    numberPouchCampaigns = initializePouchInsertion 
+
+    'To Remove
+    PPPouchSchedule.Select
 
     Dim isLogic3Feasible As Boolean
     isLogic3Feasible = logic3(numberPouchCampaigns)
@@ -97,6 +100,7 @@ Function initializePouchWorksheets()
     Pouch_OriginalDetails.Copy
     PPPouchSchedule.Range("S2:AF" & countPouches).PasteSpecial xlPasteValues
     
+
     'Calculate Pouch Fill Times
     Dim effective_fp_tonnes_perhr As Double
     Dim Pouch_Rates As Range
@@ -105,6 +109,8 @@ Function initializePouchWorksheets()
     effective_fp_tonnes_perhr = Application.WorksheetFunction.Min(Pouch_Rates)
     PPPouchSchedule.Range("Q1").Value = "Effective FP Tonnes per Hour"
     PPPouchSchedule.Range("Q2:Q" & countPouches).Formula = "=J2/2.2/1000/" & effective_fp_tonnes_perhr
+    PPPouchSchedule.Range("Q2:Q" & countPouches).Copy
+    PPPouchSchedule.Range("Q2:Q" & countPouches).PasteSpecial xlPasteValues
     
     initializePouchWorksheets = countPouches
 End Function
@@ -336,6 +342,9 @@ Function insertPPPouchCampaigns(mainSilo, otherSilo) As Boolean
         Dim PPCampaignToInsert As Double
         PPCampaignToInsert = findNextCampaignToInsert(PPPouchSchedule)
 
+        PPPouchSchedule.Range("R8").Value = "Campaign Inserting"
+        PPPouchSchedule.Range("S8").Value = PPCampaignToInsert
+
         ' get row of insertion in schedule
         ' -1 if there is no intersection of idle times
         Dim D2FirstPchAvailHrs As Integer
@@ -365,6 +374,7 @@ Function findNextCampaignToInsert(Worksheet) As Integer
         findNextCampaignToInsert = -1
         Exit Function
     End If
+
     Dim cell As Range
         For Each cell In Worksheet.Range("A2:A" & Worksheet.Range("A" & Rows.Count).End(xlUp).Row)
             If cell.Value <> "" Then
@@ -384,6 +394,15 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray, PPCampaignToInsert) As 
         MsgBox "Cell BL1 is not set to Pch Start for " & Worksheet.Name
     End If
 
+    ' Stop Condition
+    If PPCampaignToInsert = -1 Then 
+        findFirstPchAvailHrs = -2
+        Exit Function
+    End If 
+
+    'To Remove
+    PPPouchSchedule.Range("R9").Value = "Current Pouch Avail Hours Row"
+
     ' return first pouch available hours
     Dim pchAvailHrsCell As Range
     Dim nextPchStartCell As Range
@@ -394,7 +413,10 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray, PPCampaignToInsert) As 
                 If nextPchStartCell.Value <> pchAvailHrsCell.Value Then
                     If containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value, PPCampaignToInsert) Then
                         findFirstPchAvailHrs = pchAvailHrsCell.Row
-                        pouchInsertSpace.Range("N1").Value = pchAvailHrsCell.Row 'To Remove
+                        
+                        'To Remove
+                        PPPouchSchedule.Range("S9").Value = pchAvailHrsCell.Row
+
                         Exit Function
                     End If
                 End If
@@ -431,17 +453,17 @@ Function containedInIntersection(pchAvailHrs, nextPchStart, PPCampaignToInsert) 
         Set nextIdleStartCell = pouchInsertSpace.Range("I" & idleStartCell.Row + 1)
         
         Dim pouchFillTime As Range
-        Set pouchFillTime = PPPouchSchedule.Range("I" & PPCampaignToInsert)
-
-        If nextIdleStartCell.Value > nextPchStart Then
-            Exit For
-        End If
+        Set pouchFillTime = PPPouchSchedule.Range("Q" & PPCampaignToInsert)
         
         If betweenIntersected(idleStartCell.Value, idleEndCell.Value, pchAvailHrs, pouchFillTime) Then
             containedInIntersection = True
             Exit Function
         End If
-        
+
+        If nextIdleStartCell.Value > nextPchStart Then
+            Exit For
+        End If
+
         If idleStartCell.Value = "" Then
             Exit For
         End If
@@ -464,8 +486,10 @@ End Function
 Function determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
     If PPCampaignToInsert = -1 Then
         determineDryerCampaign = -1
+        Exit Function
     ElseIf D2FirstPchAvailHrs = -1 Then
         determineDryerCampaign = -2
+        Exit Function
     Else
         determineDryerCampaign = 1
     End If
@@ -480,14 +504,19 @@ Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedul
     Dim canAdd As Boolean
     canAdd = checkSiloConstraint(mainSilo, otherSilo)
     If canAdd = True Then
-        PPPouchSchedule.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Delete
+        MsgBox "Can Add"
+        PPPouchSchedule.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Delete xlShiftUp
+        PPPouchSchedule.Range("Q" & PPCampaignToInsert).Delete xlShiftUp
         dryerSkipArray = addItemToArray((D2FirstPchAvailHrs + 1), dryerSkipArray)
     Else
-        dryerDefaultSchedule.Rows(D2FirstPchAvailHrs).EntireRow.Delete
+        MsgBox "Cannot Add -- Skipping"
+        dryerDefaultSchedule.Rows(D2FirstPchAvailHrs).EntireRow.Delete xlShiftUp
         dryerSkipArray = addItemToArray(D2FirstPchAvailHrs, dryerSkipArray)
-        addPouchCampaign = dryerSkipArray
         Application.CalculateFull
     End If
+
+
+    addPouchCampaign = dryerSkipArray
     ' to ensure all pivottables are updated after adding pouch campaigns
     wb.RefreshAll
 End Function
