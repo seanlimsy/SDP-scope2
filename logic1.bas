@@ -24,6 +24,7 @@ Sub resetAll()
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
     
     Application.CalculateFull
+    wb.refreshAll
 End Sub
 
 ' If needed to make thread calculation more robust
