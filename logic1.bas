@@ -24,8 +24,6 @@ Sub resetAll()
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
     
     Application.CalculateFull
-    Application.CalculateFull
-    
 End Sub
 
 ' If needed to make thread calculation more robust
@@ -227,7 +225,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             Exit For
         End If
         
-        dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete
+        dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete xlShiftUp
         ' case nothing can be added
         If i <= DBCampaignToInsert Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -262,21 +260,22 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
             If i = 1 Then
-                PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete
+                PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete xlShiftUp
             Else
                 PPCanSchedule.Range("J" & PPCampaignToInsert).Value = PPCanSchedule.Range("J" & PPCampaignToInsert).Value * (1 - i)
             End If
             Exit For
         End If
-        dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
+        dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete xlShiftUp
         If i <= decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
         End If
     Next
-    
-    ' this is to ensure that the pivot table is updated after adding pp campaigns
+
     Application.CalculateFull
+    ' this is to ensure that the pivot table is updated after adding pp campaigns
+    wb.refreshAll
     
     addPPCampaign = dryerSkipArray
 End Function
