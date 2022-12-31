@@ -1,14 +1,14 @@
 Option Explicit
 Dim wb As Workbook
-Dim D1schedule As Worksheet, D2Schedule As Worksheet, Silos As Worksheet
+Dim D1Schedule As Worksheet, D2Schedule As Worksheet, Silos As Worksheet
 Dim workingDryerSchedule As Worksheet
 
 Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Dim D1CipHrs As Double, D2CipHrs As Double
     Dim siteCpledCapCurrent As Double
-    Dim DiCausingViolation As String
+    Dim DiCausingViolationPE As String, DiCausingViolationSG as String, DiCausingViolation as String
     
-    Dim exceedTimeStep As Double
+    Dim exceedTimeStepPE As Double, exceedTimeStepSG as Double, exceedTimeStep as Double
     'Dim nextInsertTimeStep As Double
     Dim dryerBlockBeforeNextInsert_bool As Boolean
     
@@ -17,7 +17,7 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     
 
     Application.AutoRecover.Enabled = False
-    initializeWorksheets
+    initializeWorksheetsStage2
     
     'Defining Variables - CIP
     D1CipHrs = wb.Worksheets("Evap DryCIP").Range("T3")
@@ -25,11 +25,34 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     
     Do While True
         siteCpledCapCurrent = Round(Silos.Range("R13"), 1)
-        DiCausingViolation = checkDryerResults
-        exceedTimeStep = getExceedTimeStep(DiCausingViolation)
-        
-        If DiCausingViolation = "None" Then
+        DiCausingViolationPE = checkPEDryerResults
+        DiCausingViolationSG = checkSGDryerResults
+
+        If DiCausingViolationPE = "None" And DiCausingViolationSG = "None" Then
             Exit Sub
+        Else
+            If DiCausingViolationPE <> "None" And DiCausingViolationSG = "None" Then
+                exceedTimeStepPE = getExceedTimeStep(DiCausingViolationPE)
+                exceedTimeStep = exceedTimeStepPE
+                DiCausingViolation = DiCausingViolationPE
+
+            ElseIf DiCausingViolationPE = "None" And DiCausingViolationSG <> "None" Then
+                exceedTimeStepSG = getExceedTimeStep(DiCausingViolationSG)
+                exceedTimeStep = exceedTimeStepSG
+                DiCausingViolation = DiCausingViolationSG
+
+            ElseIf DiCausingViolationPE <> "None" And DiCausingViolationSG <> "None" Then 
+                exceedTimeStepPE = getExceedTimeStep(DiCausingViolationPE)
+                exceedTimeStepSG = getExceedTimeStep(DiCausingViolationSG)
+
+                If exceedTimeStepPE <= exceedTimeStepSG Then
+                    exceedTimeStep = exceedTimeStepPE
+                    DiCausingViolation = DiCausingViolationPE
+                Else
+                    exceedTimeStep = exceedTimeStepSG
+                    DiCausingViolation = DiCausingViolationSG
+                End If
+            End If
         End If
         
         'nextInsertTimeStep = getNextInsertionPointInSchedule(DiCausingViolation)
@@ -46,17 +69,13 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Loop
 End Sub
 
-Sub initializeWorksheets()
-    'Without Initialising into same workbook
-    
-    'To adjust to hardcode onto user's path
-    'Can also consider moving sheets over to one main workbook
-    'Michael: Change reference to an cell value -- solve for this in instructions for documentation -- Lester's Preference KIV
+Sub initializeWorksheetsStage2()
     Set wb = ThisWorkbook
 
-    setWorksheet D1schedule, "D1B1L65T"
+    setWorksheet D1Schedule, "D1B1L65T"
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
     setWorksheet Silos, "Silos"
+    
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -68,26 +87,64 @@ Err:
     End
 End Sub
 
-Function checkDryerResults()
-    Dim presenceD1 As String, presenceD2 As String
-    presenceD1 = Silos.Range("S9")
-    presenceD2 = Silos.Range("S10")
+Function checkPEDryerResults()
+    Dim PEPresenceD1 As String, PEPresenceD2 As String
+
+    PEPresenceD1 = Silos.Range("S9")
+    PEPresenceD2 = Silos.Range("S10")
     
-    If presenceD1 = "YES" Then
-        checkDryerResults = "D1"
-        Set workingDryerSchedule = D1schedule
-    ElseIf presenceD2 = "YES" Then
-        checkDryerResults = "D2"
-        Set workingDryerSchedule = D2Schedule
+    If PEPresenceD1 = "YES" Then
+        If Silos.Range("R9") = 0 And Silos.Range("R10") = 0 Then
+            checkPEDryerResults = "None"
+        Else
+            checkPEDryerResults = "PED1"
+            Set workingDryerSchedule = D1Schedule
+        End If
+    ElseIf PEPresenceD2 = "YES" Then
+        If Silos.Range("R9") = 0 And Silos.Range("R10") = 0 Then
+            checkPEDryerResults = "None"
+        Else
+            checkPEDryerResults = "PED2"
+            Set workingDryerSchedule = D2Schedule
+        End If
     Else
-        checkDryerResults = "None"
+        checkPEDryerResults = "None"
+    End If
+End Function
+
+Function checkSGDryerResults()
+    Dim SGPresenceD1 As String, SGPresenceD2 As String
+
+    SGPresenceD1 = Silos.Range("U9")
+    SGPresenceD2 = Silos.Range("U10")
+    
+    If SGPresenceD1 = "YES" Then
+        If Silos.Range("T9") = 0 And Silos.Range("T10") = 0 Then 
+            checkSGDryerResults = "None"
+        Else
+            checkSGDryerResults = "SGD1"
+            Set workingDryerSchedule = D1Schedule
+        End If
+    ElseIf SGPresenceD2 = "YES" Then
+        If Silos.Range("T9") = 0 And Silos.Range("T10") = 0 Then 
+            checkSGDryerResults = "None"
+        Else
+            checkSGDryerResults = "SGD2"
+            Set workingDryerSchedule = D2Schedule
+        End If
+    Else
+        checkSGDryerResults = "None"
     End If
 End Function
 
 Function getExceedTimeStep(DiCause)
-    If DiCause = "D1" Then
+    If DiCause = "PED1" Then
         getExceedTimeStep = Silos.Range("R9")
-    ElseIf DiCause = "D2" Then
+    ElseIf DiCause = "PED2" Then
+        getExceedTimeStep = Silos.Range("R10")
+    ElseIf DiCause = "SGD1" Then
+        getExceedTimeStep = Silos.Range("R9")
+    ElseIf DiCause = "SGD2" Then
         getExceedTimeStep = Silos.Range("R10")
     End If
 End Function
@@ -116,9 +173,13 @@ Function getIdxToDelay(timeExceed)
 End Function
 
 Function getCIPHrs(DiCause, D1CIP, D2CIP)
-    If DiCause = "D1" Then
+    If DiCause = "PED1" Then
         getCIPHrs = D1CIP
-    ElseIf DiCause = "D2" Then
+    ElseIf DiCause = "SGD1" Then 
+        getCIPHrs = D1CIP
+    ElseIf DiCause = "PED2" Then
+        getCIPHrs = D2CIP
+    ElseIf DiCause = "SGD2" Then
         getCIPHrs = D2CIP
     End If
 End Function
@@ -141,10 +202,14 @@ Sub resolveSiloContraint(index, CIPHrs, timeExceed, DiCausingViolation, siteCple
 End Sub
 
 Function checkUpdatedCIP(DiCause)
-    If DiCause = "D1" Then
+    If DiCause = "PED1" Then
         checkUpdatedCIP = Silos.Range("R9")
-    ElseIf DiCause = "D2" Then
+    ElseIf DiCause = "PED2" Then
         checkUpdatedCIP = Silos.Range("R10")
+    ElseIf DiCause = "SGD1" Then
+        checkUpdatedCIP = Silos.Range("T9")
+    ElseIf DiCause = "SGD2" Then
+        checkUpdatedCIP = Silos.Range("T10")
     End If
 End Function
 
@@ -170,5 +235,3 @@ Sub checkDryerBlock(index, timeExceed, timeExceedNext, currentCIPTimeBase, delay
     End If
     
 End Sub
-
-
