@@ -24,6 +24,7 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     D2CipHrs = wb.Worksheets("Evap DryCIP").Range("T6")
     
     Do While True
+        Application.CalculateFull
         siteCpledCapCurrent = Round(Silos.Range("R13"), 1)
         DiCausingViolationPE = checkPEDryerResults
         DiCausingViolationSG = checkSGDryerResults
@@ -192,7 +193,7 @@ Sub resolveSiloContraint(index, CIPHrs, timeExceed, DiCausingViolation, siteCple
     
     existingDryerCIPTimeBase = workingDryerSchedule.Cells(index, 32).Value
     workingDryerSchedule.Cells(index, 32).Value = CIPHrs
-    Application.Calculate
+    Application.CalculateFull
     
     siteCpledCapUpdatedCIP = Round(Silos.Range("R13"), 1)
     delayToAdd = Silos.Range("R7")
@@ -220,18 +221,18 @@ Sub checkDryerBlock(index, timeExceed, timeExceedNext, currentCIPTimeBase, delay
         If cpledCapCIP > currentCpledCap Then
             workingDryerSchedule.Cells(index, 32).Value = currentCIPTimeBase
             workingDryerSchedule.Cells(index, 35).Value = delay
-            Application.Calculate
+            Application.CalculateFull
             
             siteCpledCapUpdatedBlock = Round(Silos.Range("R13"), 1)
             If siteCpledCapUpdatedBlock > cpledCapCIP Then
                 workingDryerSchedule.Cells(index, 35).Value = currentCIPTimeBase
                 workingDryerSchedule.Cells(index, 32) = CIPHrs
-                Application.Calculate
+                Application.CalculateFull
             End If
         End If
     Else
         workingDryerSchedule.Cells(index, 35).Value = delay
-        Application.Calculate
+        Application.CalculateFull
     End If
     
 End Sub

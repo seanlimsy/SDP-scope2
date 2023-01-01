@@ -143,39 +143,53 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         
         ' get initial silo constraint violation time
         Dim initialSiloConstraintViolation
-        initialSiloConstraintViolation = Silos.Range("K1").Value
+        if Silos.Range("K1").Value <> 0 and silos.range("K2").value <> 0 then
+            if silos.range("K1").value > silos.range("K2").value then
+                initialSiloConstraintViolation = silos.range("K2").value
+            Else
+                initialSiloConstraintViolation = silos.range("K1").value
+            end if
+        ElseIf Silos.Range("K1").Value = 0 then
+            initialSiloConstraintViolation = Silos.Range("K2").Value
+        ElseIf Silos.Range("K2").Value = 0 then
+            initialSiloConstraintViolation = Silos.Range("K1").Value
+        else
+            initialSiloConstraintViolation = 0 
+        end if
         
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert)
             
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
-            ' MsgBox "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
+            MsgBox "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
             End
         ElseIf dryerCampaign = -1 Then 'case: no more campaigns left
-            ' MsgBox "All campaigns Inserted"
+            MsgBox "All campaigns Inserted"
+            ' run dryer blockage on remaining silo constraint violations
+            Module4.dryerBlockDelayMain 9999999
             insertPPCan100DBCampaigns = True
             Exit Function
         ElseIf dryerCampaign = 0 Then 'case: no more dryer slots
-            ' MsgBox "All can starvation slots used. Increasing silo constraint"
+            MsgBox "All can starvation slots used. Increasing silo constraint"
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
-            If D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+            If D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
             '' MsgBox "Adding PP campaign to dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
-           If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+           If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
             '' MsgBox "Adding PP campaign to dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
-            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation Then
+            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
@@ -282,6 +296,12 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 End Function
 
 Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow, initialSiloConstraintViolation) As Boolean
+    if initialSiloConstraintViolation = 0 then
+        if Silos.Range("K1").Value <> 0 or Silos.Range("K2").Value <> 0 then
+            checkSiloConstraint = False
+            exit Function
+        end if
+    end if
     Dim siloCheckStartTime As Double
     Dim siloCheckTimeEnd As Double
     siloCheckTimeStart = dryerSchedule.Range("BY" & dryerInsertRow).Value 'silo entry hour
