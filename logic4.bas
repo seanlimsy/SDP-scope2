@@ -12,7 +12,6 @@ Sub PPCanStretchMain()
     Application.AutoRecover.Enabled = False
     initializeWorksheets
     'runOrDuplicateFile
-
     initializePPRateDS
     End
 
@@ -24,6 +23,7 @@ Sub PPCanStretchMain()
 
 End Sub
 
+' =============== Setup Logic ===============
 Sub initializeWorksheets()
     Set wb = ThisWorkbook
 
@@ -161,6 +161,7 @@ Function findMinNonZero(arrayValues) As Double
     findMinNonZero = smallest
 End Function
 
+' =============== Main Logic ===============
 Function logic4()
     Dim mainSilo As Integer
     Dim otherSilo As Integer
