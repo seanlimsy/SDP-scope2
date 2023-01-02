@@ -126,13 +126,13 @@ Sub initializePPRateDS()
     Dim indexWorstTonePerHourOEE As Integer
 
     ' worse case Ton per Hour OEE (smallest value)
-    worstTonPerHourOEE = Application.Min(tonPerHrOEEs)
-    indexWorstTonePerHourOEE = Application.Match(worstTonPerHourOEE, PPRateDSSheet.Range("D2:D" & lastRow), 0)
+    worstTonPerHourOEE = findMinNonZero(tonPerHrOEEs)
+    indexWorstTonePerHourOEE = Application.Match(worstTonPerHourOEE, PPRateDSSheet.Range("D1:D" & lastRow), 0)
     worstTonPerHourPOEE = PPRateDSSheet.Range("B" & indexWorstTonePerHourOEE).Value
     worstSA = PPRateDSSheet.Range("C" & indexWorstTonePerHourOEE).Value
 
     ' worse case FP lbs per silo (smallest value)
-    worstFPLbsPerSilo = Application.Min(FPLbsPerSilos)
+    worstFPLbsPerSilo = findMinNonZero(FPLbsPerSilos)
 
     ' build PP - CAN - 5
     PPRateDSSheet.Range("A" & canStretchRow).Value = "PP - CAN - 5"
@@ -141,7 +141,25 @@ Sub initializePPRateDS()
     PPRateDSSheet.Range("D" & canStretchRow).Value = worstTonPerHourOEE
     PPRateDSSheet.Range("E" & canStretchRow).Value = worstFPLbsPerSilo
 
+    If worstTonPerHourPOEE * worstSA = worstTonPerHourOEE Then
+        PPRateDSSheet.Range("A2:E2").Copy
+        PPRateDSSheet.Range("A" & canStretchRow & ":" & "E" & canStretchRow).PasteSpecial xlFormats
+    Else
+        MsgBox "Error in Determining PPRateDS for PP-Can-5 (Stretching add). Check code-base ""initializePPRateDS"". Ending program." 
+        End
+    End If
 End Sub
+
+Function findMinNonZero(arrayValues) As Double
+    Dim smallest As Double, item As Variant
+    smallest = Application.Max(arrayValues)
+    For Each item In arrayValues
+        If item <> 0 And smallest > item Then 
+            smallest = item
+        End If
+    Next item
+    findMinNonZero = smallest
+End Function
 
 Function logic4()
     Dim mainSilo As Integer
@@ -296,5 +314,3 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     
     addPPCampaign = dryerSkipArray
 End Function
-
-
