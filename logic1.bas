@@ -1,6 +1,6 @@
 'create worksheets as global variables
 Dim wb As Workbook
-Dim D1schedule As Worksheet
+Dim D1Schedule As Worksheet
 Dim D1Default As Worksheet
 Dim D2Schedule As Worksheet
 Dim D2Default As Worksheet
@@ -20,8 +20,20 @@ Sub resetAll()
     PPCanSchedule.Range("A:N").Value = PPCanSchedule.Range("R:AD").Value
     DBSchedule.Range("A:O").Value = DBSchedule.Range("Q:AE").Value
     
-    D1schedule.Range("A:N").Value = D1Default.Range("A:N").Value
+    D1Schedule.Range("A:N").Value = D1Default.Range("A:N").Value
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
+    
+    ' ===== reset cip and dryer blockage cells =====
+    Dim lastRowD1 As Integer
+    Dim lastRowD2 As Integer
+    lastRowD1 = D1Schedule.Range("AF1").End(xlDown).Row
+    lastRowD2 = D2Schedule.Range("AF1").End(xlDown).Row
+
+    D1Schedule.Range("AF2:AF" & lastRowD1).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$2,'Evap DryCIP'!$T$3,0),0))"
+    D2Schedule.Range("AF2:AF" & lastRowD2).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$5,'Evap DryCIP'!$T$6,0),0))"
+
+    D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
+    D2Schedule.Range("AI2:AI" & lastRowD2).Value = 0
     
     Application.CalculateFull
     wb.refreshAll
@@ -56,7 +68,7 @@ Sub initializeWorksheets()
     'note that the worksheets have to be in the same workbook
     'have the PPCan and 100DB schedules in the same workbook
     Set wb = ThisWorkbook
-    setWorksheet D1schedule, "D1B1L65T"
+    setWorksheet D1Schedule, "D1B1L65T"
     setWorksheet D1Default, "D1Sched"
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
     setWorksheet D2Default, "D2Sched"
@@ -138,7 +150,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         ' -1 if there is no can starve
         Dim D1FirstCanStarveTime As Double
         Dim D2FirstCanStarveTime As Double
-        D1FirstCanStarveTime = findFirstCanStarveTime(D1schedule, d1Skip)
+        D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
         D2FirstCanStarveTime = findFirstCanStarveTime(D2Schedule, d2Skip)
         
         ' get initial silo constraint violation time
@@ -175,12 +187,12 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
-            If D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
-                    Module4.dryerBlockDelayMain D1schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
+            If D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+                    Module4.dryerBlockDelayMain D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
             '' MsgBox "Adding PP campaign to dryer 1"
-            d1Skip = addPPCampaign(PPCampaignToInsert, D1schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
+            d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
@@ -340,7 +352,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
     If D1FirstCanStarveTime <> -1 Then
-        D1CanStarveStartTime = D1schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
+        D1CanStarveStartTime = D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
     End If
     If D2FirstCanStarveTime <> -1 Then
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
