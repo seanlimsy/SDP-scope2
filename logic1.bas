@@ -314,7 +314,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
             exit Function
         end if
     end if
-    Dim siloCheckStartTime As Double
+    Dim siloCheckTimeStart As Double
     Dim siloCheckTimeEnd As Double
     siloCheckTimeStart = dryerSchedule.Range("BY" & dryerInsertRow).Value 'silo entry hour
     'siloCheckTimeEnd = dryerSchedule.Range("BB" & dryerInsertRow).Value
@@ -441,7 +441,7 @@ End Function
 Function getTippingStationAvailableStartTime() As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
-    
+
     tippingStationAvailableTime = 0
     Dim PT As PivotTable
     For Each PT In PPTippingStation.PivotTables
