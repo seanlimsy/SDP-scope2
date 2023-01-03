@@ -440,6 +440,8 @@ End Function
 
 Function getTippingStationAvailableStartTime() As Double
     Dim tippingStationAvailableTime As Double
+    Dim Column As Range, row As Range
+    
     tippingStationAvailableTime = 0
     Dim PT As PivotTable
     For Each PT In PPTippingStation.PivotTables
