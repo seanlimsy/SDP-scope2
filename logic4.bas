@@ -1,7 +1,9 @@
 Option Explicit
 Dim wb As Workbook
 Dim D1Schedule As Worksheet
+Dim D1Default As Worksheet
 Dim D2Schedule As Worksheet
+Dim D2Default As Worksheet
 Dim PPThreshold As Worksheet
 Dim PPTippingStation As Worksheet
 Dim PPRateDSSheet As Worksheet
@@ -13,7 +15,6 @@ Sub PPCanStretchMain()
     initializeWorksheets
     'runOrDuplicateFile
     initializePPRateDS
-    End
 
     Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
@@ -23,12 +24,14 @@ Sub PPCanStretchMain()
 
 End Sub
 
-' =============== Setup Logic ===============
+' ============================================= Setup Logic =============================================
 Sub initializeWorksheets()
     Set wb = ThisWorkbook
 
     setWorksheet D1Schedule, "D1B1L65T"
+    setWorksheet D1Default, "D1Sched"
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
+    setWorksheet D2Default, "D2Sched"
     setWorksheet PPThreshold, "PP CAN ADDED THRESHOLD"
     setWorksheet PPTippingStation, "PP"
     setWorksheet Silos, "Silos"
@@ -161,7 +164,7 @@ Function findMinNonZero(arrayValues) As Double
     findMinNonZero = smallest
 End Function
 
-' =============== Main Logic ===============
+' ============================================= Main Logic =============================================
 Function logic4()
     Dim mainSilo As Integer
     Dim otherSilo As Integer
@@ -178,17 +181,18 @@ End Function
 Function stretchingCampaigns(mainSilo, otherSilo)
     Dim PPCanStretching As Range
     Dim D1TipStatPivotTable As pivotTable, D2TipStatPivotTable As pivotTable
-    Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long, TipStatCanCOMax As Long
-    Application.CalculateFull
 
     Set D1TipStatPivotTable = pivotFromDryers(1)
     Set D2TipStatPivotTable = pivotFromDryers(2)
     D1TipStatPivotTable.RefreshTable
     D2TipStatPivotTable.RefreshTable
+
+    Application.CalculateFull
     wb.RefreshAll
 
-    D1TipStatCanCOMax = infoFromDryers(D1TipStatPivotTable)
-    D2TipStatCanCOMax = infoFromDryers(D2TipStatPivotTable)
+    ' Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long
+    ' D1TipStatCanCOMax = infoFromDryers(D1TipStatPivotTable)
+    ' D2TipStatCanCOMax = infoFromDryers(D2TipStatPivotTable)
     
     ' arrays for determining which can starve to skip
     Dim d1Skip() As Integer
@@ -228,7 +232,13 @@ Function stretchingCampaigns(mainSilo, otherSilo)
 
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime)
-        
+
+        'For Testing
+        DeBug.Print "Insertion"
+        DeBug.Print D1FirstCanStarveTime
+        DeBug.Print D2FirstCanStarveTime
+        DeBug.Print dryerCampaign
+
         If dryerCampaign = 0 Then 'case: no more dryer slots
             MsgBox "All can starve slots used. Terminating Program"
             stretchingCampaigns = False
@@ -296,39 +306,63 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
             If D1CanStarveStartTime > tippingStationAvailableTime Then
-                determineDryerCampaign = 1 'd1pp
+                determineDryerCampaignCanStretch = 1 'd1pp
             Else
                 If D2CanStarveStartTime > tippingStationAvailableTime Then
-                    determineDryerCampaign = 2 'd2pp
+                    determineDryerCampaignCanStretch = 2 'd2pp
                 Else
-                    determineDryerCampaign = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
+                    determineDryerCampaignCanStretch = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
                 End If
             End If
         Else
             If D2CanStarveStartTime > tippingStationAvailableTime Then
-                determineDryerCampaign = 2 'd2pp
+                determineDryerCampaignCanStretch = 2 'd2pp
             Else
                 If D1CanStarveStartTime > tippingStationAvailableTime Then
-                    determineDryerCampaign = 1 'd1pp
+                    determineDryerCampaignCanStretch = 1 'd1pp
                 Else
-                    determineDryerCampaign = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
+                    determineDryerCampaignCanStretch = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
                 End If
             End If
         End If
     ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then 'case only d1 has slots
         If D1CanStarveStartTime > tippingStationAvailableTime Then
-            determineDryerCampaign = 1 'd1pp
+            determineDryerCampaignCanStretch = 1 'd1pp
         Else
-            determineDryerCampaign = 4 'can't do pp on d1 and d2 is not available so skip can starve time
+            determineDryerCampaignCanStretch = 4 'can't do pp on d1 and d2 is not available so skip can starve time
         End If    
     ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then 'case only d2 has slots
         If D2CanStarveStartTime > tippingStationAvailableTime Then
-            determineDryerCampaign = 2 'd2pp
+            determineDryerCampaignCanStretch = 2 'd2pp
         Else
-            determineDryerCampaign = 5 'can't insert pp can and there are no more db campaigns so skip d2 can starve time
+            determineDryerCampaignCanStretch = 5 'can't insert pp can and there are no more db campaigns so skip d2 can starve time
         End If
 
     End If
+End Function
+
+Function getTippingStationAvailableStartTime() As Double
+    Dim tippingStationAvailableTime As Double
+    Dim Column As Range, row As Range
+    tippingStationAvailableTime = 0
+    Dim PT As PivotTable
+    For Each PT In PPTippingStation.PivotTables
+        For Each Column In PT.ColumnRange
+             If Column.Value = "Sum of Can After CO Hrs" Then
+                For Each Row In PT.RowRange
+                    If IsNumeric(Row.Value) Then
+                        If PPTippingStation.Cells(Row.Row, Column.Column).Value > tippingStationAvailableTime Then
+                            tippingStationAvailableTime = PPTippingStation.Cells(Row.Row, Column.Column).Value
+                        End If
+                    End If
+                Next
+            End If
+        Next
+    Next PT
+    If tippingStationAvailableTime <> 0 Then
+        tippingStationAvailableTime = tippingStationAvailableTime + 40
+    End If
+    getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
@@ -336,14 +370,14 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
-    decrementCounter = 0.5
+    decrementCounter = 0.2
 
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False
-
+    
     Dim i As Double
-    For i = 1 To decrementCounter Step -decrementCounter
+    For i = 1 To 0.1 Step -decrementCounter
         ' insert to the row before the can starvation time
         PPThreshold.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
@@ -353,6 +387,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
+            DeBug.Print "Inserted" & i & "amount of worst campaign parameters"
             Exit For
         End If
 
@@ -377,7 +412,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
             Exit Function
         End If
     End If
-    Dim siloCheckStartTime As Double
+    Dim siloCheckTimeStart As Double
     Dim siloCheckTimeEnd As Double
     siloCheckTimeStart = dryerSchedule.Range("BY" & dryerInsertRow).Value 'silo entry hour
     'siloCheckTimeEnd = dryerSchedule.Range("BB" & dryerInsertRow).Value
@@ -394,4 +429,44 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     Next
     
     checkSiloConstraint = True
+End Function
+
+Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
+    'ensure column CI is Can Starve
+    If IsNumeric("CI1") Or Worksheet.Range("CI1").Value <> "Can Starve" Then
+            MsgBox "Cell CI1 is not set to Can Starve for " & Worksheet.Name
+        End
+    End If
+    
+    ' return first can starve time
+    Dim cell As Range
+    For Each cell In Worksheet.Range("CI:CI")
+        If cell.Value > 0 And IsNumeric(cell.Value) And isCanStarveInArray(cell.Row, dryerSkipArray) = False Then
+            findFirstCanStarveTime = cell.Row
+            Exit Function
+        End If
+        If cell.Value = "" Then
+            Exit For
+        End If
+    Next cell
+    
+    'no can starve time found
+    findFirstCanStarveTime = -1
+End Function
+
+Function isCanStarveInArray(canStarve, dryerSkipArray) As Boolean
+    Dim i As Integer
+    For i = LBound(dryerSkipArray) To UBound(dryerSkipArray)
+        If dryerSkipArray(i) = canStarve Then
+            isCanStarveInArray = True
+            Exit Function
+        End If
+    Next
+    isCanStarveInArray = False
+End Function
+
+Function addItemToArray(item, dryerSkipArray) As Integer()
+    ReDim Preserve dryerSkipArray(LBound(dryerSkipArray) To UBound(dryerSkipArray) + 1)
+    dryerSkipArray(UBound(dryerSkipArray)) = item
+    addItemToArray = dryerSkipArray
 End Function
