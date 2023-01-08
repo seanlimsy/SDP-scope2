@@ -237,6 +237,18 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
             DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete xlShiftUp
+            ' case not 16(6) - run dryer blockage
+            If mainSilo <> 16 Then
+                If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then
+                    Exit For
+                Else
+                    If Silos.Range("K1").Value > Silos.Range("K2").Value Then
+                        Module4.dryerBlockDelayMain Silos.Range("K1").Value + 1
+                    Else
+                        Module4.dryerBlockDelayMain Silos.Range("K2").Value + 1
+                    End If
+                End If
+            End If
             Exit For
         End If
         
@@ -278,6 +290,18 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete xlShiftUp
             Else
                 PPCanSchedule.Range("J" & PPCampaignToInsert).Value = PPCanSchedule.Range("J" & PPCampaignToInsert).Value * (1 - i)
+            End If
+            ' case not 16(6) - run dryer blockage
+            If mainSilo <> 16 Then
+                If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then
+                    Exit For
+                Else
+                    If Silos.Range("K1").Value > Silos.Range("K2").Value Then
+                        Module4.dryerBlockDelayMain Silos.Range("K1").Value + 1
+                    Else
+                        Module4.dryerBlockDelayMain Silos.Range("K2").Value + 1
+                    End If
+                End If
             End If
             Exit For
         End If
