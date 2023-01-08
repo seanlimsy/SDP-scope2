@@ -27,6 +27,7 @@ Sub ppPouchMain()
 
 End Sub
 
+' ============================================= Setup Logic =============================================
 Function initializePouchInsertion()
     Dim countPouchCampaigns As Long
     
@@ -317,6 +318,7 @@ Sub findIntersectionsOfIdleTimes(countPouches)
     Loop
 End Sub
 
+' ============================================= Main Logic =============================================
 Function logic3(countPouchCampaigns)
     Dim mainSilo As Integer
     Dim otherSilo As Integer
