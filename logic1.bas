@@ -138,6 +138,11 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
     d1Skip(0) = 0
     d2Skip(0) = 0
     
+    Dim D1PrevInsertTime as Double
+    Dim D2PrevInsertTime as Double
+    D1PrevInsertTime = -1
+    D2PrevInsertTime = -1
+
     Do While True
         ' get row of campaign to insert
         ' -1 if there is no campaign
@@ -171,7 +176,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert)
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime)
             
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
             MsgBox "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
@@ -193,6 +198,8 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             End If
             '' MsgBox "Adding PP campaign to dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
+            D1PrevInsertTime = D1FirstCanStarveTime
+            D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
@@ -200,6 +207,8 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             End If
             '' MsgBox "Adding PP campaign to dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
+            D2PrevInsertTime = D2FirstCanStarveTime
+            D1PrevInsertTime = -1
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
             If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
@@ -357,7 +366,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     checkSiloConstraint = True
 End Function
       
-Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert) As Integer
+Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then
         determineDryerCampaign = -1
         Exit Function
@@ -371,7 +380,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     ' check PP sheet pivot table to determine tipping station availability
     Dim tippingStationAvailableTime As Double
     tippingStationAvailableTime = 0
-    tippingStationAvailableTime = getTippingStationAvailableStartTime
+    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
@@ -382,10 +391,14 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
+    If D1CanStarveStartTime < tippingStationAvailableTime Then
+        determineDryerCampaign = 4 'if d1 can starve is before tipping station start then skip d1 time
+        Exit Function
+    End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then 'case both pp and db campaigns available
-            If D1CanStarveStartTime < D2CanStarveStartTime + 150 Then
+            If D1CanStarveStartTime < D2CanStarveStartTime + 50 Then
                 If D1CanStarveStartTime > tippingStationAvailableTime Then
                     determineDryerCampaign = 1 'd1pp
                 Else
@@ -462,7 +475,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     End If
 End Function
 
-Function getTippingStationAvailableStartTime() As Double
+Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
 
@@ -482,7 +495,13 @@ Function getTippingStationAvailableStartTime() As Double
         Next
     Next PT
     If tippingStationAvailableTime <> 0 Then
-        tippingStationAvailableTime = tippingStationAvailableTime + 40
+        If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then
+            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then
+            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        Else
+            tippingStationAvailableTime = tippingStationAvailableTime + 40
+        End If
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
