@@ -1,0 +1,37 @@
+Option Explicit
+Dim wb As Workbook
+Dim reportWS As Worksheet
+Dim programStatus As String
+Dim toAttemptStage4 As String
+
+' ============================================= runLTP() Integrated modules logic1 to logic 4 =============================================
+Set wb = ThisWorkBook
+Set reportWS = wb.Worksheets("Program Report")
+
+' ============================================= Logic 1 =============================================
+programStatus = "PPCan & 100DB Campaign Insertion Phase"
+reportWS.Range("A2").Value = programStatus
+programModule1.main
+
+' To include the status output for unable to insert
+If infeasibleProgram = True Then
+    reportWS.Range("A2").Value = "Unable to insert automatically."
+End If
+
+' ============================================= Logic 3 =============================================
+programStatus = "PPPouch Campaign Insertion Phase"
+reportWS.Range("A2").Value = programStatus
+programModule3.ppPouchMain
+
+' ============================================= Logic 4 =============================================
+toAttemptStage4 = reportWS.Range("B2").Value
+
+If toAttemptStage4 = "Yes" Then
+    programStatus = "PPCan Stretching Insertion Phase"
+    reportWS.Range("A2").Value = programStatus
+    programModule4.PPCanStretchMain
+    porgamStatus = "All phases complete. Total files to view = 2"
+    reportWS.Range("A2").Value = programStatus
+Else
+    reportWS.Range("A2").Value = "Attempted insertion until PPPouch Campaigns. Total files to view = 3"
+End If
