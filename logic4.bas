@@ -202,6 +202,11 @@ Function stretchingCampaigns(mainSilo, otherSilo)
     d1Skip(0) = 0
     d2Skip(0) = 0
 
+    Dim D1PrevInsertTime As Double
+    Dim D2PrevInsertTime As Double
+    D1PrevInsertTime = -1
+    D2PrevInsertTime = -2
+
     Do While True
         ' get row of campaign to insert
         Dim PPCampaignToInsert As Double
@@ -231,7 +236,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         End If
 
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime)
+        dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
 
         'For Testing
         DeBug.Print "Insertion"
@@ -246,9 +251,13 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         ElseIf dryerCampaign = 1 Then 'case: d1 PP campaign
             MsgBox "Add PPCan to Dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
+            D1PrevInsertTime = D1FirstCanStarveTime
+            D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 PP campaign
             MsgBox "Add PPCan to Dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
+            D1PrevInsertTime = -1
+            D2PrevInsertTime = D2FirstCanStarveTime
         ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
         ElseIf dryerCampaign = 5 Then 'case: skip d2 can starve time
@@ -291,7 +300,7 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     ' check PP sheet pivot table to determine tipping station availability
     Dim tippingStationAvailableTime As Double
     tippingStationAvailableTime = 0
-    tippingStationAvailableTime = getTippingStationAvailableStartTime
+    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
@@ -302,6 +311,10 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
+    If D1CanStarveStartTime < tippingStationAvailableTime Then 
+        determineDryerCampaign = 4 'if d1 can starve if before tipping station start then skip d1 time
+        Exit Function
+    End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
@@ -341,7 +354,7 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     End If
 End Function
 
-Function getTippingStationAvailableStartTime() As Double
+Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
     tippingStationAvailableTime = 0
@@ -359,10 +372,18 @@ Function getTippingStationAvailableStartTime() As Double
             End If
         Next
     Next PT
+
     If tippingStationAvailableTime <> 0 Then
-        tippingStationAvailableTime = tippingStationAvailableTime + 40
+        If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then 
+            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then 
+            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        Else
+            tippingStationAvailableTime = tippingStationAvailableTime + 40
+        End If
+    Else
+        getTippingStationAvailableStartTime = tippingStationAvailableTime
     End If
-    getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
