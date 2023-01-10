@@ -101,7 +101,6 @@ Function initializePouchWorksheets()
     Pouch_OriginalDetails.Copy
     PPPouchSchedule.Range("S2:AF" & countPouches).PasteSpecial xlPasteValues
     
-
     'Calculate Pouch Fill Times
     Dim effective_fp_tonnes_perhr As Double
     Dim Pouch_Rates As Range
