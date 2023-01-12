@@ -381,9 +381,8 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Else
             tippingStationAvailableTime = tippingStationAvailableTime + 40
         End If
-    Else
-        getTippingStationAvailableStartTime = tippingStationAvailableTime
     End If
+    getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
