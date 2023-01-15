@@ -443,13 +443,18 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     addPPCampaign = dryerSkipArray
 End Function
 
-Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow, initialSiloConstraintViolation) As Boolean
-    If Silos.Range("K1").Value <> 0 Or Silos.Range("K2").Value <> 0 Then
+Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
+    Dim effectOnMainSilo As Double
+    Dim effectOnOtherSilo As Double
+
+    effectOnMainSilo = Silos.Range("J1").Value
+    effectOnOtherSilo = Silos.Range("J2").Value
+
+    If effectOnMainSilo <= mainSilo And effectOnOtherSilo <= otherSilo Then
+        checkSiloConstraint = True
+    Else
         checkSiloConstraint = False
-        DeBug.Print "Effect: Silo Constraint violated by insertion."
-        Exit Function
     End If
-    checkSiloConstraint = True
 End Function
 
 Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
