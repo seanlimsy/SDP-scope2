@@ -407,11 +407,14 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     DeBug.Print "++++++++++++++++++++++++"
 
     Dim i As Double
+    Dim FPLoadingWeight As Double
+    FPLoadingWeight = PPThreshold.Range("J" & PPCampaignToInsert).Value
+
     For i = 1 To 0.1 Step -decrementCounter
         ' insert to the row before the can starvation time
-        PPThreshold.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
+        PPThreshold.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
-        dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value = dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value * i
+        dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value = FPLoadingWeight * i
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
         Application.CalculateFull
 
