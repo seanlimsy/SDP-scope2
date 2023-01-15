@@ -178,6 +178,10 @@ Function logic4()
 
 End Function
 
+Function getSiloConstraintViolation
+
+End Function 
+
 Function stretchingCampaigns(mainSilo, otherSilo)
     Dim PPCanStretching As Range
     Dim D1TipStatPivotTable As pivotTable, D2TipStatPivotTable As pivotTable
@@ -239,22 +243,27 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
 
         'For Testing
-        DeBug.Print "Insertion"
-        DeBug.Print D1FirstCanStarveTime
-        DeBug.Print D2FirstCanStarveTime
-        DeBug.Print dryerCampaign
+        DeBug.Print "================= Getting output from determineDryerCampaignCanStretch ================="
+        DeBug.Print "Index to Insert @ D1 " & D1FirstCanStarveTime
+        DeBug.Print "Index to Insert @ D2 " & D2FirstCanStarveTime
+        If dryerCampaign = 0 Then 
+            DeBug.Print( "All can starve slots used. Terminating Program")
+        ElseIf dryerCampaign = 1 Then
+            DeBug.Print "Add PPCan to Dryer 1"
+        ElseIf dryerCampaign = 2 Then 
+            DeBug.Print "Add PPCan to Dryer 2"
+        ElseIf dryerCampaign >= 4 Then 
+            DeBug.Print "Skipping D1 or D1 or Both D1 and D2 slots"
+        End If
 
         If dryerCampaign = 0 Then 'case: no more dryer slots
-            MsgBox "All can starve slots used. Terminating Program"
             stretchingCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 PP campaign
-            MsgBox "Add PPCan to Dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
             D1PrevInsertTime = D1FirstCanStarveTime
             D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 PP campaign
-            MsgBox "Add PPCan to Dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
             D1PrevInsertTime = -1
             D2PrevInsertTime = D2FirstCanStarveTime
@@ -266,6 +275,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         End If
+        DeBug.Print "================= Finished attempt @ slot determineDryerCampaignCanStretch ================="
 continueLoop:
     Loop
     stretchingCampaigns = True
@@ -291,7 +301,7 @@ Function infoFromDryers(pivotTable)
     infoFromDryers = TipStatCanCOMax
 End Function
 
-Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime) As Integer    
+Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Integer    
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then
         determineDryerCampaignCanStretch = 0
         Exit Function
@@ -312,7 +322,7 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     End If
 
     If D1CanStarveStartTime < tippingStationAvailableTime Then 
-        determineDryerCampaign = 4 'if d1 can starve if before tipping station start then skip d1 time
+        determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
         Exit Function
     End If
 
@@ -381,8 +391,9 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Else
             tippingStationAvailableTime = tippingStationAvailableTime + 40
         End If
+    Else
+        getTippingStationAvailableStartTime = tippingStationAvailableTime
     End If
-    getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
@@ -407,14 +418,22 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
-            DeBug.Print "Inserted" & i & "amount of worst campaign parameters"
+            DeBug.Print "++++++++++++++++++++++++"
+            DeBug.Print "Inserted @ " & dryerFirstCanStarveTime
+            DeBug.Print "Inserted " & i & "th amount of 1 worst-case PPCan Campaign"
+            DeBug.Print "++++++++++++++++++++++++"
             Exit For
         End If
+
+        DeBug.Print("------------------------")
+        DeBug.Print "Reducing amount by " & i
 
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
         If i <= decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+            DeBug.Print("Cannot be inserted at slot. Skipping.")
+            DeBug.Print("------------------------")
         End If
     Next
     Application.CalculateFull
@@ -429,9 +448,11 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     If initialSiloConstraintViolation = 0 Then
         If Silos.Range("K1").Value <> 0 or Silos.Range("K2").Value <> 0 Then
             checkSiloConstraint = False
+            DeBug.Print ("Effect: Silo Constraint Violated by insertion.")
             Exit Function
         End If
     End If
+
     Dim siloCheckTimeStart As Double
     Dim siloCheckTimeEnd As Double
     siloCheckTimeStart = dryerSchedule.Range("BY" & dryerInsertRow).Value 'silo entry hour
