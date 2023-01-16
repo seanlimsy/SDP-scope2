@@ -448,13 +448,13 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
-            Print #textFile, "Inserted @ " & dryerFirstCanStarveTime
-            Print #textFile, "Inserted " & i & "th amount of 1 worst-case PPCan Campaign"
+            Print #textFile, "Inserted @ Time " & dryerFirstCanStarveTime
+            Print #textFile, "Inserted " & i & "-th amount of 1 worst-case PPCan Campaign"
             Print #textFile, "++++++++++++++++++++++++"
             Exit For
         End If
 
-        Print #textFile, "Reducing amount by " & i
+        Print #textFile, "Reducing amount to " & i-decrementCounter
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
         If i <= decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
