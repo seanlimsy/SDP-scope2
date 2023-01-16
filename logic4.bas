@@ -12,12 +12,13 @@ Dim Silos As Worksheet
 
 Sub PPCanStretchMain()
     Application.AutoRecover.Enabled = False
-    DeBug.Print "================== Setup Logic =================="
+    DeBug.Print "==== Setup Logic ===="
     initializeWorksheets
     'runOrDuplicateFile
     initializePPRateDS
+    DeBug.Print "Done."
 
-    DeBug.Print "================== Main Logic =================="
+    DeBug.Print "==== Main Logic ===="
     Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
     If isLogic4Feasible = False Then
@@ -114,7 +115,12 @@ Sub initializePPRateDS()
     Dim tonPerHrOEEs() As Double, FPLbsPerSilos() As Double
     ReDim tonPerHrOEEs(1)
     ReDim FPLbsPerSilos(1)
+
     lastRow = PPRateDSSheet.Range("B1").End(xlDown).row
+    If PPRateDSSheet.Range("A" & lastRow).Value = "PP - CAN - 5" Then 
+        Exit Sub 
+    End If
+
     canStretchRow = lastRow + 1
 
     Dim cell As Range
@@ -209,7 +215,11 @@ Function stretchingCampaigns(mainSilo, otherSilo)
     D1PrevInsertTime = -1
     D2PrevInsertTime = -2
 
+    Dim count As Integer
+    count = 1
+
     Do While True
+        DeBug.Print "======== Attempt " & count & " ========"
         ' get row of campaign to insert
         Dim PPCampaignToInsert As Double
         PPCampaignToInsert = 2 ' fixed
@@ -239,15 +249,15 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         Else
             initialSiloConstraintViolation = 0
         End If
-        DeBug.Print "Done"
+        DeBug.Print "Done."
+        DeBug.Print "-------"
+        DeBug.Print "D1 First Can Starve Time Index: " & D1FirstCanStarveTime: Space 0
+        DeBug.Print "D2 First Can Starve Time Index: " & D2FirstCanStarveTime
 
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
-
-        DeBug.Print "================= Getting output from determineDryerCampaignCanStretch ================="
-        DeBug.Print "Index to Insert @ D1 " & D1FirstCanStarveTime
-        DeBug.Print "Index to Insert @ D2 " & D2FirstCanStarveTime
-
+        DeBug.Print "Dryer Campaign Value: " & dryerCampaign
+        
         If dryerCampaign = 0 Then 'case: no more dryer slots
             DeBug.Print "All can starve slots used. Terminating Program"
             stretchingCampaigns = False
@@ -273,7 +283,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         End If
-        DeBug.Print "================= Finished attempt @ slot determineDryerCampaignCanStretch ================="
+        DeBug.Print "======== Attempt " & (count-1) & " Concluded ========"
 continueLoop:
     Loop
     stretchingCampaigns = True
@@ -310,6 +320,8 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
+    DeBug.Print "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
+
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
     If D1FirstCanStarveTime <> -1 Then
@@ -319,10 +331,17 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
-    If D1CanStarveStartTime < tippingStationAvailableTime Then
-        determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
-        Exit Function
+    DeBug.Print "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
+    DeBug.Print "D2CanStarveStartTime: " & D2CanStarveStartTime
+
+    If D1CanStarveStartTime >= tippingStationAvailableTime OR D2CanStarveStartTime >= tippingStationAvailableTime Then 
+        End
     End If
+
+    ' If D1CanStarveStartTime < tippingStationAvailableTime Then
+    '     determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
+    '     Exit Function
+    ' End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
@@ -403,8 +422,6 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False
-    
-    DeBug.Print "++++++++++++++++++++++++"
 
     Dim i As Double
     Dim FPLoadingWeight As Double
@@ -443,18 +460,13 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     addPPCampaign = dryerSkipArray
 End Function
 
-Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
-    Dim effectOnMainSilo As Double
-    Dim effectOnOtherSilo As Double
-
-    effectOnMainSilo = Silos.Range("J1").Value
-    effectOnOtherSilo = Silos.Range("J2").Value
-
-    If effectOnMainSilo <= mainSilo And effectOnOtherSilo <= otherSilo Then
-        checkSiloConstraint = True
-    Else
+Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow, initialSiloConstraintViolation) As Boolean
+    If Silos.Range("K1").Value <> 0 Or Silos.Range("K2").Value <> 0 Then
         checkSiloConstraint = False
+        DeBug.Print "Effect: Silo Constraint violated by insertion."
+        Exit Function
     End If
+    checkSiloConstraint = True
 End Function
 
 Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
