@@ -1,0 +1,121 @@
+======== Initializing ========
+Done.
+======== Main Logic ========
+======== Attempt 1 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 490
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
+======== Attempt 1 Concluded ========
+ 
+======== Attempt 2 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 491
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 491
+++++++++++++++++++++++++
+======== Attempt 2 Concluded ========
+ 
+======== Attempt 3 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 992
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 992
+++++++++++++++++++++++++
+======== Attempt 3 Concluded ========
+ 
+======== Attempt 4 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 1099
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 1099
+++++++++++++++++++++++++
+======== Attempt 4 Concluded ========
+ 
+======== Attempt 5 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 1628
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 1628
+++++++++++++++++++++++++
+======== Attempt 5 Concluded ========
+ 
+======== Attempt 6 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 1665
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 1665
+++++++++++++++++++++++++
+======== Attempt 6 Concluded ========
+ 
+======== Attempt 7 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: 2
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: 1796
+Done.
+-------
+Dryer Campaign Value: 1
+Adding PP Pouch Campaign campaign
+++++++++++++++++++++++++
+Inserted @ 1796
+++++++++++++++++++++++++
+======== Attempt 7 Concluded ========
+ 
+======== Attempt 8 ========
+-- Finding PP Pouch Campaign to Insert...
+To insert Campaign: -1
+Done.
+-- Finding Pouch Line Availability...
+First Pouch Availability: -2
+Done.
+-------
+Dryer Campaign Value: -1
+All PP Pouch Campaigns inserted.
+======== Attempt 8 Concluded ========
+All PP-Pouch Campaigns inserted. Ending Stage 3.
