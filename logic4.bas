@@ -347,14 +347,10 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
     Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime
 
-    ' If D1CanStarveStartTime >= tippingStationAvailableTime OR D2CanStarveStartTime >= tippingStationAvailableTime Then 
-    '     End
-    ' End If
-
-    ' If D1CanStarveStartTime < tippingStationAvailableTime Then
-    '     determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
-    '     Exit Function
-    ' End If
+    If D1CanStarveStartTime < tippingStationAvailableTime AND D1CanStarveStartTime <> 0 Then
+        determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
+        Exit Function
+    End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
