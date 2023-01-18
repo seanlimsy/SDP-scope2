@@ -18,7 +18,6 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Dim idxToDelay As Double
     Dim DiCIPHrs As Double
     
-
     Application.AutoRecover.Enabled = False
     initializeWorksheetsStage2
     
@@ -26,7 +25,15 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     D1CipHrs = wb.Worksheets("Evap DryCIP").Range("T3")
     D2CipHrs = wb.Worksheets("Evap DryCIP").Range("T6")
     
+    Dim repeatedSolve As Integer
+    repeatedSolve = 1
     Do While True
+        If repeatedSolve = 30 Then 
+            End
+        Else 
+            repeatedSolve = repeatedSolve + 1
+        End If 
+
         Application.CalculateFull
         siteCpledCapCurrent = Round(Silos.Range("R13"), 1)
         DiCausingViolationPE = checkPEDryerResults
@@ -71,8 +78,10 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
             Print #logic1TextFile, " ": Space 0
             Exit Do
         Else
+            Print #logic1TextFile, "Solving Delay...": Space 0
             idxToDelay = getIdxToDelay(exceedTimeStep)
             DiCIPHrs = getCIPHrs(DiCausingViolation, D1CipHrs, D2CipHrs)
+            Print #logic1TextFile, "Index to Delay: " & idxToDelay: Space 0
             resolveSiloContraint idxToDelay, DiCIPHrs, exceedTimeStep, DiCausingViolation, siteCpledCapCurrent
 
         End If
@@ -153,9 +162,9 @@ Function getExceedTimeStep(DiCause)
     ElseIf DiCause = "PED2" Then
         getExceedTimeStep = Silos.Range("R10")
     ElseIf DiCause = "SGD1" Then
-        getExceedTimeStep = Silos.Range("R9")
+        getExceedTimeStep = Silos.Range("T9")
     ElseIf DiCause = "SGD2" Then
-        getExceedTimeStep = Silos.Range("R10")
+        getExceedTimeStep = Silos.Range("T10")
     End If
 End Function
 
