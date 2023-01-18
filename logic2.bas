@@ -4,6 +4,9 @@ Dim D1Schedule As Worksheet, D2Schedule As Worksheet, Silos As Worksheet
 Dim workingDryerSchedule As Worksheet
 
 Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
+    Print #logic1TextFile, " "
+    Print #logic1TextFile, "==== Initializing logic 2 ====": Space 0
+    
     Dim D1CipHrs As Double, D2CipHrs As Double
     Dim siteCpledCapCurrent As Double
     Dim DiCausingViolationPE As String, DiCausingViolationSG as String, DiCausingViolation as String
@@ -55,11 +58,17 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
                 End If
             End If
         End If
-        
+        Print #logic1TextFile, "Next possible insert time step: " & nextInsertTimeStep: Space 0
+        Print #logic1TextFile, "Next dryer exceed time step: " & exceedTimeStep: Space 0
+        Print #logic1TextFile, "Cause of violation: " & DiCausingViolation: Space 0
+
         'nextInsertTimeStep = getNextInsertionPointInSchedule(DiCausingViolation)
         dryerBlockBeforeNextInsert_bool = isDryerBlockBeforeNextInsert(exceedTimeStep, nextInsertTimeStep)
         
         If dryerBlockBeforeNextInsert_bool = False Then
+            Print #logic1TextFile, "Next potential insertion point is before the next time dryer is exceeded. Ending blockage.": Space 0
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
+            Print #logic1TextFile, " ": Space 0
             Exit Do
         Else
             idxToDelay = getIdxToDelay(exceedTimeStep)

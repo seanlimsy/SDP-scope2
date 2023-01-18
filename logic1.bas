@@ -11,6 +11,10 @@ Dim Silos As Worksheet
 Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
 
+Public logic1File As String
+Public logic1TextFile As Integer
+Dim reasonForStop As String
+
 Sub resetAll()
     initializeWorksheets
     
@@ -29,7 +33,7 @@ Sub resetAll()
     lastRowD1 = D1Schedule.Range("AF1").End(xlDown).Row
     lastRowD2 = D2Schedule.Range("AF1").End(xlDown).Row
 
-    D1Schedule.Range("AF2:AF" & lastRowD1).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$2,'Evap DryCIP'!$T$3,0),0))"
+    D1Schedule.Range("AF2:AF" & lastRowD1).Formula = "=If(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$2,'Evap DryCIP'!$T$3,0),0))"
     D2Schedule.Range("AF2:AF" & lastRowD2).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$5,'Evap DryCIP'!$T$6,0),0))"
 
     D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
@@ -49,16 +53,22 @@ End Sub
 'End Sub
 
 Sub main()
+    'Debugging
+    logic1File = "/Users/ben/Desktop/logic1.txt"
+    logic1TextFile = FreeFile
+    Open logic1File For Output as logic1TextFile
+
     'turn off autosave
     Application.AutoRecover.Enabled = False
-    MsgBox "Initialising Program"
+    Print #logic1TextFile, "======== Initializing ========"
     initializeWorksheets
+    Print #logic1TextFile, "Done."
     
-    MsgBox "Insertion to Proceed"
+    Print #logic1TextFile, "======== Main Logic ========"
     Dim isLogic1Feasible As Boolean
     isLogic1Feasible = logic1()
     If isLogic1Feasible = False Then
-        MsgBox "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6). Terminating Program."
+        Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6). Terminating Program."
         End
     End If
     
@@ -92,13 +102,19 @@ Sub initializeWorksheets()
         Next PI
     Next PT
 
-    'Include Silo Constraint presense for SG
+    'Include Silo Constraint presense for PE and SG
     Silos.Range("R8:S8").Value = "PE"
+    Silos.Range("R9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$1,D1B1L65T!AP:AP,"">=1"")"
+    Silos.Range("R10").Formula = "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$1,D2B1L3B3B4L45T!AP:AP,"">=1"")"
+    Silos.Range("S9").Formula = "=IF(K1-R9<0.5,""YES"",""NO"")"
+    Silos.Range("S10").Formula = "=IF(K1-R10<0.5,""YES"",""NO"")"
+    
     Silos.Range("T8:U8").Value = "SG"
     Silos.Range("T9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$2,D1B1L65T!AP:AP,"">=1"")"
-    Silos.Range("T10").Formula =  "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$2,D2B1L3B3B4L45T!AP:AP,"">=1"")"
+    Silos.Range("T10").Formula = "=MAXIFS(D2B1L3B3B4L45T!AJ:AJ,D2B1L3B3B4L45T!AJ:AJ,""<=""&Silos!$K$2,D2B1L3B3B4L45T!AP:AP,"">=1"")"
     Silos.Range("U9").Formula = "=IF(K2-T9<0.5,""YES"",""NO"")"
     Silos.Range("U10").Formula = "=IF(K2-T10<0.5,""YES"",""NO"")"
+    
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -119,6 +135,8 @@ Function logic1()
     Dim isFeasible As Boolean
     isFeasible = False
     Do While mainSilo <= 22
+        Print #logic1TextFile, "Current PE Silo Allowance: " & mainSilo: Space 0
+        Print #logic1TextFile, "Current SG Silo Allowance: " & otherSilo: Space 0
         isFeasible = insertPPCan100DBCampaigns(mainSilo, otherSilo)
         If isFeasible = True Then
             Exit Do
@@ -143,23 +161,40 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
     D1PrevInsertTime = -1
     D2PrevInsertTime = -1
 
+    Dim count As Integer
+    count = 1
+
     Do While True
+        Print #logic1TextFile, "======== Attempt " & count & " ========"
+        count = count + 1
+        
+        Print #logic1TextFile, "-- Finding PP / DB Campaign to insert..."
         ' get row of campaign to insert
         ' -1 if there is no campaign
         Dim PPCampaignToInsert As Double
         Dim DBCampaignToInsert As Double
         PPCampaignToInsert = findNextCampaignToInsert(PPCanSchedule)
         DBCampaignToInsert = findNextCampaignToInsert(DBSchedule)
-        
+        Print #logic1TextFile, "Done."
+        Print #logic1TextFile, "-------"
+        Print #logic1TextFile, "PP Campaign to insert " & PPCampaignToInsert: Space 0
+        Print #logic1TextFile, "DB Campaign to insert " & DBCampaignToInsert: Space 0
+
+        Print #logic1TextFile, "-- Finding CanStarveTime..."
         ' get row of insertion in schedule
         ' -1 if there is no can starve
         Dim D1FirstCanStarveTime As Double
         Dim D2FirstCanStarveTime As Double
         D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
         D2FirstCanStarveTime = findFirstCanStarveTime(D2Schedule, d2Skip)
-        
+        Print #logic1TextFile, "Done."
+        Print #logic1TextFile, "-------"
+        Print #logic1TextFile, "D1 First Can Starve Time Index: " & D1FirstCanStarveTime: Space 0
+        Print #logic1TextFile, "D2 First Can Starve Time Index: " & D2FirstCanStarveTime: Space 0
+
+        Print #logic1TextFile, "-- Finding initial silo constraint..."
         ' get initial silo constraint violation time
-        Dim initialSiloConstraintViolation
+        Dim initialSiloConstraintViolation As Double
         if Silos.Range("K1").Value <> 0 and silos.range("K2").value <> 0 then
             if silos.range("K1").value > silos.range("K2").value then
                 initialSiloConstraintViolation = silos.range("K2").value
@@ -173,22 +208,35 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         else
             initialSiloConstraintViolation = 0 
         end if
-        
+        Print #logic1TextFile, "Done."
+        Print #logic1TextFile, "-------"
+        Print #logic1TextFile, "Initial Silo Constraint Violation " & initialSiloConstraintViolation: Space 0
+
+        Print #logic1TextFile, "-- Finding dryer campaign value..."
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime)
-            
+        Print #logic1TextFile, "Done."
+        Print #logic1TextFile, "-------"
+        Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
+        
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
-            MsgBox "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
+            Print #logic1TextFile, "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
+            Print #logic1TextFile, "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+            Print #logic1TextFile, "DB Campaigns remaining but there are no more can starvation slots in D2."
+            Print #logic1TextFile, "Resetting Schedules and increasing dryer allowances"
             End
         ElseIf dryerCampaign = -1 Then 'case: no more campaigns left
-            MsgBox "All campaigns Inserted"
+            Print #logic1TextFile, "All campaigns Inserted. Running dryer blockage on all remaining silo constraint violations. "
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
             ' run dryer blockage on remaining silo constraint violations
             Module4.dryerBlockDelayMain 9999999
             insertPPCan100DBCampaigns = True
             Exit Function
         ElseIf dryerCampaign = 0 Then 'case: no more dryer slots
-            MsgBox "All can starvation slots used. Increasing silo constraint"
+            Print #logic1TextFile, "All can starvation slots used. Increasing silo constraint"
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
@@ -196,7 +244,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
                     Module4.dryerBlockDelayMain D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
-            '' MsgBox "Adding PP campaign to dryer 1"
+            Print #logic1TextFile, "Adding PP campaign to dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
             D1PrevInsertTime = D1FirstCanStarveTime
             D2PrevInsertTime = -1
@@ -205,7 +253,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
-            '' MsgBox "Adding PP campaign to dryer 2"
+            Print #logic1TextFile, "Adding PP campaign to dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
             D2PrevInsertTime = D2FirstCanStarveTime
             D1PrevInsertTime = -1
@@ -214,16 +262,21 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     GoTo continueLoop
             End If
-            '' MsgBox "Adding DB campaign to dryer 2"
+            Print #logic1TextFile, "Adding DB campaign to dryer 2"
             d2Skip = addDBCampaign(DBCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
         ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
+            Print #logic1TextFile, "Skipping D1"
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
         ElseIf dryerCampaign = 5 Then 'case: skip d2 can starve time
+            Print #logic1TextFile, "Skipping D2"
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         ElseIf dryerCampaign = 6 Then 'case: skip d1 and d2 can starve time
+            Print #logic1TextFile, "Skipping D1 or D1 or Both D1 and D2 slots"
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         End If
+        Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
+        Print #logic1TextFile, " "
 continueLoop:
     Loop
     insertPPCan100DBCampaigns = True
@@ -247,6 +300,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Loop
     
     Dim i As Integer
+    Print #logic1TextFile, "++++++++++++++++++++++++"
     For i = lastRow To DBCampaignToInsert Step -1
         ' insert DB campaign
         DBSchedule.Range("A" & DBCampaignToInsert, "M" & i).Copy
@@ -258,8 +312,12 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
             DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete xlShiftUp
+            Print #logic1TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
+            Print #logic1TextFile, "Inserted " & i & " campaign(s) from window": Space 0
             ' case not 16(6) - run dryer blockage
             If mainSilo <> 16 Then
+                Print #logic1TextFile, "Silo allowance attained. Inducing dryer blockage/delay.": Space 0
+                Print #logic1TextFile, "Induced Delay/Block @ " & initialSiloConstraintViolation: Space 0
                 If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then
                     Exit For
                 Else
@@ -270,14 +328,18 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     End If
                 End If
             End If
+            Print #logic1TextFile, "++++++++++++++++++++++++"
             Exit For
         End If
         
+        Print #logic1TextFile, "Reducing amount to " & (i - decrementCounter)
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete xlShiftUp
         ' case nothing can be added
         If i <= DBCampaignToInsert Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:M").Value = dryerDefaultSchedule.Range("A:M").Value
+            Print #logic1TextFile, "Cannot be inserted at slot. Skipping."
+            Print #logic1TextFile, "++++++++++++++++++++++++"
             Exit For
         End If
     Next
@@ -297,6 +359,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     canAdd = False
 
     Dim i As Double
+    Print #logic1TextFile, "++++++++++++++++++++++++"
     For i = 1 To decrementCounter Step -decrementCounter
         ' insert to the row before the can starvation time
         PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
@@ -307,6 +370,8 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
+            Print #logic1TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
+            Print #logic1TextFile, " Inserted " & i & "th amount of campaign": Space 0
             If i = 1 Then
                 PPCanSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Delete xlShiftUp
             Else
@@ -314,6 +379,8 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             End If
             ' case not 16(6) - run dryer blockage
             If mainSilo <> 16 Then
+                Print #logic1TextFile, "Silo allowance retained. Inducing dryer blockage/delay.": Space 0
+                Print #logic1TextFile, "Induced Delay/Block @ " & initialSiloConstraintViolation: Space 0
                 If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then
                     Exit For
                 Else
@@ -324,12 +391,17 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     End If
                 End If
             End If
+            Print #logic1TextFile, "++++++++++++++++++++++++"
             Exit For
         End If
+
+        Print #logic1TextFile, "Reducing amount to " & (i - decrementCounter)
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete xlShiftUp
         If i <= decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+            Print #logic1TextFile, "Cannot be inserted at slot. Skipping."
+            Print #logic1TextFile, "++++++++++++++++++++++++"
         End If
     Next
 
@@ -341,22 +413,25 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 End Function
 
 Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow, initialSiloConstraintViolation) As Boolean
-    if initialSiloConstraintViolation = 0 then
-        if Silos.Range("K1").Value <> 0 or Silos.Range("K2").Value <> 0 then
+    If initialSiloConstraintViolation = 0 then
+        If Silos.Range("K1").Value <> 0 or Silos.Range("K2").Value <> 0 then
             checkSiloConstraint = False
-            exit Function
-        end if
-    end if
+            Print #logic1TextFile, "Effect: Silo Constraint violated by insertion."
+            Print #logic1TextFile, "PE Silo: " & Silos.Range("J1").Value & "; SG Silo: " & Silos.Range("J2").Value
+            Exit Function
+        End If
+    End If
     Dim siloCheckTimeStart As Double
     Dim siloCheckTimeEnd As Double
     siloCheckTimeStart = dryerSchedule.Range("BY" & dryerInsertRow).Value 'silo entry hour
     'siloCheckTimeEnd = dryerSchedule.Range("BB" & dryerInsertRow).Value
     
-    ' iterate through silos sheet to find if the silo constraint is being violated by the campaign insertion
+    ' iterate through silos sheet to find If the silo constraint is being violated by the campaign insertion
     Dim i As Double
     For i = 2 To (2 ^ 15) - 1 Step 1
         If Silos.Range("A" & i).Value >= siloCheckTimeStart And Silos.Range("A" & i).Value < initialSiloConstraintViolation Then
             If Silos.Range("D" & i).Value > mainSilo Or Silos.Range("G" & i).Value > otherSilo Then
+                Print #logic1TextFile, "Effect: Silo Constraint violated by insertion."
                 checkSiloConstraint = False
                 Exit Function
             End If
@@ -382,6 +457,8 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
+    Print #logic1TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
+
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
     If D1FirstCanStarveTime <> -1 Then
@@ -391,8 +468,11 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
-    If D1CanStarveStartTime < tippingStationAvailableTime Then
-        determineDryerCampaign = 4 'if d1 can starve is before tipping station start then skip d1 time
+    Print #logic1TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
+    Print #logic1TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
+
+    If D1CanStarveStartTime < tippingStationAvailableTime And D1CanStarveStartTime <> 0 Then
+        determineDryerCampaign = 4 'If d1 can starve is before tipping station start then skip d1 time
         Exit Function
     End If
 
@@ -506,7 +586,7 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
     getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
-' checks the FP Loading Per Batch (if 0 then the campaign has been inserted)
+' checks the FP Loading Per Batch (If 0 then the campaign has been inserted)
 Function findNextCampaignToInsert(Worksheet) As Integer
     If Worksheet.Range("A1").End(xlDown).Value = "" Then
         findNextCampaignToInsert = -1
