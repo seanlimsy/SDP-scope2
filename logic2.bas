@@ -26,13 +26,16 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     D2CipHrs = wb.Worksheets("Evap DryCIP").Range("T6")
     
     Dim repeatedSolve As Integer
-    repeatedSolve = 1
+    repeatedSolve = 0
+
     Do While True
-        If repeatedSolve = 30 Then 
+        If repeatedSolve >= 40 Then 
+            Print #logic1TextFile, "Issues with resolving dryer blockage at point. Ending program.": Space 0
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             End
-        Else 
+        Else
             repeatedSolve = repeatedSolve + 1
-        End If 
+        End If
 
         Application.CalculateFull
         siteCpledCapCurrent = Round(Silos.Range("R13"), 1)
@@ -40,6 +43,8 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
         DiCausingViolationSG = checkSGDryerResults
 
         If DiCausingViolationPE = "None" And DiCausingViolationSG = "None" Then
+            Print #logic1TextFile, "No more dryer blockages in the system."
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             Exit Sub
         Else
             If DiCausingViolationPE <> "None" And DiCausingViolationSG = "None" Then
@@ -78,12 +83,13 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
             Print #logic1TextFile, " ": Space 0
             Exit Do
         Else
-            Print #logic1TextFile, "Solving Delay...": Space 0
             idxToDelay = getIdxToDelay(exceedTimeStep)
             DiCIPHrs = getCIPHrs(DiCausingViolation, D1CipHrs, D2CipHrs)
             Print #logic1TextFile, "Index to Delay: " & idxToDelay: Space 0
+            Print #logic1TextFile, "Solving Delay...": Space 0
             resolveSiloContraint idxToDelay, DiCIPHrs, exceedTimeStep, DiCausingViolation, siteCpledCapCurrent
-
+            Print #logic1TextFile, "Resolved. Moving to next possible TimeStep.": Space 0
+            Print #logic1TextFile, " "
         End If
     Loop
 End Sub
@@ -126,8 +132,23 @@ Function checkPEDryerResults()
             checkPEDryerResults = "PED2"
             Set workingDryerSchedule = D2Schedule
         End If
-    Else
-        checkPEDryerResults = "None"
+    Else 
+        Dim firstViolationTime As Double
+        Dim tempD1 As Double, tempD2 As Double
+
+        firstViolationTime = Silos.Range("K1").Value
+        tempD1 = Silos.Range("R9")
+        tempD2 = Silos.Range("R10")
+        
+        If tempD1 <= firstViolationTime Then 
+            checkPEDryerResults = "PED1"
+            Set workingDryerSchedule = D1Schedule
+        ElseIf tempD2 <= firstViolationTime Then
+            checkPEDryerResults = "PED2"
+            Set workingDryerSchedule = D2Schedule
+        Else
+            checkPEDryerResults = "None"            
+        End If
     End If
 End Function
 
@@ -152,7 +173,22 @@ Function checkSGDryerResults()
             Set workingDryerSchedule = D2Schedule
         End If
     Else
-        checkSGDryerResults = "None"
+         Dim firstViolationTime As Double
+        Dim tempD1 As Double, tempD2 As Double
+
+        firstViolationTime = Silos.Range("K1").Value
+        tempD1 = Silos.Range("T9")
+        tempD2 = Silos.Range("T10")
+        
+        If tempD1 <= firstViolationTime Then 
+            checkSGDryerResults = "SGD1"
+            Set workingDryerSchedule = D1Schedule
+        ElseIf tempD2 <= firstViolationTime Then
+            checkSGDryerResults = "SGD2"
+            Set workingDryerSchedule = D2Schedule
+        Else
+            checkSGDryerResults = "None"            
+        End If
     End If
 End Function
 
