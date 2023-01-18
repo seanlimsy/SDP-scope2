@@ -8,13 +8,11 @@ Dim pouchInsertSpace As Worksheet
 Dim D2Default As Worksheet
 Dim Silos As Worksheet
 
-Dim logic3File as String
-Dim logic3TextFile As Integer
+' Dim logic3File as String
+' Dim logic3TextFile As Integer
 
 Sub ppPouchMain()
     'Debugging:
-    logic3File = "/Users/ben/Desktop/logic3.txt"
-    logic3TextFile = FreeFile
     Open logic3File For Output As logic3TextFile 
 
     Application.AutoRecover.Enabled = False

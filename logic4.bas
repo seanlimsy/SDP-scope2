@@ -10,8 +10,8 @@ Dim PPRateDSSheet As Worksheet
 Dim workingDryerSchedule As Worksheet
 Dim Silos As Worksheet
 
-Dim logic4File as String
-Dim logic4TextFile As Integer
+' Dim logic4File as String
+' Dim logic4TextFile As Integer
 
 Sub PPCanStretchMain()
     'Debugging:

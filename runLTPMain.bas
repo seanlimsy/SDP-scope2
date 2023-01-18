@@ -2,14 +2,24 @@ Option Explicit
 Dim wb As Workbook
 Public reportWS As Worksheet
 
-' For controlling feasibility of program and reason for premature stoppage
+' For controlling feasibility of program
 Public isLogic1Feasible As Boolean
 Public isLogic3Feasible As Boolean
 Public isLogic4Feasible As Boolean
 
+' Reason for premature stoppage
 Public reasonForStop As String
 Public mainSilo
 Public otherSilo
+
+' Debugging
+Public logic1File As String
+Public logic1TextFile As String
+Public logic3File As String
+Public logic3TextFile As String
+Public logic4File as String
+Public logic4TextFile As Integer
+
 
 Sub initializeRunLTP()
     Set wb = ThisWorkbook
@@ -24,8 +34,22 @@ Sub clearPrevious()
     reportWS.Range("I3:I4").ClearContents
 End Sub
 
+Sub initializeOutputs
+    logic1File = "/Users/ben/Desktop/logic1.txt"
+    logic1TextFile = FreeFile
+
+    logic3File = "/Users/ben/Desktop/logic3.txt"
+    logic3TextFile = FreeFile
+
+    logic4File = "/Users/ben/Desktop/logic4.txt"
+    logic4TextFile = FreeFile
+
+End Sub
+
 Sub runLTP()
     initializeRunLTP
+    initializeOutputs
+
     Dim toAttemptStage1 As String
     Dim toAttemptStage3 As String
     Dim toAttemptStage4 As String
