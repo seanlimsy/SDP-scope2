@@ -230,9 +230,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             End
         ElseIf dryerCampaign = -1 Then 'case: no more campaigns left
             Print #logic1TextFile, "All campaigns Inserted. Running dryer blockage on all remaining silo constraint violations. ": Space 0
-            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             ' run dryer blockage on remaining silo constraint violations
             Module4.dryerBlockDelayMain 9999999
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             insertPPCan100DBCampaigns = True
             Exit Function
         ElseIf dryerCampaign = 0 Then 'case: no more dryer slots
