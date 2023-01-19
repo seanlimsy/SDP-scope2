@@ -15,8 +15,8 @@ Dim Silos As Worksheet
 
 Sub PPCanStretchMain()
     'Debugging:
-    logic4File = "/Users/ben/Desktop/logic4.txt"
-    logic4TextFile = FreeFile
+    ' logic4File = "/Users/ben/Desktop/logic4.txt"
+    ' logic4TextFile = FreeFile
     Open logic4File For Output As logic4TextFile 
 
     Application.AutoRecover.Enabled = False
