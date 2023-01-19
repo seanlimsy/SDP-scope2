@@ -443,6 +443,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
         If Silos.Range("A" & i).Value >= siloCheckTimeStart And Silos.Range("A" & i).Value < initialSiloConstraintViolation Then
             If Silos.Range("D" & i).Value > mainSilo Or Silos.Range("G" & i).Value > otherSilo Then
                 Print #logic1TextFile, "Effect: Silo Constraint violated by insertion."
+                Print #logic1TextFile, "PE Silo: " & Silos.Range("J1").Value & "; SG Silo: " & Silos.Range("J2").Value
                 checkSiloConstraint = False
                 Exit Function
             End If
@@ -633,6 +634,7 @@ Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
     'ensure column CI is Can Starve
     If IsNumeric("CI1") Or Worksheet.Range("CI1").Value <> "Can Starve" Then
             MsgBox "Cell CI1 is not set to Can Starve for " & Worksheet.Name
+            ' reasonForStop = "Cell CI1 is not set to Can Starve for " & Worksheet.Name
         End
     End If
     
