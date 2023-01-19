@@ -26,7 +26,8 @@ Sub resetAll()
     
     D1Schedule.Range("A:N").Value = D1Default.Range("A:N").Value
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
-    
+    Application.CalculateFull
+
     ' ===== reset cip and dryer blockage cells =====
     Dim lastRowD1 As Integer
     Dim lastRowD2 As Integer
@@ -35,12 +36,11 @@ Sub resetAll()
 
     D1Schedule.Range("AF2:AF" & lastRowD1).Formula = "=If(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$2,'Evap DryCIP'!$T$3,0),0))"
     D2Schedule.Range("AF2:AF" & lastRowD2).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$5,'Evap DryCIP'!$T$6,0),0))"
+    Application.CalculateFull
 
     D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
     D2Schedule.Range("AI2:AI" & lastRowD2).Value = 0
-
     Application.CalculateFull
-    wb.refreshAll
 
 End Sub
 
