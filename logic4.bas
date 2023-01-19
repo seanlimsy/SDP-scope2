@@ -10,13 +10,14 @@ Dim PPRateDSSheet As Worksheet
 Dim workingDryerSchedule As Worksheet
 Dim Silos As Worksheet
 
-' Dim logic4File as String
-' Dim logic4TextFile As Integer
+Dim logic4File as String
+Dim logic4TextFile As Integer
+Dim reasonForStop As String
 
 Sub PPCanStretchMain()
     'Debugging:
-    ' logic4File = "/Users/ben/Desktop/logic4.txt"
-    ' logic4TextFile = FreeFile
+    logic4File = "/Users/ben/Desktop/logic4.txt"
+    logic4TextFile = FreeFile
     Open logic4File For Output As logic4TextFile 
 
     Application.AutoRecover.Enabled = False
@@ -27,7 +28,7 @@ Sub PPCanStretchMain()
     Print #logic4TextFile, "Done.": Space 0
 
     Print #logic4TextFile, "======== Main Logic ========": Space 0
-    ' Dim isLogic4Feasible As Boolean
+    Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
     If isLogic4Feasible = True Then
         Print #logic4TextFile, "Worst Case PP Can inserted. Terminating Program": Space 0
@@ -91,11 +92,11 @@ End Sub
 
 Sub runOrDuplicateFile()
     If InStr(wb.Name, " - (Original LTP w Additional PPCAN)") Then
-        Print #logic4TextFile "Running PPCan Stretching on this file.": Space 0
+        Print #logic4TextFile, "Running PPCan Stretching on this file.": Space 0
     ElseIf InStr(wb.Name, " - (Original LTP wo Additional PPCAN)") = False Then
-        Print #logic4TextFile "Making a copy of BaseFile and Saving into an alternate file.": Space 0
+        Print #logic4TextFile, "Making a copy of BaseFile and Saving into an alternate file.": Space 0
         makeCopy wb
-        Print #logic4TextFile "Duplication complete. Running PPCan Stretching on this file.": Space 0
+        Print #logic4TextFile, "Duplication complete. Running PPCan Stretching on this file.": Space 0
     End If
 End Sub
 
@@ -244,24 +245,6 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
         D2FirstCanStarveTime = findFirstCanStarveTime(D2Schedule, d2Skip)
         Print #logic4TextFile, "Done.": Space 0
-
-        Print #logic4TextFile, "-- Finding initial silo constraint...": Space 0
-        ' get initial silo constraint violation time
-        Dim initialSiloConstraintViolation
-        If Silos.Range("K1").Value <> 0 And Silos.Range("K2").Value <> 0 Then
-            If Silos.Range("K1").Value > Silos.Range("K2").Value Then
-                initialSiloConstraintViolation = Silos.Range("K2").Value
-            Else
-                initialSiloConstraintViolation = Silos.Range("K1").Value
-            End If
-        ElseIf Silos.Range("K1").Value = 0 Then
-            initialSiloConstraintViolation = Silos.Range("K2").Value
-        ElseIf Silos.Range("K2").Value = 0 Then
-            initialSiloConstraintViolation = Silos.Range("K1").Value
-        Else
-            initialSiloConstraintViolation = 0
-        End If
-        Print #logic4TextFile, "Done.": Space 0
         Print #logic4TextFile, "-------": Space 0
         Print #logic4TextFile, "D1 First Can Starve Time Index: " & D1FirstCanStarveTime: Space 0
         Print #logic4TextFile, "D2 First Can Starve Time Index: " & D2FirstCanStarveTime: Space 0
@@ -277,12 +260,12 @@ Function stretchingCampaigns(mainSilo, otherSilo)
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 PP campaign
             Print #logic4TextFile, "Add PPCan to Dryer 1": Space 0
-            d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation)
+            d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip)
             D1PrevInsertTime = D1FirstCanStarveTime
             D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 PP campaign
             Print #logic4TextFile, "Add PPCan to Dryer 2": Space 0
-            d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation)
+            d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip)
             D1PrevInsertTime = -1
             D2PrevInsertTime = D2FirstCanStarveTime
         ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
@@ -422,7 +405,7 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
     getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
 
-Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
+Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray) As Integer()
     ' PPCampaignToInsert = 2 fixed & no need to delete sample campaign
 
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
@@ -445,7 +428,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
         Application.CalculateFull
 
-        canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
+        canAdd = checkSiloConstraint(mainSilo, otherSilo)
         If canAdd = True Then
             Print #logic4TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
             Print #logic4TextFile, "Inserted " & i & "th amount of 1 worst-case PPCan Campaign": Space 0
@@ -470,7 +453,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     addPPCampaign = dryerSkipArray
 End Function
 
-Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow, initialSiloConstraintViolation) As Boolean
+Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
     If Silos.Range("J1").Value > 16 Or Silos.Range("J2").Value > 6 Then
         checkSiloConstraint = False
         Print #logic4TextFile, "Effect: Silo Constraint violated by insertion.": Space 0

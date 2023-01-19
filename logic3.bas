@@ -14,8 +14,8 @@ Dim reasonForStop
 
 Sub ppPouchMain()
     'Debugging:
-    ' logic3File = "/Users/ben/Desktop/logic3.txt"
-    ' logic3TextFile = FreeFile
+    logic3File = "/Users/ben/Desktop/logic3.txt"
+    logic3TextFile = FreeFile
     Open logic3File For Output As logic3TextFile 
 
     Application.AutoRecover.Enabled = False
@@ -28,11 +28,11 @@ Sub ppPouchMain()
 
     ' 'To Remove
     ' PPPouchSchedule.Select
-    ' Silos.Select
+    Silos.Select
     ' reportWS.Select
 
     Print #logic3TextFile, "======== Main Logic ========": Space 0
-    ' Dim isLogic3Feasible As Boolean
+    Dim isLogic3Feasible As Boolean
     isLogic3Feasible = logic3(numberPouchCampaigns)
     If isLogic3Feasible = False Then
         Print #logic3TextFile, "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program.": Space 0
