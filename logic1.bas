@@ -222,27 +222,29 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
         
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
-            Print #logic1TextFile, "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program."
-            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
-            Print #logic1TextFile, "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
-            Print #logic1TextFile, "DB Campaigns remaining but there are no more can starvation slots in D2."
-            Print #logic1TextFile, "Resetting Schedules and increasing dryer allowances"
+            Print #logic1TextFile, "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program.": Space 0
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+            Print #logic1TextFile, "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-": Space 0
+            Print #logic1TextFile, "DB Campaigns remaining but there are no more can starvation slots in D2.": Space 0
+            Print #logic1TextFile, "Resetting Schedules and increasing dryer allowances": Space 0
             End
         ElseIf dryerCampaign = -1 Then 'case: no more campaigns left
-            Print #logic1TextFile, "All campaigns Inserted. Running dryer blockage on all remaining silo constraint violations. "
-            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
+            Print #logic1TextFile, "All campaigns Inserted. Running dryer blockage on all remaining silo constraint violations. ": Space 0
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             ' run dryer blockage on remaining silo constraint violations
             Module4.dryerBlockDelayMain 9999999
             insertPPCan100DBCampaigns = True
             Exit Function
         ElseIf dryerCampaign = 0 Then 'case: no more dryer slots
-            Print #logic1TextFile, "All can starvation slots used. Increasing silo constraint"
-            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========"
+            Print #logic1TextFile, "All can starvation slots used. Increasing silo constraint": Space 0
+            Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
             If D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+                    Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
                     Module4.dryerBlockDelayMain D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
+                    Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 1"
@@ -251,7 +253,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+                    Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 2"
@@ -260,7 +264,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
             D1PrevInsertTime = -1
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
             If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+                    Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
                     Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding DB campaign to dryer 2"
