@@ -174,7 +174,7 @@ Function checkSGDryerResults()
             Set workingDryerSchedule = D2Schedule
         End If
     Else
-         Dim firstViolationTime As Double
+        Dim firstViolationTime As Double
         Dim tempD1 As Double, tempD2 As Double
 
         firstViolationTime = Silos.Range("K1").Value
