@@ -41,7 +41,8 @@ Sub resetAll()
     D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
     D2Schedule.Range("AI2:AI" & lastRowD2).Value = 0
     Application.CalculateFull
-
+    wb.refreshAll
+    wb.Save
 End Sub
 
 ' If needed to make thread calculation more robust
@@ -142,6 +143,7 @@ Function logic1()
         If isFeasible = True Then
             Exit Do
         End If
+        resetAll
         mainSilo = mainSilo + 1
     Loop
     logic1 = isFeasible
