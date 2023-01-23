@@ -8,18 +8,19 @@ Dim pouchInsertSpace As Worksheet
 Dim D2Default As Worksheet
 Dim Silos As Worksheet
 
-Dim logic3File as String
-Dim logic3TextFile As Integer
-Dim reasonForStop
+' Dim logic3File as String
+' Dim logic3TextFile As Integer
+' Dim reasonForStop
 
 Sub ppPouchMain()
     'Debugging:
-    logic3File = "/Users/ben/Desktop/logic3.txt"
-    logic3TextFile = FreeFile
-    Open logic3File For Output As logic3TextFile 
+    ' logic3File = "/Users/ben/Desktop/logic3.txt"
+    ' logic3TextFile = FreeFile
+    ' Open logic3File For Output As logic3TextFile 
 
     Application.AutoRecover.Enabled = False
     Print #logic3TextFile, "======== Initializing ========": Space 0
+    Print #logic3TextFile, "logic3 Started @ " & Now
     initializeWorksheets
 
     Dim numberPouchCampaigns As Integer
@@ -32,7 +33,7 @@ Sub ppPouchMain()
     ' reportWS.Select
 
     Print #logic3TextFile, "======== Main Logic ========": Space 0
-    Dim isLogic3Feasible As Boolean
+    ' Dim isLogic3Feasible As Boolean
     isLogic3Feasible = logic3(numberPouchCampaigns)
     If isLogic3Feasible = False Then
         Print #logic3TextFile, "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program.": Space 0
@@ -40,6 +41,7 @@ Sub ppPouchMain()
         Print #logic3TextFile, "All PP-Pouch Campaigns inserted. Ending Stage 3.": Space 0
     End If
 
+    Print #logic3TextFile, "logic3 Ended @ " & Now
     Close #logic3TextFile
 
 End Sub
@@ -103,7 +105,6 @@ Sub setWorksheet(Worksheet, worksheetName)
     Exit Sub
 Err:
     reasonForStop = worksheetName & " is not in current workbook"
-    MsgBox reasonForStop
     End
 End Sub
 
@@ -448,10 +449,6 @@ Function findFirstPchAvailHrs(Worksheet, dryerSkipArray, PPCampaignToInsert) As 
                 If nextPchStartCell.Value <> pchAvailHrsCell.Value Then
                     If containedInIntersection(pchAvailHrsCell.Value, nextPchStartCell.Value, PPCampaignToInsert) Then
                         findFirstPchAvailHrs = pchAvailHrsCell.Row
-                        
-                        'To Remove
-                        PPPouchSchedule.Range("S9").Value = pchAvailHrsCell.Row
-
                         Exit Function
                     End If
                 End If

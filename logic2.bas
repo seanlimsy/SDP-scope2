@@ -31,7 +31,7 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Do While True
         If repeatedSolve >= 40 Then 
             Print #logic1TextFile, "Issues with resolving dryer blockage at point. Early Termination": Space 0
-            ' reasonForStop = "Unknown effects to delay stage -- Infinite Loop occured. Restart program"
+            reasonForStop = "Unknown effects to delay stage -- Infinite Loop occured. Restart program"
             Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             End
         Else
@@ -81,7 +81,6 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
         If dryerBlockBeforeNextInsert_bool = False Then
             Print #logic1TextFile, "Next potential insertion point is before the next time dryer is exceeded. Ending blockage.": Space 0
             Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
-            Print #logic1TextFile, " ": Space 0
             Exit Do
         Else
             idxToDelay = getIdxToDelay(exceedTimeStep)

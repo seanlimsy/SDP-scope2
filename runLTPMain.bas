@@ -20,33 +20,10 @@ Public logic3TextFile As String
 Public logic4File as String
 Public logic4TextFile As Integer
 
-
-Sub initializeRunLTP()
-    Set wb = ThisWorkbook
-    Set reportWS = wb.Worksheets("Program Report Page")
-    clearPrevious
-End Sub 
-
-Sub clearPrevious()
-    reportWS.Range("B3:B5").ClearContents
-    reportWS.Range("B7:B8").ClearContents
-    reportWS.Range("F3:F4").ClearContents
-    reportWS.Range("I3:I4").ClearContents
-End Sub
-
-Sub initializeOutputs
-    logic1File = "/Users/ben/Desktop/logic1.txt"
-    logic1TextFile = FreeFile
-
-    logic3File = "/Users/ben/Desktop/logic3.txt"
-    logic3TextFile = FreeFile
-
-    logic4File = "/Users/ben/Desktop/logic4.txt"
-    logic4TextFile = FreeFile
-
-End Sub
-
 Sub runLTP()
+    Dim startTime As Double, endTime As Double, totalTime As Double 
+    startTime = Timer
+    
     initializeRunLTP
     initializeOutputs
 
@@ -57,13 +34,77 @@ Sub runLTP()
     toAttemptStage1 = reportWS.Range("C3").Value
     toAttemptStage3 = reportWS.Range("C4").Value
     toAttemptStage4 = reportWS.Range("C5").Value
-
+    
     runStage1 toAttemptStage1
     runStage3 toAttemptStage3
     runStage4 toAttemptStage4
 
+    endTime = Timer 
+    totalTime = endTime - startTime
+    reportWS.Range("F5").Value = Format(totalTime/3600, "0.00")
+
 End Sub
 
+' ============================================= Setup Logic =============================================
+Sub initializeRunLTP()
+    Set wb = ThisWorkbook
+    Set reportWS = wb.Worksheets("Program Report Page")
+    checkWorksheetsRequired
+    clearPrevious
+End Sub 
+
+Sub clearPrevious()
+    reportWS.Range("B3:B5").ClearContents
+    reportWS.Range("B7:B8").ClearContents
+    reportWS.Range("F3:F4").ClearContents
+    reportWS.Range("I3:I4").ClearContents
+End Sub
+
+Sub checkWorksheetsRequired()
+    checkExists "D1B1L65T"
+    checkExists "D1Sched"
+    checkExists "D2B1L3B3B4L45T"
+    checkExists "D2Sched"
+    checkExists "DBSCH Reorder Select"
+    checkExists "Silos"
+    checkExists "D1Sched (2)"
+    checkExists "D2Sched (2)"
+    checkExists "PP"
+    checkExists "PP CAN"
+    checkExists "PP PCH"
+    checkExists "PPRateDS"
+    checkExists "PP CAN ADDED THRESHOLD"
+    checkExists "PP PCH SPACE" 
+End Sub
+
+Sub checkExists(checkSheetName)
+    Dim sheetName As Worksheet
+    For Each sheetName In wb.Worksheets
+        If sheetName.Name = checkSheetName Then 
+            Exit Sub
+        End If
+    Next sheetName
+    
+    MsgBox "Warning! " & checkSheetName & " is not in current workbook. Please check & update the names"
+    End
+End Sub
+
+Sub initializeOutputs()
+    logic1File = "/Users/ben/Desktop/logic1.txt"
+    logic1TextFile = FreeFile
+    Open logic1File For Output as logic1TextFile
+
+    logic3File = "/Users/ben/Desktop/logic3.txt"
+    logic3TextFile = FreeFile
+    Open logic3File For Output As logic3TextFile 
+
+    logic4File = "/Users/ben/Desktop/logic4.txt"
+    logic4TextFile = FreeFile
+    Open logic4File For Output As logic4TextFile 
+
+End Sub
+
+' ============================================= Main Logic =============================================
 Sub runStage1(toAttemptStage1)
     Dim stage1Progress As Range
     Set stage1Progress = reportWS.Range("B3")

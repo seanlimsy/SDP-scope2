@@ -16,24 +16,28 @@ Dim reasonForStop As String
 
 Sub PPCanStretchMain()
     'Debugging:
-    logic4File = "/Users/ben/Desktop/logic4.txt"
-    logic4TextFile = FreeFile
-    Open logic4File For Output As logic4TextFile 
+    ' logic4File = "/Users/ben/Desktop/logic4.txt"
+    ' logic4TextFile = FreeFile
+    ' Open logic4File For Output As logic4TextFile 
+    
+    ' reportWS.Select
 
     Application.AutoRecover.Enabled = False
     Print #logic4TextFile, "======== Initializing ========": Space 0
+    Print #logic4TextFile, "logic4 Started @ " & Now
     initializeWorksheets
     'runOrDuplicateFile
     initializePPRateDS
     Print #logic4TextFile, "Done.": Space 0
 
     Print #logic4TextFile, "======== Main Logic ========": Space 0
-    Dim isLogic4Feasible As Boolean
+    ' Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
     If isLogic4Feasible = True Then
         Print #logic4TextFile, "Worst Case PP Can inserted. Terminating Program": Space 0
     End If
 
+    Print #logic4TextFile, "logic4 Ended @ " & Now
     Close #logic4TextFile
 
 End Sub
