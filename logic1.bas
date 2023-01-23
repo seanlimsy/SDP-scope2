@@ -11,13 +11,17 @@ Dim Silos As Worksheet
 Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
 
-Public logic1File As String
-Public logic1TextFile As Integer
-Dim reasonForStop As String
+' Public logic1File As String
+' Public logic1TextFile As Integer
+' Dim reasonForStop As String
 
 Sub resetAll()
+    Print #logic1TextFile, " ": Space 0
+    Print #logic1TextFile, "================ Insert fail due to Silo Constraint ================": Space 0
+    Print #logic1TextFile, "++++ Resetting Sheets for relaxed Constraint ++++": Space 0
     initializeWorksheets
     
+    Print #logic1TextFile, "--- Reverting Schedules..."
     D1Default.Range("A:N").Value = D1DefaultOriginal.Range("A:N").Value
     D2Default.Range("A:N").Value = D2DefaultOriginal.Range("A:N").Value
     
@@ -27,7 +31,9 @@ Sub resetAll()
     D1Schedule.Range("A:N").Value = D1Default.Range("A:N").Value
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
     Application.CalculateFull
+    Print #logic1TextFile, "Done."
 
+    Print #logic1TextFile, "--- Reverting CIP & Blockage..."
     ' ===== reset cip and dryer blockage cells =====
     Dim lastRowD1 As Integer
     Dim lastRowD2 As Integer
@@ -43,6 +49,9 @@ Sub resetAll()
     Application.CalculateFull
     wb.refreshAll
     wb.Save
+    Print #logic1TextFile, "Done."
+    Print #logic1TextFile, "++++ Reset Done. Reattempting ++++": Space 0
+    Print #logic1TextFile, " ": Space 0
 End Sub
 
 ' If needed to make thread calculation more robust
@@ -56,24 +65,29 @@ End Sub
 
 Sub main()
     'Debugging
-    logic1File = "/Users/ben/Desktop/logic1.txt"
-    logic1TextFile = FreeFile
-    Open logic1File For Output as logic1TextFile
+    ' logic1File = "/Users/ben/Desktop/logic1.txt"
+    ' logic1TextFile = FreeFile
+    ' Open logic1File For Output as logic1TextFile
+    
+    ' reportWS.Select
 
     'turn off autosave
     Application.AutoRecover.Enabled = False
     Print #logic1TextFile, "======== Initializing ========"
+    Print #logic1TextFile, "Program Started @ " & Now
     initializeWorksheets
     Print #logic1TextFile, "Done."
     
     Print #logic1TextFile, "======== Main Logic ========"
-    Dim isLogic1Feasible As Boolean
+    ' Dim isLogic1Feasible As Boolean
     isLogic1Feasible = logic1()
     If isLogic1Feasible = False Then
-        Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6). Terminating Program."
-        End
+        Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6)."
+        Print #logic1Textfile, "Terminating Program.": Space 0
     End If
     
+    Print #logic1TextFile, "logic1 Ended @ " & Now
+    Close #logic1TextFile
 End Sub
 
 Sub initializeWorksheets()
@@ -124,13 +138,13 @@ Sub setWorksheet(Worksheet, worksheetName)
         Set Worksheet = wb.Sheets(worksheetName)
     Exit Sub
 Err:
-    MsgBox worksheetName & " is not in current workbook"
+    reasonForStop = worksheetName & " is not in current workbook"
     End
 End Sub
 
 Function logic1()
-    Dim mainSilo As Integer
-    Dim otherSilo As Integer
+    ' Dim mainSilo As Integer
+    ' Dim otherSilo As Integer
     mainSilo = 16
     otherSilo = 6
     
@@ -233,7 +247,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         ElseIf dryerCampaign = -1 Then 'case: no more campaigns left
             Print #logic1TextFile, "All campaigns Inserted. Running dryer blockage on all remaining silo constraint violations. ": Space 0
             ' run dryer blockage on remaining silo constraint violations
-            Module4.dryerBlockDelayMain 9999999
+            programModule2.dryerBlockDelayMain 9999999
             Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             insertPPCan100DBCampaigns = True
             Exit Function
@@ -245,8 +259,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
             If D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
-                    Module4.dryerBlockDelayMain D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
+                    programModule2.dryerBlockDelayMain D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
                     Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+                    Print #logic1TextFile, " "
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 1"
@@ -256,8 +271,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
            If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
-                    Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    programModule2.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+                    Print #logic1TextFile, " "
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 2"
@@ -267,8 +283,9 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
             If D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
-                    Module4.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
+                    programModule2.dryerBlockDelayMain D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
                     Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+                    Print #logic1TextFile, " "
                     GoTo continueLoop
             End If
             Print #logic1TextFile, "Adding DB campaign to dryer 2"
@@ -333,9 +350,9 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Exit For
                 Else
                     If Silos.Range("K1").Value > Silos.Range("K2").Value Then
-                        Module4.dryerBlockDelayMain Silos.Range("K1").Value + 1
+                        programModule2.dryerBlockDelayMain Silos.Range("K1").Value + 1
                     Else
-                        Module4.dryerBlockDelayMain Silos.Range("K2").Value + 1
+                        programModule2.dryerBlockDelayMain Silos.Range("K2").Value + 1
                     End If
                 End If
             End If
@@ -398,9 +415,9 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Exit For
                 Else
                     If Silos.Range("K1").Value > Silos.Range("K2").Value Then
-                        Module4.dryerBlockDelayMain Silos.Range("K1").Value + 1
+                        programModule2.dryerBlockDelayMain Silos.Range("K1").Value + 1
                     Else
-                        Module4.dryerBlockDelayMain Silos.Range("K2").Value + 1
+                        programModule2.dryerBlockDelayMain Silos.Range("K2").Value + 1
                     End If
                 End If
             End If
@@ -635,8 +652,7 @@ End Function
 Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
     'ensure column CI is Can Starve
     If IsNumeric("CI1") Or Worksheet.Range("CI1").Value <> "Can Starve" Then
-            MsgBox "Cell CI1 is not set to Can Starve for " & Worksheet.Name
-            ' reasonForStop = "Cell CI1 is not set to Can Starve for " & Worksheet.Name
+            reasonForStop = "Cell CI1 is not set to Can Starve for " & Worksheet.Name
         End
     End If
     
