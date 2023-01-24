@@ -1,7 +1,19 @@
 Option Explicit
 Dim wb As Workbook
 Dim D1Schedule As Worksheet, D2Schedule As Worksheet, Silos As Worksheet
+Dim PPTippingStation As Worksheet
 Dim workingDryerSchedule As Worksheet
+Dim D1TipStatPivotTable As pivotTable
+Dim D2TipStatPivotTable As pivotTable
+
+Sub calculateAll()
+    Application.CalculateFull
+    If Not Application.CalculationState = xlDone Then 
+        DoEvents
+    End If
+    D1TipStatPivotTable.RefreshTable
+    D2TipStatPivotTable.RefreshTable
+End Sub
 
 Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Print #logic1TextFile, " "
@@ -17,7 +29,7 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     
     Dim idxToDelay As Double
     Dim DiCIPHrs As Double
-    
+    1
     Application.AutoRecover.Enabled = False
     initializeWorksheetsStage2
     
@@ -31,14 +43,14 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     Do While True
         If repeatedSolve >= 40 Then 
             Print #logic1TextFile, "Issues with resolving dryer blockage at point. Early Termination": Space 0
-            reasonForStop = "Unknown effects to delay stage -- Infinite Loop occured. Restart program"
+            reasonForStop = "Unknown effects to delay stage -- Infinite Loop occurred. Restart program"
             Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             End
         Else
             repeatedSolve = repeatedSolve + 1
         End If
 
-        Application.CalculateFull
+        calculateAll
         siteCpledCapCurrent = Round(Silos.Range("R13"), 1)
         DiCausingViolationPE = checkPEDryerResults
         DiCausingViolationSG = checkSGDryerResults
@@ -100,7 +112,10 @@ Sub initializeWorksheetsStage2()
     setWorksheet D1Schedule, "D1B1L65T"
     setWorksheet D2Schedule, "D2B1L3B3B4L45T"
     setWorksheet Silos, "Silos"
-    
+    setWorksheet PPTippingStation, "PP"
+
+    Set D1TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD1")
+    Set D2TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD2")    
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -247,12 +262,14 @@ Sub resolveSiloContraint(index, CIPHrs, timeExceed, DiCausingViolation, siteCple
     
     existingDryerCIPTimeBase = workingDryerSchedule.Cells(index, 32).Value
     workingDryerSchedule.Cells(index, 32).Value = CIPHrs
-    Application.CalculateFull
+    calculateAll
     
     siteCpledCapUpdatedCIP = Round(Silos.Range("R13"), 1)
     delayToAdd = Silos.Range("R7")
     
     timeExceedNext = checkUpdatedCIP(DiCausingViolation)
+    Print #logic1Textfile, "Current time exceed: " & timeExceed: Space 0
+    Print #logic1TextFile, "Next time exceed: " & timeExceedNext: Space 0
     checkDryerBlock index, timeExceed, timeExceedNext, existingDryerCIPTimeBase, delayToAdd, CIPHrs, siteCpledCapUpdatedCIP, siteCpledCapCurrent
 End Sub
 
@@ -272,21 +289,23 @@ Sub checkDryerBlock(index, timeExceed, timeExceedNext, currentCIPTimeBase, delay
     Dim siteCpledCapUpdatedBlock As Double
     
     If timeExceedNext <> timeExceed Then
+        Print #logic1TextFile, "Next exceeded time step is after current exceed time step. Delay at spot is resolved.": Space 0
         If cpledCapCIP > currentCpledCap Then
             workingDryerSchedule.Cells(index, 32).Value = currentCIPTimeBase
             workingDryerSchedule.Cells(index, 35).Value = delay
-            Application.CalculateFull
+            calculateAll
             
             siteCpledCapUpdatedBlock = Round(Silos.Range("R13"), 1)
             If siteCpledCapUpdatedBlock > cpledCapCIP Then
                 workingDryerSchedule.Cells(index, 35).Value = currentCIPTimeBase
                 workingDryerSchedule.Cells(index, 32) = CIPHrs
-                Application.CalculateFull
+                calculateAll
             End If
         End If
     Else
+        Print #logic1TextFile, "Delay at spot still exists. Adding Dryer Delay.": Space 0
         workingDryerSchedule.Cells(index, 35).Value = delay
-        Application.CalculateFull
+        calculateAll
     End If
     
 End Sub

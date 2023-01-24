@@ -7,10 +7,21 @@ Dim PPRateDSSheet As Worksheet
 Dim pouchInsertSpace As Worksheet
 Dim D2Default As Worksheet
 Dim Silos As Worksheet
+Dim D1TipStatPivotTable As pivotTable
+Dim D2TipStatPivotTable As pivotTable
 
 ' Dim logic3File as String
 ' Dim logic3TextFile As Integer
 ' Dim reasonForStop
+
+Sub calculateAll()
+    Application.CalculateFull
+    If Not Application.CalculationState = xlDone Then 
+        DoEvents
+    End If
+    D1TipStatPivotTable.RefreshTable
+    D2TipStatPivotTable.RefreshTable
+End Sub
 
 Sub ppPouchMain()
     'Debugging:
@@ -96,7 +107,10 @@ Sub initializeWorksheets()
     Silos.Range("U9").Formula = "=IF(K2-T9<0.5,""YES"",""NO"")"
     Silos.Range("U10").Formula = "=IF(K2-T10<0.5,""YES"",""NO"")"
     
-    Application.CalculateFull
+    Set D1TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD1")
+    Set D2TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD2")
+    
+    calculateAll
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -135,12 +149,7 @@ Function initializePouchWorksheets()
 End Function
 
 Sub getPotentialSlots(countPouches)
-    Dim D1TipStatPivotTable As pivotTable
-    Dim D2TipStatPivotTable As pivotTable
     Dim D1TipStatStart As Range, D1TipStatEnd As Range, D2TipStatStart As Range, D2TipStatEnd As Range
-    
-    Set D1TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD1")
-    Set D2TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD2")
     
     D1TipStatPivotTable.RefreshTable
     D2TipStatPivotTable.RefreshTable
@@ -532,7 +541,7 @@ Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedul
     PPPouchSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
     dryerDefaultSchedule.Range("A" & D2FirstPchAvailHrs).Insert xlShiftDown
     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-    Application.CalculateFull
+    calculateAll
 
     Dim canAdd As Boolean
     canAdd = checkSiloConstraint(mainSilo, otherSilo)
@@ -547,7 +556,7 @@ Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedul
         Print #logic3TextFile, "Cannot be inserted at slot. Skipping.": Space 0
         dryerDefaultSchedule.Rows(D2FirstPchAvailHrs).EntireRow.Delete xlShiftUp
         dryerSkipArray = addItemToArray(D2FirstPchAvailHrs, dryerSkipArray)
-        Application.CalculateFull
+        calculateAll
         Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
     End If
 

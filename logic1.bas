@@ -10,10 +10,21 @@ Dim PPTippingStation As Worksheet
 Dim Silos As Worksheet
 Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
+Dim D1TipStatPivotTable As pivotTable
+Dim D2TipStatPivotTable As pivotTable
 
 ' Public logic1File As String
 ' Public logic1TextFile As Integer
 ' Dim reasonForStop As String
+
+Sub calculateAll()
+    Application.CalculateFull
+    If Not Application.CalculationState = xlDone Then 
+        DoEvents
+    End If
+    D1TipStatPivotTable.RefreshTable
+    D2TipStatPivotTable.RefreshTable
+End Sub
 
 Sub resetAll()
     Print #logic1TextFile, " ": Space 0
@@ -30,7 +41,7 @@ Sub resetAll()
     
     D1Schedule.Range("A:N").Value = D1Default.Range("A:N").Value
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
-    Application.CalculateFull
+    calculateAll
     Print #logic1TextFile, "Done."
 
     Print #logic1TextFile, "--- Reverting CIP & Blockage..."
@@ -42,26 +53,17 @@ Sub resetAll()
 
     D1Schedule.Range("AF2:AF" & lastRowD1).Formula = "=If(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$2,'Evap DryCIP'!$T$3,0),0))"
     D2Schedule.Range("AF2:AF" & lastRowD2).Formula = "=IF(ISBLANK(A2),"""",IF(G2=""DR"",IF(SUMIFS(V:V,O:O,"">""&AE2,O:O,""<=""&O2)>='Evap DryCIP'!$T$5,'Evap DryCIP'!$T$6,0),0))"
-    Application.CalculateFull
+    calculateAll
 
     D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
     D2Schedule.Range("AI2:AI" & lastRowD2).Value = 0
-    Application.CalculateFull
+    calculateAll
     wb.refreshAll
     wb.Save
     Print #logic1TextFile, "Done."
     Print #logic1TextFile, "++++ Reset Done. Reattempting ++++": Space 0
     Print #logic1TextFile, " ": Space 0
 End Sub
-
-' If needed to make thread calculation more robust
-' Sub calculateAllOpenWorkBooks()
-'     Application.CalculateFull
-'    If Not Application.CalculateState = xlDone Then 
-'        DoEvents
-'   Else
-'        End If
-'End Sub
 
 Sub main()
     'Debugging
@@ -117,6 +119,9 @@ Sub initializeWorksheets()
             End Select
         Next PI
     Next PT
+    
+    Set D1TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD1")
+    Set D2TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD2")
 
     'Include Silo Constraint presense for PE and SG
     Silos.Range("R8:S8").Value = "PE"
@@ -332,7 +337,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         DBSchedule.Range("A" & DBCampaignToInsert, "M" & i).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerSchedule.Range("A:M").Value = dryerDefaultSchedule.Range("A:M").Value
-        Application.CalculateFull
+        calculateAll
         
         ' check if the added campaign satisfies silo constraint
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
@@ -372,7 +377,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         End If
     Next
         
-    Application.CalculateFull
+    calculateAll    
     addDBCampaign = dryerSkipArray
 End Function
 
@@ -380,7 +385,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
-    decrementCounter = 0.5
+    decrementCounter = 0.2
 
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
@@ -394,7 +399,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value = dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value * i
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-        Application.CalculateFull
+        calculateAll
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerFirstCanStarveTime, initialSiloConstraintViolation)
         If canAdd = True Then
@@ -427,7 +432,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         Print #logic1TextFile, "Reducing amount to " & (i - decrementCounter)
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete xlShiftUp
-        If i <= decrementCounter Then
+        If i - decrementCounter < decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
             Print #logic1TextFile, "Cannot be inserted at slot. Skipping."
@@ -435,7 +440,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         End If
     Next
 
-    Application.CalculateFull
+    calculateAll
     ' this is to ensure that the pivot table is updated after adding pp campaigns
     wb.refreshAll
     

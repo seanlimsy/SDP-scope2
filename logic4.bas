@@ -9,10 +9,21 @@ Dim PPTippingStation As Worksheet
 Dim PPRateDSSheet As Worksheet
 Dim workingDryerSchedule As Worksheet
 Dim Silos As Worksheet
+Dim D1TipStatPivotTable As pivotTable
+Dim D2TipStatPivotTable As pivotTable
 
-Dim logic4File as String
-Dim logic4TextFile As Integer
-Dim reasonForStop As String
+' Dim logic4File as String
+' Dim logic4TextFile As Integer
+' Dim reasonForStop As String
+
+Sub calculateAll()
+    Application.CalculateFull
+    If Not Application.CalculationState = xlDone Then 
+        DoEvents
+    End If
+    D1TipStatPivotTable.RefreshTable
+    D2TipStatPivotTable.RefreshTable
+End Sub
 
 Sub PPCanStretchMain()
     'Debugging:
@@ -69,6 +80,9 @@ Sub initializeWorksheets()
         Next PI
     Next PT
 
+    Set D1TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD1")
+    Set D2TipStatPivotTable = PPTippingStation.PivotTables("PivotTableD2")
+
     'Include Silo Constraint presense for PE and SG
     Silos.Range("R8:S8").Value = "PE"
     Silos.Range("R9").Formula = "=MAXIFS(D1B1L65T!AJ:AJ,D1B1L65T!AJ:AJ,""<=""&Silos!$K$1,D1B1L65T!AP:AP,"">=1"")"
@@ -82,7 +96,7 @@ Sub initializeWorksheets()
     Silos.Range("U9").Formula = "=IF(K2-T9<0.5,""YES"",""NO"")"
     Silos.Range("U10").Formula = "=IF(K2-T10<0.5,""YES"",""NO"")"
     
-    Application.CalculateFull
+    calculateAll
 End Sub
 
 Sub setWorksheet(Worksheet, worksheetName)
@@ -204,14 +218,8 @@ End Function
 
 Function stretchingCampaigns(mainSilo, otherSilo)
     Dim PPCanStretching As Range
-    Dim D1TipStatPivotTable As pivotTable, D2TipStatPivotTable As pivotTable
 
-    Set D1TipStatPivotTable = pivotFromDryers(1)
-    Set D2TipStatPivotTable = pivotFromDryers(2)
-    D1TipStatPivotTable.RefreshTable
-    D2TipStatPivotTable.RefreshTable
-
-    Application.CalculateFull
+    calculateAll
     wb.RefreshAll
 
     ' Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long
@@ -290,16 +298,6 @@ continueLoop:
     stretchingCampaigns = True
 End Function
 
-Function pivotFromDryers(identity)
-    If identity = 1 Then
-        'D1 - Tip Station (40H Gap)
-        Set pivotFromDryers = PPTippingStation.PivotTables("PivotTableD1")
-    ElseIf identity = 2 Then
-        'D2 - Tip Station (40H Gap)
-        Set pivotFromDryers = PPTippingStation.PivotTables("PivotTableD2")
-    End If
-End Function
-
 Function infoFromDryers(pivotTable)
     Dim TipStatCanCORange As Range
     Dim TipStatCanCOMax As Long
@@ -335,10 +333,11 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
     Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
 
-    If D1CanStarveStartTime < tippingStationAvailableTime AND D1CanStarveStartTime <> 0 Then
-        determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
-        Exit Function
-    End If
+    ' Not needed for logic4 as what-if scenario v requirement.
+    ' If D1CanStarveStartTime < tippingStationAvailableTime AND D1CanStarveStartTime <> 0 Then
+    '     determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
+    '     Exit Function
+    ' End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
@@ -430,7 +429,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value = FPLoadingWeight * i
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-        Application.CalculateFull
+        calculateAll
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo)
         If canAdd = True Then
@@ -449,7 +448,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
         End If
     Next
-    Application.CalculateFull
+    calculateAll
     
     ' this is to ensure that the pivot table is updated after adding pp campaigns
     wb.RefreshAll
