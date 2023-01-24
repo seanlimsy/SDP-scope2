@@ -1,5 +1,5 @@
 ======== Initializing ========
-Program Started @ 23/1/23 21:12:17
+Program Started @ 24/1/23 10:47:07
 Done.
 ======== Main Logic ========
 Current PE Silo Allowance: 16
@@ -233,10 +233,10 @@ Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
 PE Silo: 18; SG Silo: 5
-Reducing amount to 0.5
+Reducing amount to 0.8
 -----------
 Inserted @ 409
-Inserted 0.5th amount of campaign
+Inserted 0.8th amount of campaign
 -----------
 ++++++++++++++++++++++++
 ======== Attempt 6 Concluded ========
@@ -251,53 +251,23 @@ DB Campaign to insert: 2
 Done.
 -------
 D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 410
+D2 First Can Starve Time Index: 651
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 579.63711791765
+Tipping Station Available Time: 649.174735468482
 D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 579.63711791765
+D2CanStarveStartTime: 796.696931829148
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 7
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 7
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 5
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 5
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 2
 -----------
-Inserted @ 410
-Inserted 2 campaign(s) from window
+Inserted @ 647
+Inserted 1th amount of campaign
 -----------
 ++++++++++++++++++++++++
 ======== Attempt 7 Concluded ========
@@ -311,27 +281,39 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 652
+D1 First Can Starve Time Index: 989
+D2 First Can Starve Time Index: 651
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 619.63711791765
-D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 798.279097973857
+Tipping Station Available Time: 847.811901154186
+D1CanStarveStartTime: 1149.68315464124
+D2CanStarveStartTime: 796.696931829148
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 0.5
+PE Silo: 18; SG Silo: 10
+Reducing amount to 11
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 10
+Reducing amount to 10
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 7
+Reducing amount to 9
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 7
+Reducing amount to 8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 8
+Reducing amount to 7
 -----------
-Inserted @ 647
-Inserted 0.5th amount of campaign
+Inserted @ 651
+Inserted 7 campaign(s) from window
 -----------
 ++++++++++++++++++++++++
 ======== Attempt 8 Concluded ========
@@ -345,30 +327,24 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1007
-D2 First Can Starve Time Index: 652
+D1 First Can Starve Time Index: 989
+D2 First Can Starve Time Index: 887
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 852.734837412658
-D1CanStarveStartTime: 1166.83414620166
-D2CanStarveStartTime: 798.279097973857
+Tipping Station Available Time: 847.811901154186
+D1CanStarveStartTime: 1149.68315464124
+D2CanStarveStartTime: 1077.52394129611
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 7
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 7
-Reducing amount to 9
 -----------
-Inserted @ 652
-Inserted 9 campaign(s) from window
+Inserted @ 887
+Inserted 1th amount of campaign
 -----------
 ++++++++++++++++++++++++
 ======== Attempt 9 Concluded ========
@@ -382,29 +358,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1007
-D2 First Can Starve Time Index: 660
+D1 First Can Starve Time Index: 989
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 852.734837412658
-D1CanStarveStartTime: 1166.83414620166
-D2CanStarveStartTime: 859.033065310141
+Tipping Station Available Time: 1180.91804839181
+D1CanStarveStartTime: 1149.68315464124
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 7
-Reducing amount to 0.5
------------
-Inserted @ 660
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 10 Concluded ========
  
 ======== Attempt 11 ========
@@ -416,26 +383,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1007
-D2 First Can Starve Time Index: 891
+D1 First Can Starve Time Index: 998
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 914.090405956321
-D1CanStarveStartTime: 1166.83414620166
-D2CanStarveStartTime: 1078.82468637038
+Tipping Station Available Time: 1180.91804839181
+D1CanStarveStartTime: 1156.61338236265
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 891
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 11 Concluded ========
  
 ======== Attempt 12 ========
@@ -448,25 +409,19 @@ DB Campaign to insert: 2
 Done.
 -------
 D1 First Can Starve Time Index: 1007
-D2 First Can Starve Time Index: 892
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1093.29869368323
-D1CanStarveStartTime: 1166.83414620166
-D2CanStarveStartTime: 1093.29869368323
+Tipping Station Available Time: 1180.91804839181
+D1CanStarveStartTime: 1166.7275979934
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 892
-Inserted 3 campaign(s) from window
------------
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 12 Concluded ========
  
 ======== Attempt 13 ========
@@ -478,100 +433,23 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1007
-D2 First Can Starve Time Index: 894
+D1 First Can Starve Time Index: 1016
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1166.83414620166
-D2CanStarveStartTime: 1119.22655317643
+Tipping Station Available Time: 1180.91804839181
+D1CanStarveStartTime: 1176.84181362415
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 13 Concluded ========
  
 ======== Attempt 14 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1016
-D2 First Can Starve Time Index: 894
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1176.84181362415
-D2CanStarveStartTime: 1119.22655317643
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 7
-Reducing amount to 16
------------
-Inserted @ 894
-Inserted 16 campaign(s) from window
------------
-++++++++++++++++++++++++
-======== Attempt 14 Concluded ========
- 
-======== Attempt 15 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1016
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1176.84181362415
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 15 Concluded ========
- 
-======== Attempt 16 ========
 -- Finding PP / DB Campaign to insert...
 Done.
 -------
@@ -581,15 +459,15 @@ DB Campaign to insert: 2
 Done.
 -------
 D1 First Can Starve Time Index: 1025
-D2 First Can Starve Time Index: 1235
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
 Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
+Tipping Station Available Time: 1180.91804839181
 D1CanStarveStartTime: 1186.9560292549
-D2CanStarveStartTime: 1511.24762191828
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
 Dryer Campaign Value: 1
@@ -597,2831 +475,20 @@ Adding PP campaign to dryer 1
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
 PE Silo: 25; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 16 Concluded ========
- 
-======== Attempt 17 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1034
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1197.07024488565
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 17 Concluded ========
- 
-======== Attempt 18 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1043
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1207.18446051641
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 26; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 18 Concluded ========
- 
-======== Attempt 19 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1052
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1217.29867614716
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 27; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 19 Concluded ========
- 
-======== Attempt 20 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1061
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1227.41289177791
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 27; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 20 Concluded ========
- 
-======== Attempt 21 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1070
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1239.02710740866
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 29; SG Silo: 6
-Reducing amount to 0.5
+Reducing amount to 0.8
 Effect: Silo Constraint violated by insertion.
 PE Silo: 23; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 21 Concluded ========
- 
-======== Attempt 22 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1079
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1251.48055219513
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 29; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 22 Concluded ========
- 
-======== Attempt 23 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1630
-D2 First Can Starve Time Index: 1235
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1133.29869368323
-D1CanStarveStartTime: 1892.86275605811
-D2CanStarveStartTime: 1511.24762191828
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 1235
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 23 Concluded ========
- 
-======== Attempt 24 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1630
-D2 First Can Starve Time Index: 1236
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1626.22506234731
-D1CanStarveStartTime: 1892.86275605811
-D2CanStarveStartTime: 1626.22506234731
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 1236
-Inserted 2 campaign(s) from window
------------
-++++++++++++++++++++++++
-======== Attempt 24 Concluded ========
- 
-======== Attempt 25 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1630
-D2 First Can Starve Time Index: 1303
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1666.22506234731
-D1CanStarveStartTime: 1892.86275605811
-D2CanStarveStartTime: 1695.77202613769
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
+Reducing amount to 0.6
 Effect: Silo Constraint violated by insertion.
 PE Silo: 21; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 25 Concluded ========
- 
-======== Attempt 26 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1630
-D2 First Can Starve Time Index: 1426
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1666.22506234731
-D1CanStarveStartTime: 1892.86275605811
-D2CanStarveStartTime: 1875.46895718298
-Done.
--------
-Dryer Campaign Value: 1
-Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 1892.86275605811
-Next dryer exceed time step: 1724.14589096632
-Cause of violation: PED1
-Index to Delay: 1503
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-Next possible insert time step: 1892.86275605811
-Next dryer exceed time step: 3882.40657857501
-Cause of violation: PED1
-Next potential insertion point is before the next time dryer is exceeded. Ending blockage.
-==== Ending logic 2 ====
-======== Attempt 26 Concluded ========
- 
-======== Attempt 27 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1630
-D2 First Can Starve Time Index: 1426
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 1666.22506234731
-D1CanStarveStartTime: 1892.86275605811
-D2CanStarveStartTime: 1875.46895718298
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 1630
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 27 Concluded ========
- 
-======== Attempt 28 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1426
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1875.46895718298
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 28 Concluded ========
- 
-======== Attempt 29 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1434
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1884.11286194441
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 6
+Reducing amount to 0.4
 Effect: Silo Constraint violated by insertion.
 PE Silo: 20; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 29 Concluded ========
- 
-======== Attempt 30 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1442
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1895.48750618573
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 30 Concluded ========
- 
-======== Attempt 31 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1450
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1906.86215042706
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 31 Concluded ========
- 
-======== Attempt 32 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1458
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1919.73679466838
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 32 Concluded ========
- 
-======== Attempt 33 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1466
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1931.1114389097
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 33 Concluded ========
- 
-======== Attempt 34 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1474
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 1942.48608315103
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 6
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 6
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 2
+Reducing amount to 0.2
 -----------
-Inserted @ 1474
-Inserted 2 campaign(s) from window
+Inserted @ 1025
+Inserted 0.2th amount of campaign
 -----------
-++++++++++++++++++++++++
-======== Attempt 34 Concluded ========
- 
-======== Attempt 35 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1563
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2029.48045594725
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 2082.85539140243
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 1563
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 35 Concluded ========
- 
-======== Attempt 36 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1735
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2175.25353935348
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 2295.47408452125
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 1735
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 36 Concluded ========
- 
-======== Attempt 37 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2135
-D2 First Can Starve Time Index: 1977
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2382.8722324723
-D1CanStarveStartTime: 2480.52024737215
-D2CanStarveStartTime: 2518.39442883298
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 2135
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 37 Concluded ========
- 
-======== Attempt 38 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2624
-D2 First Can Starve Time Index: 1977
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2588.49960995687
-D1CanStarveStartTime: 3037.72124730588
-D2CanStarveStartTime: 2518.39442883298
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 1977
-Inserted 11 campaign(s) from window
------------
-++++++++++++++++++++++++
-======== Attempt 38 Concluded ========
- 
-======== Attempt 39 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2624
-D2 First Can Starve Time Index: 2202
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2588.49960995687
-D1CanStarveStartTime: 3037.72124730588
-D2CanStarveStartTime: 2791.89181204677
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 2202
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 39 Concluded ========
- 
-======== Attempt 40 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2624
-D2 First Can Starve Time Index: 2203
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 2844.45450796482
-D1CanStarveStartTime: 3037.72124730588
-D2CanStarveStartTime: 2844.45450796482
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 2624
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 40 Concluded ========
- 
-======== Attempt 41 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 2804
-D2 First Can Starve Time Index: 2203
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3178.94868773492
-D1CanStarveStartTime: 3259.3929886823
-D2CanStarveStartTime: 2844.45450796482
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 2804
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 41 Concluded ========
- 
-======== Attempt 42 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 3039
-D2 First Can Starve Time Index: 2203
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3882.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3348.95183862687
-D1CanStarveStartTime: 3523.91525690918
-D2CanStarveStartTime: 2844.45450796482
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 3039
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 42 Concluded ========
- 
-======== Attempt 43 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2203
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 2844.45450796482
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 43 Concluded ========
- 
-======== Attempt 44 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2307
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3054.26464716386
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 44 Concluded ========
- 
-======== Attempt 45 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2339
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3135.93786527148
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 45 Concluded ========
- 
-======== Attempt 46 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2355
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3149.79143736922
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 46 Concluded ========
- 
-======== Attempt 47 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2359
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3160.05866033354
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 47 Concluded ========
- 
-======== Attempt 48 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2367
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3174.82924746381
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 48 Concluded ========
- 
-======== Attempt 49 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2375
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3186.20389170513
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 49 Concluded ========
- 
-======== Attempt 50 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2383
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3197.57853594646
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 50 Concluded ========
- 
-======== Attempt 51 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2391
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3208.95318018778
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 51 Concluded ========
- 
-======== Attempt 52 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2399
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3220.32782442911
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 52 Concluded ========
- 
-======== Attempt 53 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2407
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3231.70246867043
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 53 Concluded ========
- 
-======== Attempt 54 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2415
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3243.07711291176
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 54 Concluded ========
- 
-======== Attempt 55 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2423
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3255.95175715308
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 55 Concluded ========
- 
-======== Attempt 56 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2431
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3267.32640139441
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 56 Concluded ========
- 
-======== Attempt 57 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2439
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3295.20104563573
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 57 Concluded ========
- 
-======== Attempt 58 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2447
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3306.57568987706
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 58 Concluded ========
- 
-======== Attempt 59 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2455
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3317.95033411838
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 59 Concluded ========
- 
-======== Attempt 60 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2463
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3329.32497835971
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 60 Concluded ========
- 
-======== Attempt 61 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2471
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3340.69962260103
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 61 Concluded ========
- 
-======== Attempt 62 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2479
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3352.07426684236
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 62 Concluded ========
- 
-======== Attempt 63 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2487
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3363.44891108368
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 63 Concluded ========
- 
-======== Attempt 64 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2495
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3374.82355532501
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 64 Concluded ========
- 
-======== Attempt 65 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2503
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3386.07951469526
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 65 Concluded ========
- 
-======== Attempt 66 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2511
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3398.098830007
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 66 Concluded ========
- 
-======== Attempt 67 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2519
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3409.27719559184
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 67 Concluded ========
- 
-======== Attempt 68 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2527
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3420.45556117669
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 68 Concluded ========
- 
-======== Attempt 69 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2535
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3432.76990022801
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 69 Concluded ========
- 
-======== Attempt 70 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2543
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3447.24141625062
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 70 Concluded ========
- 
-======== Attempt 71 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2551
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3458.48380454786
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 71 Concluded ========
- 
-======== Attempt 72 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2559
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3469.7261928451
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 72 Concluded ========
- 
-======== Attempt 73 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2567
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3480.96858114234
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 73 Concluded ========
- 
-======== Attempt 74 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2575
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3492.21096943958
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 74 Concluded ========
- 
-======== Attempt 75 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2583
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3504.68628801118
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 75 Concluded ========
- 
-======== Attempt 76 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2593
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3518.4143828845
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 76 Concluded ========
- 
-======== Attempt 77 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2601
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3542.33246341941
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 77 Concluded ========
- 
-======== Attempt 78 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2609
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3554.92700189956
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 78 Concluded ========
- 
-======== Attempt 79 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2619
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3564.93517456269
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 79 Concluded ========
- 
-======== Attempt 80 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2627
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3579.64436853247
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 80 Concluded ========
- 
-======== Attempt 81 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2727
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3604.06968188147
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3623.76644924392
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 2727
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 81 Concluded ========
- 
-======== Attempt 82 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2728
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3647.9208742162
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3647.9208742162
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 82 Concluded ========
- 
-======== Attempt 83 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2739
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3687.9208742162
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3702.47301552826
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 26; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 83 Concluded ========
- 
-======== Attempt 84 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 3086
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3892.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 3687.9208742162
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4082.95893763706
-Done.
--------
-Dryer Campaign Value: 2
-Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 4082.95893763706
-Next dryer exceed time step: 3892.41959081189
-Cause of violation: PED1
-Index to Delay: 3357
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-No more dryer blockages in the system.
-==== Ending logic 2 ====
-======== Attempt 84 Concluded ========
- 
-======== Attempt 85 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 3086
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3687.9208742162
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4082.95893763706
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 3086
-Inserted 0.5th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 85 Concluded ========
- 
-======== Attempt 86 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 3087
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 4130.3570855881
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4130.3570855881
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 86 Concluded ========
- 
-======== Attempt 87 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 3314
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 4170.3570855881
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4292.95154197177
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 3314
-Inserted 1th amount of campaign
------------
-++++++++++++++++++++++++
-======== Attempt 87 Concluded ========
- 
-======== Attempt 88 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 3315
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 4130.3570855881
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4352.34968992281
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 88 Concluded ========
- 
-======== Attempt 89 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: -1
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Done.
--------
-Dryer Campaign Value: 0
-All can starvation slots used. Increasing silo constraint
-======== Attempt 89 Concluded ========
- 
-================ Insert fail due to Silo Constraint ================
-++++ Resetting Sheets for relaxed Constraint ++++
---- Reverting Schedules...
-Done.
---- Reverting CIP & Blockage...
-Done.
-++++ Reset Done. Reattempting ++++
- 
-Current PE Silo Allowance: 17
-Current SG Silo Allowance: 6
-======== Attempt 1 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 10
-D2 First Can Starve Time Index: 34
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 0
-D1CanStarveStartTime: 14.1442407105038
-D2CanStarveStartTime: 51.3581991637805
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 10
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 1724.5
-======== Attempt 1 Concluded ========
- 
-======== Attempt 2 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 209
-D2 First Can Starve Time Index: 34
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 1724.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 150.761940599648
-D1CanStarveStartTime: 242.839991647654
-D2CanStarveStartTime: 51.3581991637805
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 9
------------
-Inserted @ 34
-Inserted 9 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 1724.5
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 96
-Next dryer exceed time step: 94.8323398195547
-Cause of violation: PED2
-Index to Delay: 77
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-Next possible insert time step: 96
-Next dryer exceed time step: 3895.1530302678
-Cause of violation: PED2
-Next potential insertion point is before the next time dryer is exceeded. Ending blockage.
-==== Ending logic 2 ====
-++++++++++++++++++++++++
-======== Attempt 2 Concluded ========
- 
-======== Attempt 3 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 209
-D2 First Can Starve Time Index: 86
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 150.761940599648
-D1CanStarveStartTime: 242.839991647654
-D2CanStarveStartTime: 131.602144257484
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 86
-Inserted 3 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3895.5
-======== Attempt 3 Concluded ========
- 
-======== Attempt 4 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 209
-D2 First Can Starve Time Index: 216
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 150.761940599648
-D1CanStarveStartTime: 242.839991647654
-D2CanStarveStartTime: 314.296009998222
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 209
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3895.5
-======== Attempt 4 Concluded ========
- 
-======== Attempt 5 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 216
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 377.636287549753
-D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 314.296009998222
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 24; SG Silo: 5
-Reducing amount to 17
-Effect: Silo Constraint violated by insertion.
-PE Silo: 24; SG Silo: 5
-Reducing amount to 16
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 5
-Reducing amount to 15
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 5
-Reducing amount to 14
-Effect: Silo Constraint violated by insertion.
-PE Silo: 23; SG Silo: 5
-Reducing amount to 13
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 5
-Reducing amount to 12
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 5
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 5
-Reducing amount to 8
------------
-Inserted @ 216
-Inserted 8 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3895.5
-======== Attempt 5 Concluded ========
- 
-======== Attempt 6 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 410
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 377.636287549753
-D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 557.694205695138
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 6 Concluded ========
- 
-======== Attempt 7 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 425
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 377.636287549753
-D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 612.823750071129
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 5
-Reducing amount to 0.5
------------
-Inserted @ 425
-Inserted 0.5th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3895.5
-======== Attempt 7 Concluded ========
- 
-======== Attempt 8 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 647
-D2 First Can Starve Time Index: 652
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3895.5
--- Finding dryer campaign value...
-Tipping Station Available Time: 702.636445989183
-D1CanStarveStartTime: 769.370156120298
-D2CanStarveStartTime: 817.882333388899
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 647
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3895.5
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 900
-Next dryer exceed time step: 898.568553674636
-Cause of violation: PED1
-Index to Delay: 778
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-Next possible insert time step: 900
-Next dryer exceed time step: 3908.91959081189
-Cause of violation: PED1
-Next potential insertion point is before the next time dryer is exceeded. Ending blockage.
-==== Ending logic 2 ====
-++++++++++++++++++++++++
-======== Attempt 8 Concluded ========
- 
-======== Attempt 9 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1052
-D2 First Can Starve Time Index: 652
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 877.349518705018
-D1CanStarveStartTime: 1222.01896574888
-D2CanStarveStartTime: 817.882333388899
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 9
------------
-Inserted @ 652
-Inserted 9 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
-======== Attempt 9 Concluded ========
- 
-======== Attempt 10 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1052
-D2 First Can Starve Time Index: 890
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 877.349518705018
-D1CanStarveStartTime: 1222.01896574888
-D2CanStarveStartTime: 1083.37058113924
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 890
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
-======== Attempt 10 Concluded ========
- 
-======== Attempt 11 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1052
-D2 First Can Starve Time Index: 891
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 1186.76468823494
-D1CanStarveStartTime: 1222.01896574888
-D2CanStarveStartTime: 1186.76468823494
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 5
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 5
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 11 Concluded ========
- 
-======== Attempt 12 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1061
-D2 First Can Starve Time Index: 891
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1228.91289177791
-D2CanStarveStartTime: 1186.76468823494
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 5
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 5
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
-======== Attempt 12 Concluded ========
- 
-======== Attempt 13 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1070
-D2 First Can Starve Time Index: 891
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1239.02710740866
-D2CanStarveStartTime: 1186.76468823494
-Done.
--------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 891
-Inserted 3 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
-======== Attempt 13 Concluded ========
- 
-======== Attempt 14 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: 2
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: 1070
-D2 First Can Starve Time Index: 893
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 3909
--- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1239.02710740866
-D2CanStarveStartTime: 1212.69254772814
-Done.
--------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 25; SG Silo: 5
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 5
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
 ++++++++++++++++++++++++
 ======== Attempt 14 Concluded ========
  
@@ -3434,28 +501,25 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1079
-D2 First Can Starve Time Index: 893
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 888
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1251.48055219513
-D2CanStarveStartTime: 1212.69254772814
+Tipping Station Available Time: 1262.27956923273
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1180.91804839181
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 26; SG Silo: 5
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 5
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
+-----------
+Inserted @ 888
+Inserted 6 campaign(s) from window
+-----------
 ++++++++++++++++++++++++
 ======== Attempt 15 Concluded ========
  
@@ -3468,60 +532,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1097
-D2 First Can Starve Time Index: 893
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 970
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1275.99553239336
-D2CanStarveStartTime: 1212.69254772814
+Tipping Station Available Time: 1262.27956923273
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1332.97210294091
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 12
-Reducing amount to 16
+PE Silo: 21; SG Silo: 6
+Reducing amount to 0.8
 Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 12
-Reducing amount to 15
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.6
 Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 12
-Reducing amount to 14
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.4
 Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 12
-Reducing amount to 13
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 8
-Reducing amount to 12
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 8
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 8
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 8
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 7
-Effect: Silo Constraint violated by insertion.
-PE Silo: 17; SG Silo: 7
-Reducing amount to 6
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.2
 -----------
-Inserted @ 893
-Inserted 6 campaign(s) from window
+Inserted @ 970
+Inserted 0.2th amount of campaign
 -----------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
+++++++++++++++++++++++++
 ======== Attempt 16 Concluded ========
  
 ======== Attempt 17 ========
@@ -3533,27 +575,36 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1097
-D2 First Can Starve Time Index: 1224
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 1220
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1275.99553239336
-D2CanStarveStartTime: 1524.18667401592
+Tipping Station Available Time: 1405.43093492317
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1534.03238933648
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
-PE Silo: 26; SG Silo: 6
-Reducing amount to 0.5
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.8
 Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
 Cannot be inserted at slot. Skipping.
 ++++++++++++++++++++++++
 ======== Attempt 17 Concluded ========
@@ -3567,27 +618,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1621
-D2 First Can Starve Time Index: 1224
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 1286
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1226.76468823494
-D1CanStarveStartTime: 1900.29697212031
-D2CanStarveStartTime: 1524.18667401592
+Tipping Station Available Time: 1405.43093492317
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1682.29127420636
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
------------
-Inserted @ 1224
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
 ======== Attempt 18 Concluded ========
  
 ======== Attempt 19 ========
@@ -3599,39 +661,47 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1621
-D2 First Can Starve Time Index: 1225
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 1409
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 1724.5
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1634.55437390507
-D1CanStarveStartTime: 1900.29697212031
-D2CanStarveStartTime: 1634.55437390507
+Tipping Station Available Time: 1405.43093492317
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1875.46895718298
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 11
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 10
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 9
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 8
------------
-Inserted @ 1225
-Inserted 8 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
+Dryer Campaign Value: 1
+Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.
+ 
+==== Initializing logic 2 ====
+Next possible insert time step: 1913.24926036848
+Next dryer exceed time step: 1724.14589096632
+Cause of violation: PED1
+Index to Delay: 1504
+Solving Delay...
+Current time exceed: 1724.14589096632
+Next time exceed: 1781.230479231
+Next exceeded time step is after current exceed time step. Delay at spot is resolved.
+Resolved. Moving to next possible TimeStep.
+ 
+Next possible insert time step: 1913.24926036848
+Next dryer exceed time step: 1781.96961159599
+Cause of violation: PED2
+Index to Delay: 1348
+Solving Delay...
+Current time exceed: 1781.96961159599
+Next time exceed: 3862.74588632668
+Next exceeded time step is after current exceed time step. Delay at spot is resolved.
+Resolved. Moving to next possible TimeStep.
+ 
+Next possible insert time step: 1913.24926036848
+Next dryer exceed time step: 3862.74588632668
+Cause of violation: PED2
+Next potential insertion point is before the next time dryer is exceeded. Ending blockage.
+==== Ending logic 2 ====
 ======== Attempt 19 Concluded ========
  
 ======== Attempt 20 ========
@@ -3643,28 +713,25 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1621
-D2 First Can Starve Time Index: 1298
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 1377
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1674.55437390507
-D1CanStarveStartTime: 1900.29697212031
-D2CanStarveStartTime: 1716.50427397804
+Tipping Station Available Time: 1405.43093492317
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 1848.30141407145
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 22; SG Silo: 6
-Reducing amount to 0.5
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 0
-Cannot be inserted at slot. Skipping.
+-----------
+Inserted @ 1377
+Inserted 1th amount of campaign
+-----------
 ++++++++++++++++++++++++
 ======== Attempt 20 Concluded ========
  
@@ -3677,27 +744,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1621
-D2 First Can Starve Time Index: 1421
+D1 First Can Starve Time Index: 1649
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 1674.55437390507
-D1CanStarveStartTime: 1900.29697212031
-D2CanStarveStartTime: 1891.96895718298
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1913.24926036848
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 1621
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 21 Concluded ========
  
 ======== Attempt 22 ========
@@ -3709,35 +769,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1421
+D1 First Can Starve Time Index: 1658
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 1891.96895718298
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1920.63393886609
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 22 Concluded ========
  
 ======== Attempt 23 ========
@@ -3749,35 +794,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1429
+D1 First Can Starve Time Index: 1667
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 1900.61286194441
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1930.78008593226
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 20; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 23 Concluded ========
  
 ======== Attempt 24 ========
@@ -3789,35 +819,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1437
+D1 First Can Starve Time Index: 1676
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 1911.98750618573
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1940.92623299842
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 24 Concluded ========
  
 ======== Attempt 25 ========
@@ -3829,35 +844,20 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1445
+D1 First Can Starve Time Index: 1685
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 1923.36215042706
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1952.57238006459
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 4
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 3
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 2
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 1
-Cannot be inserted at slot. Skipping.
-++++++++++++++++++++++++
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 25 Concluded ========
  
 ======== Attempt 26 ========
@@ -3869,44 +869,25 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1453
+D1 First Can Starve Time Index: 1694
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 3909
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 1936.23679466838
+Tipping Station Available Time: 1955.13674200051
+D1CanStarveStartTime: 1964.52133442004
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 18; SG Silo: 6
-Reducing amount to 4
 -----------
-Inserted @ 1453
-Inserted 4 campaign(s) from window
+Inserted @ 1694
+Inserted 1th amount of campaign
 -----------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 3909
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 1976
-Next dryer exceed time step: 1974.94348585579
-Cause of violation: PED2
-Index to Delay: 1487
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-Next possible insert time step: 1976
-Next dryer exceed time step: 2003.48208804214
-Cause of violation: PED1
-Next potential insertion point is before the next time dryer is exceeded. Ending blockage.
-==== Ending logic 2 ====
 ++++++++++++++++++++++++
 ======== Attempt 26 Concluded ========
  
@@ -3919,31 +900,53 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1552
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1498
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 2003.5
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 2092.70265606459
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2017.01502866871
 Done.
 -------
-Dryer Campaign Value: 2
-Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.
- 
-==== Initializing logic 2 ====
-Next possible insert time step: 2092.70265606459
-Next dryer exceed time step: 2003.48208804214
-Cause of violation: PED1
-Index to Delay: 1720
-Solving Delay...
-Resolved. Moving to next possible TimeStep.
- 
-No more dryer blockages in the system.
-==== Ending logic 2 ====
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
+++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion.
+PE Silo: 25; SG Silo: 6
+Reducing amount to 16
+Effect: Silo Constraint violated by insertion.
+PE Silo: 22; SG Silo: 6
+Reducing amount to 15
+Effect: Silo Constraint violated by insertion.
+PE Silo: 22; SG Silo: 6
+Reducing amount to 14
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 13
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 12
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 11
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 10
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 9
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 8
+-----------
+Inserted @ 1498
+Inserted 8 campaign(s) from window
+-----------
+++++++++++++++++++++++++
 ======== Attempt 27 Concluded ========
  
 ======== Attempt 28 ========
@@ -3955,30 +958,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1552
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1553
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2035.09326802241
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 2092.70265606459
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2101.52905084429
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
+PE Silo: 22; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 21; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
 PE Silo: 18; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 1552
-Inserted 0.5th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Reducing amount to 5.55111512312578E-17
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
 ======== Attempt 28 Concluded ========
  
 ======== Attempt 29 ========
@@ -3990,27 +1001,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 1928
-D2 First Can Starve Time Index: 1732
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1561
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2186.93201864931
-D1CanStarveStartTime: 2262.03585794973
-D2CanStarveStartTime: 2313.19124928285
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2111.55493774329
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
------------
-Inserted @ 1928
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Effect: Silo Constraint violated by insertion.
+PE Silo: 21; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
 ======== Attempt 29 Concluded ========
  
 ======== Attempt 30 ========
@@ -4022,27 +1044,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2377
-D2 First Can Starve Time Index: 1732
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1569
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2352.51522053445
-D1CanStarveStartTime: 2773.57633887683
-D2CanStarveStartTime: 2313.19124928285
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2126.0264537659
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
------------
-Inserted @ 1732
-Inserted 2 campaign(s) from window
------------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Effect: Silo Constraint violated by insertion.
+PE Silo: 21; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
 ======== Attempt 30 Concluded ========
  
 ======== Attempt 31 ========
@@ -4054,27 +1087,38 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2377
-D2 First Can Starve Time Index: 1857
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1577
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2352.51522053445
-D1CanStarveStartTime: 2773.57633887683
-D2CanStarveStartTime: 2470.58606515228
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2137.26884206314
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
------------
-Inserted @ 1857
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
+Cannot be inserted at slot. Skipping.
+++++++++++++++++++++++++
 ======== Attempt 31 Concluded ========
  
 ======== Attempt 32 ========
@@ -4086,27 +1130,36 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2377
-D2 First Can Starve Time Index: 1975
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1585
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2610.81350558131
-D1CanStarveStartTime: 2773.57633887683
-D2CanStarveStartTime: 2622.41777618581
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2148.51123036038
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
-PE Silo: 16; SG Silo: 12
-Reducing amount to 0.5
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.8
 Effect: Silo Constraint violated by insertion.
-PE Silo: 16; SG Silo: 9
-Reducing amount to 0
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 0.2
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 5.55111512312578E-17
 Cannot be inserted at slot. Skipping.
 ++++++++++++++++++++++++
 ======== Attempt 32 Concluded ========
@@ -4120,30 +1173,26 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2377
-D2 First Can Starve Time Index: 2190
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1653
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2610.81350558131
-D1CanStarveStartTime: 2773.57633887683
-D2CanStarveStartTime: 2805.21486225665
+Tipping Station Available Time: 2099.90096365547
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2243.24809002572
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 19; SG Silo: 6
-Reducing amount to 0.5
 -----------
-Inserted @ 2377
-Inserted 0.5th amount of campaign
+Inserted @ 1653
+Inserted 1th amount of campaign
 -----------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+++++++++++++++++++++++++
 ======== Attempt 33 Concluded ========
  
 ======== Attempt 34 ========
@@ -4155,27 +1204,29 @@ DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2688
-D2 First Can Starve Time Index: 2190
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 1966
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2881.21852215473
-D1CanStarveStartTime: 3141.50462485822
-D2CanStarveStartTime: 2805.21486225665
+Tipping Station Available Time: 2384.87348186182
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2549.87196065466
 Done.
 -------
-Dryer Campaign Value: 3
-Adding DB campaign to dryer 2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 7
+Reducing amount to 0.8
 -----------
-Inserted @ 2190
-Inserted 12 campaign(s) from window
+Inserted @ 1966
+Inserted 0.8th amount of campaign
 -----------
-Silo allowance attained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+++++++++++++++++++++++++
 ======== Attempt 34 Concluded ========
  
 ======== Attempt 35 ========
@@ -4183,34 +1234,24 @@ Induced Delay/Block @ 0
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2688
-D2 First Can Starve Time Index: 2201
+D1 First Can Starve Time Index: 2277
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 2881.21852215473
-D1CanStarveStartTime: 3141.50462485822
-D2CanStarveStartTime: 2940.26647278168
+Tipping Station Available Time: 2670.85391299789
+D1CanStarveStartTime: 2638.78563382634
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 16; SG Silo: 8
-Reducing amount to 0.5
------------
-Inserted @ 2201
-Inserted 0.5th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 35 Concluded ========
  
 ======== Attempt 36 ========
@@ -4218,31 +1259,24 @@ Induced Delay/Block @ 0
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2688
-D2 First Can Starve Time Index: 2306
+D1 First Can Starve Time Index: 2287
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3003.83756442063
-D1CanStarveStartTime: 3141.50462485822
-D2CanStarveStartTime: 3082.25287161186
+Tipping Station Available Time: 2670.85391299789
+D1CanStarveStartTime: 2645.63462586896
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 2306
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 36 Concluded ========
  
 ======== Attempt 37 ========
@@ -4250,31 +1284,24 @@ Induced Delay/Block @ 0
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2688
-D2 First Can Starve Time Index: 2307
+D1 First Can Starve Time Index: 2297
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3093.99062991748
-D1CanStarveStartTime: 3141.50462485822
-D2CanStarveStartTime: 3093.99062991748
+Tipping Station Available Time: 2670.85391299789
+D1CanStarveStartTime: 2658.04776482551
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
------------
-Inserted @ 2688
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 37 Concluded ========
  
 ======== Attempt 38 ========
@@ -4282,34 +1309,24 @@ Induced Delay/Block @ 0
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: 2877
-D2 First Can Starve Time Index: 2307
+D1 First Can Starve Time Index: 2307
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3276.30092076032
-D1CanStarveStartTime: 3361.85164420869
-D2CanStarveStartTime: 3093.99062991748
+Tipping Station Available Time: 2670.85391299789
+D1CanStarveStartTime: 2668.84314243287
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 1
-Adding PP campaign to dryer 1
-++++++++++++++++++++++++
-Effect: Silo Constraint violated by insertion.
-PE Silo: 21; SG Silo: 6
-Reducing amount to 0.5
------------
-Inserted @ 2877
-Inserted 0.5th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
+Dryer Campaign Value: 4
+Skipping D1
 ======== Attempt 38 Concluded ========
  
 ======== Attempt 39 ========
@@ -4317,24 +1334,30 @@ Induced Delay/Block @ 0
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2307
+D1 First Can Starve Time Index: 2317
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3093.99062991748
+Tipping Station Available Time: 2670.85391299789
+D1CanStarveStartTime: 2679.31077689265
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
+++++++++++++++++++++++++
+-----------
+Inserted @ 2317
+Inserted 1th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 39 Concluded ========
  
 ======== Attempt 40 ========
@@ -4342,24 +1365,30 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2339
+D1 First Can Starve Time Index: 2643
+D2 First Can Starve Time Index: 2182
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3152.43786527148
+Tipping Station Available Time: 2758.30626497846
+D1CanStarveStartTime: 3057.00323286109
+D2CanStarveStartTime: 2810.47866802339
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
+++++++++++++++++++++++++
+-----------
+Inserted @ 2182
+Inserted 1th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 40 Concluded ========
  
 ======== Attempt 41 ========
@@ -4367,24 +1396,39 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2355
+D1 First Can Starve Time Index: 2643
+D2 First Can Starve Time Index: 2183
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3166.29143736922
+Tipping Station Available Time: 2910.42970124587
+D1CanStarveStartTime: 3057.00323286109
+D2CanStarveStartTime: 2922.42970124587
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 2
+Adding PP campaign to dryer 2
+++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 11
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 10
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 7
+Reducing amount to 0.4
+-----------
+Inserted @ 2183
+Inserted 0.4th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 41 Concluded ========
  
 ======== Attempt 42 ========
@@ -4392,24 +1436,30 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2359
+D1 First Can Starve Time Index: 2643
+D2 First Can Starve Time Index: 2288
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3176.55866033355
+Tipping Station Available Time: 3000.34821960671
+D1CanStarveStartTime: 3057.00323286109
+D2CanStarveStartTime: 3078.76352679794
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
+++++++++++++++++++++++++
+-----------
+Inserted @ 2643
+Inserted 1th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 42 Concluded ========
  
 ======== Attempt 43 ========
@@ -4417,24 +1467,30 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2367
+D1 First Can Starve Time Index: 2760
+D2 First Can Starve Time Index: 2288
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3191.32924746381
+Tipping Station Available Time: 3153.88101040235
+D1CanStarveStartTime: 3192.86118022156
+D2CanStarveStartTime: 3078.76352679794
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
+++++++++++++++++++++++++
+-----------
+Inserted @ 2288
+Inserted 10 campaign(s) from window
+-----------
+++++++++++++++++++++++++
 ======== Attempt 43 Concluded ========
  
 ======== Attempt 44 ========
@@ -4442,24 +1498,30 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2375
+D1 First Can Starve Time Index: 2760
+D2 First Can Starve Time Index: 2405
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3202.70389170513
+Tipping Station Available Time: 3153.88101040235
+D1CanStarveStartTime: 3192.86118022156
+D2CanStarveStartTime: 3262.70686367078
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
+++++++++++++++++++++++++
+-----------
+Inserted @ 2760
+Inserted 1th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 44 Concluded ========
  
 ======== Attempt 45 ========
@@ -4467,24 +1529,45 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2383
+D1 First Can Starve Time Index: 3067
+D2 First Can Starve Time Index: 2405
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3214.07853594646
+Tipping Station Available Time: 3332.569905391
+D1CanStarveStartTime: 3555.33244220459
+D2CanStarveStartTime: 3262.70686367078
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
+++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 11
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 10
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 9
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 18; SG Silo: 6
+Reducing amount to 7
+-----------
+Inserted @ 2405
+Inserted 7 campaign(s) from window
+-----------
+++++++++++++++++++++++++
 ======== Attempt 45 Concluded ========
  
 ======== Attempt 46 ========
@@ -4492,24 +1575,42 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2391
+D1 First Can Starve Time Index: 3067
+D2 First Can Starve Time Index: 2605
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3225.45318018778
+Tipping Station Available Time: 3332.569905391
+D1CanStarveStartTime: 3555.33244220459
+D2CanStarveStartTime: 3570.14034474838
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 1
+Adding PP campaign to dryer 1
+++++++++++++++++++++++++
+Effect: Silo Constraint violated by insertion.
+PE Silo: 26; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 24; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
+PE Silo: 22; SG Silo: 6
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 20; SG Silo: 6
+Reducing amount to 0.2
+-----------
+Inserted @ 3067
+Inserted 0.2th amount of campaign
+-----------
+++++++++++++++++++++++++
 ======== Attempt 46 Concluded ========
  
 ======== Attempt 47 ========
@@ -4517,484 +1618,33 @@ Skipping D2
 Done.
 -------
 PP Campaign to insert: 2
-DB Campaign to insert: -1
+DB Campaign to insert: 2
 -- Finding CanStarveTime...
 Done.
 -------
 D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2399
+D2 First Can Starve Time Index: 2605
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
+Tipping Station Available Time: 3631.57793029039
 D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3236.82782442911
+D2CanStarveStartTime: 3570.14034474838
 Done.
 -------
-Dryer Campaign Value: 5
-Skipping D2
+Dryer Campaign Value: 3
+Adding DB campaign to dryer 2
+++++++++++++++++++++++++
+-----------
+Inserted @ 2605
+Inserted 6 campaign(s) from window
+-----------
+++++++++++++++++++++++++
 ======== Attempt 47 Concluded ========
  
 ======== Attempt 48 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2407
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3248.20246867043
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 48 Concluded ========
- 
-======== Attempt 49 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2415
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3259.57711291176
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 49 Concluded ========
- 
-======== Attempt 50 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2423
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3272.45175715308
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 50 Concluded ========
- 
-======== Attempt 51 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2431
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3283.82640139441
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 51 Concluded ========
- 
-======== Attempt 52 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2439
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3311.70104563573
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 52 Concluded ========
- 
-======== Attempt 53 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2447
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3323.07568987706
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 53 Concluded ========
- 
-======== Attempt 54 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2455
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3334.45033411838
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 54 Concluded ========
- 
-======== Attempt 55 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2463
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3345.82497835971
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 55 Concluded ========
- 
-======== Attempt 56 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2471
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3357.19962260103
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 56 Concluded ========
- 
-======== Attempt 57 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2479
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3368.57426684236
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 57 Concluded ========
- 
-======== Attempt 58 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2487
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3379.94891108368
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 58 Concluded ========
- 
-======== Attempt 59 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2495
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3391.32355532501
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 59 Concluded ========
- 
-======== Attempt 60 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2503
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3402.57951469526
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 60 Concluded ========
- 
-======== Attempt 61 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2511
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3414.598830007
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 61 Concluded ========
- 
-======== Attempt 62 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2519
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3425.77719559185
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 62 Concluded ========
- 
-======== Attempt 63 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2527
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3436.95556117669
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 63 Concluded ========
- 
-======== Attempt 64 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2535
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3449.26990022801
-Done.
--------
-Dryer Campaign Value: 5
-Skipping D2
-======== Attempt 64 Concluded ========
- 
-======== Attempt 65 ========
--- Finding PP / DB Campaign to insert...
-Done.
--------
-PP Campaign to insert: 2
-DB Campaign to insert: -1
--- Finding CanStarveTime...
-Done.
--------
-D1 First Can Starve Time Index: -1
-D2 First Can Starve Time Index: 2543
--- Finding initial silo constraint...
-Done.
--------
-Initial Silo Constraint Violation: 0
--- Finding dryer campaign value...
-Tipping Station Available Time: 3452.33100679341
-D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3463.74141625063
-Done.
--------
-Dryer Campaign Value: 2
-Adding PP campaign to dryer 2
-++++++++++++++++++++++++
------------
-Inserted @ 2543
-Inserted 1th amount of campaign
------------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
-======== Attempt 65 Concluded ========
- 
-======== Attempt 66 ========
 -- Finding PP / DB Campaign to insert...
 Done.
 -------
@@ -5008,28 +1658,61 @@ D2 First Can Starve Time Index: 2728
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3558.55411216868
+Tipping Station Available Time: 3631.57793029039
 D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3661.21221742467
+D2CanStarveStartTime: 3686.71166927854
 Done.
 -------
 Dryer Campaign Value: 2
 Adding PP campaign to dryer 2
 ++++++++++++++++++++++++
 Effect: Silo Constraint violated by insertion.
+PE Silo: 23; SG Silo: 6
+Reducing amount to 0.8
+Effect: Silo Constraint violated by insertion.
+PE Silo: 21; SG Silo: 6
+Reducing amount to 0.6
+Effect: Silo Constraint violated by insertion.
 PE Silo: 20; SG Silo: 6
-Reducing amount to 0.5
+Reducing amount to 0.4
+Effect: Silo Constraint violated by insertion.
+PE Silo: 19; SG Silo: 6
+Reducing amount to 0.2
 -----------
 Inserted @ 2728
-Inserted 0.5th amount of campaign
+Inserted 0.2th amount of campaign
 -----------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
-======== Attempt 66 Concluded ========
+++++++++++++++++++++++++
+======== Attempt 48 Concluded ========
  
-======== Attempt 67 ========
+======== Attempt 49 ========
+-- Finding PP / DB Campaign to insert...
+Done.
+-------
+PP Campaign to insert: 2
+DB Campaign to insert: -1
+-- Finding CanStarveTime...
+Done.
+-------
+D1 First Can Starve Time Index: -1
+D2 First Can Starve Time Index: 2729
+-- Finding initial silo constraint...
+Done.
+-------
+Initial Silo Constraint Violation: 3863
+-- Finding dryer campaign value...
+Tipping Station Available Time: 3702.90805974719
+D1CanStarveStartTime: 0
+D2CanStarveStartTime: 3702.90805974719
+Done.
+-------
+Dryer Campaign Value: 5
+Skipping D2
+======== Attempt 49 Concluded ========
+ 
+======== Attempt 50 ========
 -- Finding PP / DB Campaign to insert...
 Done.
 -------
@@ -5043,18 +1726,57 @@ D2 First Can Starve Time Index: 2740
 -- Finding initial silo constraint...
 Done.
 -------
-Initial Silo Constraint Violation: 0
+Initial Silo Constraint Violation: 3863
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3751.82593763919
+Tipping Station Available Time: 3742.90805974719
 D1CanStarveStartTime: 0
-D2CanStarveStartTime: 3720.95002708213
+D2CanStarveStartTime: 3717.47301552826
 Done.
 -------
 Dryer Campaign Value: 5
 Skipping D2
-======== Attempt 67 Concluded ========
+======== Attempt 50 Concluded ========
  
-======== Attempt 68 ========
+======== Attempt 51 ========
+-- Finding PP / DB Campaign to insert...
+Done.
+-------
+PP Campaign to insert: 2
+DB Campaign to insert: -1
+-- Finding CanStarveTime...
+Done.
+-------
+D1 First Can Starve Time Index: -1
+D2 First Can Starve Time Index: 3087
+-- Finding initial silo constraint...
+Done.
+-------
+Initial Silo Constraint Violation: 3863
+-- Finding dryer campaign value...
+Tipping Station Available Time: 3742.90805974719
+D1CanStarveStartTime: 0
+D2CanStarveStartTime: 4097.95893763706
+Done.
+-------
+Dryer Campaign Value: 2
+Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.
+ 
+==== Initializing logic 2 ====
+Next possible insert time step: 4097.95893763706
+Next dryer exceed time step: 3862.74588632668
+Cause of violation: PED2
+Index to Delay: 2855
+Solving Delay...
+Current time exceed: 3862.74588632668
+Next time exceed: 0
+Next exceeded time step is after current exceed time step. Delay at spot is resolved.
+Resolved. Moving to next possible TimeStep.
+ 
+No more dryer blockages in the system.
+==== Ending logic 2 ====
+======== Attempt 51 Concluded ========
+ 
+======== Attempt 52 ========
 -- Finding PP / DB Campaign to insert...
 Done.
 -------
@@ -5070,9 +1792,9 @@ Done.
 -------
 Initial Silo Constraint Violation: 0
 -- Finding dryer campaign value...
-Tipping Station Available Time: 3751.82593763919
+Tipping Station Available Time: 3742.90805974719
 D1CanStarveStartTime: 0
-D2CanStarveStartTime: 4099.45893763706
+D2CanStarveStartTime: 4097.95893763706
 Done.
 -------
 Dryer Campaign Value: 2
@@ -5082,11 +1804,10 @@ Adding PP campaign to dryer 2
 Inserted @ 3087
 Inserted 1th amount of campaign
 -----------
-Silo allowance retained. Inducing dryer blockage/delay.
-Induced Delay/Block @ 0
-======== Attempt 68 Concluded ========
+++++++++++++++++++++++++
+======== Attempt 52 Concluded ========
  
-======== Attempt 69 ========
+======== Attempt 53 ========
 -- Finding PP / DB Campaign to insert...
 Done.
 -------
@@ -5110,5 +1831,5 @@ All campaigns Inserted. Running dryer blockage on all remaining silo constraint 
 ==== Initializing logic 2 ====
 No more dryer blockages in the system.
 ==== Ending logic 2 ====
-======== Attempt 69 Concluded ========
-logic1 Ended @ 23/1/23 23:24:01
+======== Attempt 53 Concluded ========
+logic1 Ended @ 24/1/23 12:28:25
