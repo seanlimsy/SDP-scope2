@@ -84,6 +84,7 @@ Sub main()
     ' Dim isLogic1Feasible As Boolean
     isLogic1Feasible = logic1()
     If isLogic1Feasible = False Then
+        resetAll()
         Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6)."
         Print #logic1Textfile, "Terminating Program.": Space 0
     End If
