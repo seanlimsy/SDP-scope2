@@ -86,6 +86,7 @@ Sub main()
     If isLogic1Feasible = False Then
         resetAll()
         Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6)."
+        reasonForStop = "22(6) Silo Constraint Reached."
         Print #logic1Textfile, "Terminating Program.": Space 0
     End If
     

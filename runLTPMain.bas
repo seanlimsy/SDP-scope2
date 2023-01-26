@@ -124,6 +124,8 @@ Sub runStage1(toAttemptStage1)
     Else
         stage1Progress.Value = "Unable to insert PPCAN & 100DB via Program. Terminated here."
         reportWS.Range("B7").Value = reasonForStop
+        reportWS.Range("F3").Value = mainSilo
+        reportWS.Range("F4").Value = otherSilo
         reportWS.Range("B8").Value = "PPCAN & 100DB INSERT"
         End
     End If  
