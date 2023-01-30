@@ -198,6 +198,7 @@ Sub getTipStatIdleTimes(countPouches, D1TipStatStart, D1TipStatEnd, D2TipStatSta
     pouchInsertSpace.Range("AA" & startRow & ":AA" & endRow).PasteSpecial xlPasteValues
     startRow = endRow
     
+    ' BREAK POINT HERE & HOVER OVER
     Dim PPStatInUse As Range
     Set PPStatInUse = pouchInsertSpace.Range("AA3:AA" & endRow)
     PPStatInUse.Sort Key1:=pouchInsertSpace.Range("AA3"), Order1:=xlAscending, Header:=xlYes
@@ -239,14 +240,15 @@ Sub getPchLineIdleTimes()
     Dim PchLine_Start_ColLetter As String, PchLine_End_ColLetter As String
     
     'Enter error checker for retrieving value
-    ColumnNumber_PchStart = WorksheetFunction.Match("Pch Start", D2Schedule.Range("A1:CI1"), 0)
-    PchLine_Start_ColLetter = Split(Cells(1, ColumnNumber_PchStart).Address, "$")(1) & "2"
-    ColumnNumber_PchEnd = WorksheetFunction.Match("Pch End", D2Schedule.Range("A1:CI1"), 0)
-    PchLine_End_ColLetter = Split(Cells(1, ColumnNumber_PchEnd).Address, "$")(1) & "2"
+    On Error GoTo Err
+        ColumnNumber_PchStart = WorksheetFunction.Match("Pch Start", D2Schedule.Range("A1:CI1"), 0)
+        PchLine_Start_ColLetter = Split(Cells(1, ColumnNumber_PchStart).Address, "$")(1) & "2"
+        ColumnNumber_PchEnd = WorksheetFunction.Match("Pch End", D2Schedule.Range("A1:CI1"), 0)
+        PchLine_End_ColLetter = Split(Cells(1, ColumnNumber_PchEnd).Address, "$")(1) & "2"
 
     Set PchLine_Starts = D2Schedule.Range(D2Schedule.Range(PchLine_Start_ColLetter), D2Schedule.Range(PchLine_Start_ColLetter).End(xlDown))
     Set PchLine_Ends = D2Schedule.Range(D2Schedule.Range(PchLine_End_ColLetter), D2Schedule.Range(PchLine_End_ColLetter).End(xlDown))
-    
+
     PchLine_Starts.Copy
     pouchInsertSpace.Range("AA1").Value = "PouchLineInUse_Start"
     pouchInsertSpace.Range("AA2:AA" & PchLine_Starts.Count + 1).PasteSpecial xlPasteValues
@@ -254,6 +256,7 @@ Sub getPchLineIdleTimes()
     pouchInsertSpace.Range("AB1").Value = "PouchLineInUse_End"
     pouchInsertSpace.Range("AB2:AB" & PchLine_Ends.Count + 1).PasteSpecial xlPasteValues
     
+    ' BREAK POINT HERE & Step by Step here
     pouchInsertSpace.Select
     pouchInsertSpace.Range("AA1:AB1").Select
     Selection.AutoFilter Field:=1, Criteria1:="<>#N/A", Criteria2:="<> ", Operator:=xlAnd
@@ -295,6 +298,9 @@ Sub getPchLineIdleTimes()
     pouchInsertSpace.Range("O:R").ClearContents
     pouchInsertSpace.Range("F:F").ClearContents
 
+Err:
+    reasonForStop = """Pch Start"" and/or ""Pch End"" is not found in in the D2 Schdule page. Rename and restart."
+    End
 End Sub
 
 Sub findIntersectionsOfIdleTimes(countPouches)
