@@ -29,7 +29,7 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     
     Dim idxToDelay As Double
     Dim DiCIPHrs As Double
-    1
+    
     Application.AutoRecover.Enabled = False
     initializeWorksheetsStage2
     
@@ -289,14 +289,16 @@ Sub checkDryerBlock(index, timeExceed, timeExceedNext, currentCIPTimeBase, delay
     Dim siteCpledCapUpdatedBlock As Double
     
     If timeExceedNext <> timeExceed Then
-        Print #logic1TextFile, "Next exceeded time step is after current exceed time step. Delay at spot is resolved.": Space 0
+        Print #logic1TextFile, "Next exceeded time step is after current exceed time step. Moving to check improvements.": Space 0
         If cpledCapCIP > currentCpledCap Then
+            Print #logic1TextFile, "--- Checking effect from adding Blockage Only."
             workingDryerSchedule.Cells(index, 32).Value = currentCIPTimeBase
             workingDryerSchedule.Cells(index, 35).Value = delay
             calculateAll
             
             siteCpledCapUpdatedBlock = Round(Silos.Range("R13"), 1)
             If siteCpledCapUpdatedBlock > cpledCapCIP Then
+                Print #logic1TextFile, "--- Additional Coupled Capacity incurred by Delay is worse. Reverting back to CIP Only"
                 workingDryerSchedule.Cells(index, 35).Value = currentCIPTimeBase
                 workingDryerSchedule.Cells(index, 32) = CIPHrs
                 calculateAll
