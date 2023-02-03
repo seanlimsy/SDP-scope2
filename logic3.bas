@@ -246,58 +246,58 @@ Sub getPchLineIdleTimes()
         ColumnNumber_PchEnd = WorksheetFunction.Match("Pch End", D2Schedule.Range("A1:CI1"), 0)
         PchLine_End_ColLetter = Split(Cells(1, ColumnNumber_PchEnd).Address, "$")(1) & "2"
 
-    Set PchLine_Starts = D2Schedule.Range(D2Schedule.Range(PchLine_Start_ColLetter), D2Schedule.Range(PchLine_Start_ColLetter).End(xlDown))
-    Set PchLine_Ends = D2Schedule.Range(D2Schedule.Range(PchLine_End_ColLetter), D2Schedule.Range(PchLine_End_ColLetter).End(xlDown))
+        Set PchLine_Starts = D2Schedule.Range(D2Schedule.Range(PchLine_Start_ColLetter), D2Schedule.Range(PchLine_Start_ColLetter).End(xlDown))
+        Set PchLine_Ends = D2Schedule.Range(D2Schedule.Range(PchLine_End_ColLetter), D2Schedule.Range(PchLine_End_ColLetter).End(xlDown))
 
-    PchLine_Starts.Copy
-    pouchInsertSpace.Range("AA1").Value = "PouchLineInUse_Start"
-    pouchInsertSpace.Range("AA2:AA" & PchLine_Starts.Count + 1).PasteSpecial xlPasteValues
-    PchLine_Ends.Copy
-    pouchInsertSpace.Range("AB1").Value = "PouchLineInUse_End"
-    pouchInsertSpace.Range("AB2:AB" & PchLine_Ends.Count + 1).PasteSpecial xlPasteValues
-    
-    ' BREAK POINT HERE & Step by Step here
-    pouchInsertSpace.Select
-    pouchInsertSpace.Range("AA1:AB1").Select
-    Selection.AutoFilter Field:=1, Criteria1:="<>#N/A", Criteria2:="<> ", Operator:=xlAnd
-    pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
-    Selection.SpecialCells(xlCellTypeVisible).Select
-    Selection.Copy
-    
-    pouchInsertSpace.Range("W8").PasteSpecial xlPasteValues
-    pouchInsertSpace.Range("AA1:AB1").Select
-    Selection.AutoFilter
-    pouchInsertSpace.Range("AA:AB").ClearContents
+        PchLine_Starts.Copy
+        pouchInsertSpace.Range("AA1").Value = "PouchLineInUse_Start"
+        pouchInsertSpace.Range("AA2:AA" & PchLine_Starts.Count + 1).PasteSpecial xlPasteValues
+        PchLine_Ends.Copy
+        pouchInsertSpace.Range("AB1").Value = "PouchLineInUse_End"
+        pouchInsertSpace.Range("AB2:AB" & PchLine_Ends.Count + 1).PasteSpecial xlPasteValues
+        
+        ' BREAK POINT HERE & Step by Step here
+        pouchInsertSpace.Select
+        pouchInsertSpace.Range("AA1:AB1").Select
+        Selection.AutoFilter Field:=1, Criteria1:="<>#N/A", Criteria2:="<> ", Operator:=xlAnd
+        pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
+        Selection.SpecialCells(xlCellTypeVisible).Select
+        Selection.Copy
+        
+        pouchInsertSpace.Range("W8").PasteSpecial xlPasteValues
+        pouchInsertSpace.Range("AA1:AB1").Select
+        Selection.AutoFilter
+        pouchInsertSpace.Range("AA:AB").ClearContents
 
-    Dim PchLineIdle_Start As Range, PchLineIdle_End As Range
-    Set PchLineIdle_Start = pouchInsertSpace.Range(pouchInsertSpace.Range("X9"), pouchInsertSpace.Range("X9").End(xlDown))
-    Set PchLineIdle_End = pouchInsertSpace.Range(pouchInsertSpace.Range("W9"), pouchInsertSpace.Range("W9").End(xlDown))
+        Dim PchLineIdle_Start As Range, PchLineIdle_End As Range
+        Set PchLineIdle_Start = pouchInsertSpace.Range(pouchInsertSpace.Range("X9"), pouchInsertSpace.Range("X9").End(xlDown))
+        Set PchLineIdle_End = pouchInsertSpace.Range(pouchInsertSpace.Range("W9"), pouchInsertSpace.Range("W9").End(xlDown))
 
-    pouchInsertSpace.Range("P8").Value = "Start"
-    pouchInsertSpace.Range("Q8").Value = "End"
-    pouchInsertSpace.Range("R8").Value = "same"
-    pouchInsertSpace.Range("P9").Value = 0
+        pouchInsertSpace.Range("P8").Value = "Start"
+        pouchInsertSpace.Range("Q8").Value = "End"
+        pouchInsertSpace.Range("R8").Value = "same"
+        pouchInsertSpace.Range("P9").Value = 0
 
-    PchLineIdle_End.Copy
-    pouchInsertSpace.Range("Q9:Q" & PchLineIdle_End.Count).PasteSpecial xlPasteValues
-    PchLineIdle_Start.Copy
-    pouchInsertSpace.Range("P10:P" & PchLineIdle_Start.Count).PasteSpecial xlPasteValues
-    pouchInsertSpace.Range("I" & PchLineIdle_Start.Count + 9).Value = wb.Worksheets("Silos").Range("A1").End(xlDown)
-    pouchInsertSpace.Range("W:X").ClearContents
+        PchLineIdle_End.Copy
+        pouchInsertSpace.Range("Q9:Q" & PchLineIdle_End.Count).PasteSpecial xlPasteValues
+        PchLineIdle_Start.Copy
+        pouchInsertSpace.Range("P10:P" & PchLineIdle_Start.Count).PasteSpecial xlPasteValues
+        pouchInsertSpace.Range("I" & PchLineIdle_Start.Count + 9).Value = wb.Worksheets("Silos").Range("A1").End(xlDown)
+        pouchInsertSpace.Range("W:X").ClearContents
 
-    pouchInsertSpace.Range("R9:R" & PchLineIdle_Start.Count + 9).Formula = "=IF(P9=Q9, ""Yes"", ""No"")"
-    pouchInsertSpace.Range("P8:R8").Select
-    Selection.AutoFilter Field:=3, Criteria1:="No"
-    pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
-    Selection.SpecialCells(xlCellTypeVisible).Select
-    Selection.Copy
-    pouchInsertSpace.Range("D2").Value = "PouchLine Idle"
-    pouchInsertSpace.Range("D3").PasteSpecial xlPasteValues
-    pouchInsertSpace.Range("P8:R8").Select
-    Selection.AutoFilter
-    pouchInsertSpace.Range("O:R").ClearContents
-    pouchInsertSpace.Range("F:F").ClearContents
-
+        pouchInsertSpace.Range("R9:R" & PchLineIdle_Start.Count + 9).Formula = "=IF(P9=Q9, ""Yes"", ""No"")"
+        pouchInsertSpace.Range("P8:R8").Select
+        Selection.AutoFilter Field:=3, Criteria1:="No"
+        pouchInsertSpace.Range(Selection, Selection.End(xlDown)).Select
+        Selection.SpecialCells(xlCellTypeVisible).Select
+        Selection.Copy
+        pouchInsertSpace.Range("D2").Value = "PouchLine Idle"
+        pouchInsertSpace.Range("D3").PasteSpecial xlPasteValues
+        pouchInsertSpace.Range("P8:R8").Select
+        Selection.AutoFilter
+        pouchInsertSpace.Range("O:R").ClearContents
+        pouchInsertSpace.Range("F:F").ClearContents
+    Exit Sub
 Err:
     reasonForStop = """Pch Start"" and/or ""Pch End"" is not found in in the D2 Schdule page. Rename and restart."
     End
