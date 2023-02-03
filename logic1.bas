@@ -367,7 +367,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             Exit For
         End If
         
-        Print #logic1TextFile, "Reducing amount to " & (i - 1)
+        Print #logic1TextFile, "Reducing amount to " & (i - 2)
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete xlShiftUp
         ' case nothing can be added
         If i <= DBCampaignToInsert Then
