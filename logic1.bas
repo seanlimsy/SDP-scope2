@@ -347,7 +347,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete xlShiftUp
             Print #logic1TextFile, "-----------"
             Print #logic1TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
-            Print #logic1TextFile, "Inserted " & i & " campaign(s) from window": Space 0
+            Print #logic1TextFile, "Inserted " & (i-1) & " campaign(s) from window": Space 0
             Print #logic1TextFile, "-----------"
             ' case not 16(6) - run dryer blockage
             If mainSilo <> 16 Then
