@@ -185,7 +185,7 @@ Sub initializePPRateDS()
         PPRateDSSheet.Range("A2:E2").Copy
         PPRateDSSheet.Range("A" & canStretchRow & ":" & "E" & canStretchRow).PasteSpecial xlFormats
     Else
-        Print #logic4TextFile "Error in Determining PPRateDS for PP-Can-5 (Stretching add). Check code-base ""initializePPRateDS"". Ending program.": Space 0
+        Print #logic4TextFile, "Error in Determining PPRateDS for PP-Can-5 (Stretching add). Check code-base ""initializePPRateDS"". Ending program.": Space 0
         reasonForStop = "Error in determining PP-CAN-5 PPRateDS."
         End
     End If
