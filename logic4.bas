@@ -34,21 +34,21 @@ Sub PPCanStretchMain()
     ' reportWS.Select
 
     Application.AutoRecover.Enabled = False
-    Print #logic4TextFile, "======== Initializing ========": Space 0
-    Print #logic4TextFile, "logic4 Started @ " & Now
+    ' Print #logic4TextFile, "======== Initializing ========": Space 0
+    ' Print #logic4TextFile, "logic4 Started @ " & Now
     initializeWorksheets
     'runOrDuplicateFile
     initializePPRateDS
-    Print #logic4TextFile, "Done.": Space 0
+    ' Print #logic4TextFile, "Done.": Space 0
 
-    Print #logic4TextFile, "======== Main Logic ========": Space 0
+    ' Print #logic4TextFile, "======== Main Logic ========": Space 0
     ' Dim isLogic4Feasible As Boolean
     isLogic4Feasible = logic4()
     If isLogic4Feasible = True Then
-        Print #logic4TextFile, "Worst Case PP Can inserted. Terminating Program": Space 0
+        ' Print #logic4TextFile, "Worst Case PP Can inserted. Terminating Program": Space 0
     End If
 
-    Print #logic4TextFile, "logic4 Ended @ " & Now
+    ' Print #logic4TextFile, "logic4 Ended @ " & Now
     Close #logic4TextFile
 
 End Sub
@@ -110,11 +110,11 @@ End Sub
 
 Sub runOrDuplicateFile()
     If InStr(wb.Name, " - (Original LTP w Additional PPCAN)") Then
-        Print #logic4TextFile, "Running PPCan Stretching on this file.": Space 0
+        ' Print #logic4TextFile, "Running PPCan Stretching on this file.": Space 0
     ElseIf InStr(wb.Name, " - (Original LTP wo Additional PPCAN)") = False Then
-        Print #logic4TextFile, "Making a copy of BaseFile and Saving into an alternate file.": Space 0
+        ' Print #logic4TextFile, "Making a copy of BaseFile and Saving into an alternate file.": Space 0
         makeCopy wb
-        Print #logic4TextFile, "Duplication complete. Running PPCan Stretching on this file.": Space 0
+        ' Print #logic4TextFile, "Duplication complete. Running PPCan Stretching on this file.": Space 0
     End If
 End Sub
 
@@ -185,7 +185,7 @@ Sub initializePPRateDS()
         PPRateDSSheet.Range("A2:E2").Copy
         PPRateDSSheet.Range("A" & canStretchRow & ":" & "E" & canStretchRow).PasteSpecial xlFormats
     Else
-        Print #logic4TextFile, "Error in Determining PPRateDS for PP-Can-5 (Stretching add). Check code-base ""initializePPRateDS"". Ending program.": Space 0
+        ' Print #logic4TextFile, "Error in Determining PPRateDS for PP-Can-5 (Stretching add). Check code-base ""initializePPRateDS"". Ending program.": Space 0
         reasonForStop = "Error in determining PP-CAN-5 PPRateDS."
         End
     End If
@@ -243,56 +243,56 @@ Function stretchingCampaigns(mainSilo, otherSilo)
     count = 1
 
     Do While True
-        Print #logic4TextFile, "======== Attempt " & count & " ========": Space 0
+        ' Print #logic4TextFile, "======== Attempt " & count & " ========": Space 0
         count = count + 1
         ' get row of campaign to insert
         Dim PPCampaignToInsert As Double
         PPCampaignToInsert = 2 ' fixed
         
-        Print #logic4TextFile, "-- Finding CanStarveTime...": Space 0
+        ' Print #logic4TextFile, "-- Finding CanStarveTime...": Space 0
         ' get row of insertion in schedule
         ' -1 if there is no can starve
         Dim D1FirstCanStarveTime As Double
         Dim D2FirstCanStarveTime As Double
         D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
         D2FirstCanStarveTime = findFirstCanStarveTime(D2Schedule, d2Skip)
-        Print #logic4TextFile, "Done.": Space 0
-        Print #logic4TextFile, "-------": Space 0
-        Print #logic4TextFile, "D1 First Can Starve Time Index: " & D1FirstCanStarveTime: Space 0
-        Print #logic4TextFile, "D2 First Can Starve Time Index: " & D2FirstCanStarveTime: Space 0
+        ' Print #logic4TextFile, "Done.": Space 0
+        ' Print #logic4TextFile, "-------": Space 0
+        ' Print #logic4TextFile, "D1 First Can Starve Time Index: " & D1FirstCanStarveTime: Space 0
+        ' Print #logic4TextFile, "D2 First Can Starve Time Index: " & D2FirstCanStarveTime: Space 0
 
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
-        Print #logic4TextFile, "Dryer Campaign Value: " & dryerCampaign: Space 0
+        ' Print #logic4TextFile, "Dryer Campaign Value: " & dryerCampaign: Space 0
         
         If dryerCampaign = 0 Then 'case: no more dryer slots
-            Print #logic4TextFile, "All can starve slots used. Terminating Program": Space 0
-            Print #logic4TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+            ' Print #logic4TextFile, "All can starve slots used. Terminating Program": Space 0
+            ' Print #logic4TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             stretchingCampaigns = True
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 PP campaign
-            Print #logic4TextFile, "Add PPCan to Dryer 1": Space 0
+            ' Print #logic4TextFile, "Add PPCan to Dryer 1": Space 0
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip)
             D1PrevInsertTime = D1FirstCanStarveTime
             D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 PP campaign
-            Print #logic4TextFile, "Add PPCan to Dryer 2": Space 0
+            ' Print #logic4TextFile, "Add PPCan to Dryer 2": Space 0
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip)
             D1PrevInsertTime = -1
             D2PrevInsertTime = D2FirstCanStarveTime
         ElseIf dryerCampaign = 4 Then 'case: skip d1 can starve time
-            Print #logic4TextFile, "Skipping D1": Space 0
+            ' Print #logic4TextFile, "Skipping D1": Space 0
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
         ElseIf dryerCampaign = 5 Then 'case: skip d2 can starve time
-            Print #logic4TextFile, "Skipping D1": Space 0
+            ' Print #logic4TextFile, "Skipping D1": Space 0
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         ElseIf dryerCampaign = 6 Then 'case: skip d1 and d2 can starve time
-            Print #logic4TextFile, "Skipping D1 or D1 or Both D1 and D2 slots": Space 0
+            ' Print #logic4TextFile, "Skipping D1 or D1 or Both D1 and D2 slots": Space 0
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         End If
-        Print #logic4TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
-        Print #logic4TextFile, " "
+        ' Print #logic4TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+        ' Print #logic4TextFile, " "
 continueLoop:
     Loop
     stretchingCampaigns = True
@@ -319,7 +319,7 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
-    Print #logic4TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
+    ' Print #logic4TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
 
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
@@ -330,8 +330,8 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
         D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
-    Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
-    Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
+    ' Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
+    ' Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
 
     ' Not needed for logic4 as what-if scenario v requirement.
     ' If D1CanStarveStartTime < tippingStationAvailableTime AND D1CanStarveStartTime <> 0 Then
@@ -422,7 +422,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Dim i As Double
     Dim FPLoadingWeight As Double
     FPLoadingWeight = PPThreshold.Range("J" & PPCampaignToInsert).Value
-    Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
+    ' Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
     For i = 1 To 0.05 Step -decrementCounter
         ' insert to the row before the can starvation time
         PPThreshold.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Copy
@@ -433,19 +433,19 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         canAdd = checkSiloConstraint(mainSilo, otherSilo)
         If canAdd = True Then
-            Print #logic4TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
-            Print #logic4TextFile, "Inserted " & i & "th amount of 1 worst-case PPCan Campaign": Space 0
-            Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
+            ' Print #logic4TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
+            ' Print #logic4TextFile, "Inserted " & i & "th amount of 1 worst-case PPCan Campaign": Space 0
+            ' Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
             Exit For
         End If
 
-        Print #logic4TextFile, "Reducing amount to " & (i - decrementCounter): Space 0
+        ' Print #logic4TextFile, "Reducing amount to " & (i - decrementCounter): Space 0
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
         If i - decrementCounter < decrementCounter Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-            Print #logic4TextFile, "Cannot be inserted at slot. Skipping.": Space 0
-            Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
+            ' Print #logic4TextFile, "Cannot be inserted at slot. Skipping.": Space 0
+            ' Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
         End If
     Next
     calculateAll
@@ -459,8 +459,8 @@ End Function
 Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
     If Silos.Range("J1").Value > 16 Or Silos.Range("J2").Value > 6 Then
         checkSiloConstraint = False
-        Print #logic4TextFile, "Effect: Silo Constraint violated by insertion.": Space 0
-        Print #logic4TextFile, "PE Silo: " & Silos.Range("J1").Value & "; SG Silo: " & Silos.Range("J2").Value: Space 0
+        ' Print #logic4TextFile, "Effect: Silo Constraint violated by insertion.": Space 0
+        ' Print #logic4TextFile, "PE Silo: " & Silos.Range("J1").Value & "; SG Silo: " & Silos.Range("J2").Value: Space 0
         Exit Function
     End If
     checkSiloConstraint = True

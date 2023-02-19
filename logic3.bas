@@ -30,29 +30,29 @@ Sub ppPouchMain()
     ' Open logic3File For Output As logic3TextFile 
 
     Application.AutoRecover.Enabled = False
-    Print #logic3TextFile, "======== Initializing ========": Space 0
-    Print #logic3TextFile, "logic3 Started @ " & Now
+    ' Print #logic3TextFile, "======== Initializing ========": Space 0
+    ' Print #logic3TextFile, "logic3 Started @ " & Now
     initializeWorksheets
 
     Dim numberPouchCampaigns As Integer
     numberPouchCampaigns = initializePouchInsertion 
-    Print #logic3TextFile, "Done.": Space 0
+    ' Print #logic3TextFile, "Done.": Space 0
 
     ' 'To Remove
     ' PPPouchSchedule.Select
     Silos.Select
     ' reportWS.Select
 
-    Print #logic3TextFile, "======== Main Logic ========": Space 0
+    ' Print #logic3TextFile, "======== Main Logic ========": Space 0
     ' Dim isLogic3Feasible As Boolean
     isLogic3Feasible = logic3(numberPouchCampaigns)
     If isLogic3Feasible = False Then
-        Print #logic3TextFile, "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program.": Space 0
+        ' Print #logic3TextFile, "PP-Pouch Campaigns cannot be inserted by automated process. Terminating Program.": Space 0
     ElseIf isLogic3Feasible = True Then 
-        Print #logic3TextFile, "All PP-Pouch Campaigns inserted. Ending Stage 3.": Space 0
+        ' Print #logic3TextFile, "All PP-Pouch Campaigns inserted. Ending Stage 3.": Space 0
     End If
 
-    Print #logic3TextFile, "logic3 Ended @ " & Now
+    ' Print #logic3TextFile, "logic3 Ended @ " & Now
     Close #logic3TextFile
 
 End Sub
@@ -375,48 +375,48 @@ Function insertPPPouchCampaigns(mainSilo, otherSilo) As Boolean
     count = 1
 
     Do While True
-        Print #logic3TextFile, "======== Attempt " & count & " ========": Space 0
+        ' Print #logic3TextFile, "======== Attempt " & count & " ========": Space 0
         count = count + 1
 
-        Print #logic3TextFile, "-- Finding PP Pouch Campaign to Insert...": Space 0
+        ' Print #logic3TextFile, "-- Finding PP Pouch Campaign to Insert...": Space 0
         ' get row of campaign to insert
         ' -1 if there is no campaign
         Dim PPCampaignToInsert As Double
         PPCampaignToInsert = findNextCampaignToInsert(PPPouchSchedule)
-        Print #logic3TextFile, "To insert Campaign: " & PPCampaignToInsert: Space 0
-        Print #logic3TextFile, "Done.": Space 0
+        ' Print #logic3TextFile, "To insert Campaign: " & PPCampaignToInsert: Space 0
+        ' Print #logic3TextFile, "Done.": Space 0
 
-        Print #logic3TextFile, "-- Finding Pouch Line Availability...": Space 0
+        ' Print #logic3TextFile, "-- Finding Pouch Line Availability...": Space 0
         ' get row of insertion in schedule
         ' -1 if there is no intersection of idle times
         Dim D2FirstPchAvailHrs As Integer
         D2FirstPchAvailHrs = findFirstPchAvailHrs(D2Schedule, d2Skip, PPCampaignToInsert)
-        Print #logic3TextFile, "First Pouch Availability: " & D2FirstPchAvailHrs: Space 0
-        Print #logic3TextFile, "Done.": Space 0
-        Print #logic3TextFile, "-------": Space 0
+        ' Print #logic3TextFile, "First Pouch Availability: " & D2FirstPchAvailHrs: Space 0
+        ' Print #logic3TextFile, "Done.": Space 0
+        ' Print #logic3TextFile, "-------": Space 0
 
         ' get which index to skip in d2Skip
         Dim dryerCampaign As Integer
         dryerCampaign = determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
-        Print #logic3TextFile, "Dryer Campaign Value: " & dryerCampaign: Space 0
+        ' Print #logic3TextFile, "Dryer Campaign Value: " & dryerCampaign: Space 0
 
         If dryerCampaign = -2 Then 'Case: pouch campaigns but no more d2 slots (infeasible solution)
-            Print #logic3TextFile, "PP Pouch Campaigns remaining but no more insertion points in Dryer 2. Exiting Program.": Space 0
+            ' Print #logic3TextFile, "PP Pouch Campaigns remaining but no more insertion points in Dryer 2. Exiting Program.": Space 0
             insertPPPouchCampaigns = False
             reasonForStop = "PP-Pouch campaigns remaining but no more insertion points in dryer 2.": Space 0
-            Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+            ' Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             Exit Function
         ElseIf dryerCampaign = -1 Then 'Case: no more campaigns left
-            Print #logic3TextFile, "All PP Pouch Campaigns inserted.": Space 0
-            Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+            ' Print #logic3TextFile, "All PP Pouch Campaigns inserted.": Space 0
+            ' Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
             insertPPPouchCampaigns = True
             Exit Function
         Else
-            Print #logic3TextFile, "Adding PP Pouch Campaign campaign": Space 0
+            ' Print #logic3TextFile, "Adding PP Pouch Campaign campaign": Space 0
             d2Skip = addPouchCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstPchAvailHrs, mainSilo, otherSilo, d2Skip)
         End If
-        Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
-        Print #logic3TextFile, " ": Space 0
+        ' Print #logic3TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
+        ' Print #logic3TextFile, " ": Space 0
     Loop
 End Function
 
@@ -543,7 +543,7 @@ Function determineDryerCampaign(D2FirstPchAvailHrs, PPCampaignToInsert)
 End Function
 
 Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, D2FirstPchAvailHrs, mainSilo, otherSilo, dryerSkipArray) As Integer()
-    Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
+    ' Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
     PPPouchSchedule.Range("A" & PPCampaignToInsert, "M" & PPCampaignToInsert).Copy
     dryerDefaultSchedule.Range("A" & D2FirstPchAvailHrs).Insert xlShiftDown
     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
@@ -552,18 +552,18 @@ Function addPouchCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedul
     Dim canAdd As Boolean
     canAdd = checkSiloConstraint(mainSilo, otherSilo)
     If canAdd = True Then
-        Print #logic3TextFile, "Inserted @ " & D2FirstPchAvailHrs: Space 0
+        ' Print #logic3TextFile, "Inserted @ " & D2FirstPchAvailHrs: Space 0
         PPPouchSchedule.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Delete xlShiftUp
         PPPouchSchedule.Range("Q" & PPCampaignToInsert).Delete xlShiftUp
         dryerSkipArray = addItemToArray((D2FirstPchAvailHrs), dryerSkipArray)
         dryerSkipArray = addItemToArray((D2FirstPchAvailHrs + 1), dryerSkipArray)
-        Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
+        ' Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
     Else
-        Print #logic3TextFile, "Cannot be inserted at slot. Skipping.": Space 0
+        ' Print #logic3TextFile, "Cannot be inserted at slot. Skipping.": Space 0
         dryerDefaultSchedule.Rows(D2FirstPchAvailHrs).EntireRow.Delete xlShiftUp
         dryerSkipArray = addItemToArray(D2FirstPchAvailHrs, dryerSkipArray)
         calculateAll
-        Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
+        ' Print #logic3TextFile, "++++++++++++++++++++++++": Space 0
     End If
 
 
