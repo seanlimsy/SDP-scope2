@@ -12,10 +12,6 @@ Dim Silos As Worksheet
 Dim D1TipStatPivotTable As pivotTable
 Dim D2TipStatPivotTable As pivotTable
 
-' Dim logic4File as String
-' Dim logic4TextFile As Integer
-' Dim reasonForStop As String
-
 Sub calculateAll()
     Application.CalculateFull
     If Not Application.CalculationState = xlDone Then 
@@ -26,18 +22,11 @@ Sub calculateAll()
 End Sub
 
 Sub PPCanStretchMain()
-    'Debugging:
-    ' logic4File = "/Users/ben/Desktop/logic4.txt"
-    ' logic4TextFile = FreeFile
-    ' Open logic4File For Output As logic4TextFile 
-    
-    ' reportWS.Select
-
     Application.AutoRecover.Enabled = False
     ' Print #logic4TextFile, "======== Initializing ========": Space 0
     ' Print #logic4TextFile, "logic4 Started @ " & Now
     initializeWorksheets
-    'runOrDuplicateFile
+    runOrDuplicateFile
     initializePPRateDS
     ' Print #logic4TextFile, "Done.": Space 0
 
@@ -49,7 +38,7 @@ Sub PPCanStretchMain()
     End If
 
     ' Print #logic4TextFile, "logic4 Ended @ " & Now
-    Close #logic4TextFile
+    ' Close #logic4TextFile
 
 End Sub
 
@@ -505,4 +494,3 @@ Function addItemToArray(item, dryerSkipArray) As Integer()
     dryerSkipArray(UBound(dryerSkipArray)) = item
     addItemToArray = dryerSkipArray
 End Function
-

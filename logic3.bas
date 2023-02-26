@@ -10,10 +10,6 @@ Dim Silos As Worksheet
 Dim D1TipStatPivotTable As pivotTable
 Dim D2TipStatPivotTable As pivotTable
 
-' Dim logic3File as String
-' Dim logic3TextFile As Integer
-' Dim reasonForStop
-
 Sub calculateAll()
     Application.CalculateFull
     If Not Application.CalculationState = xlDone Then 
@@ -24,11 +20,6 @@ Sub calculateAll()
 End Sub
 
 Sub ppPouchMain()
-    'Debugging:
-    ' logic3File = "/Users/ben/Desktop/logic3.txt"
-    ' logic3TextFile = FreeFile
-    ' Open logic3File For Output As logic3TextFile 
-
     Application.AutoRecover.Enabled = False
     ' Print #logic3TextFile, "======== Initializing ========": Space 0
     ' Print #logic3TextFile, "logic3 Started @ " & Now
@@ -53,7 +44,7 @@ Sub ppPouchMain()
     End If
 
     ' Print #logic3TextFile, "logic3 Ended @ " & Now
-    Close #logic3TextFile
+    ' Close #logic3TextFile
 
 End Sub
 
@@ -583,7 +574,7 @@ Function checkSiloConstraint(mainSilo, otherSilo) As Boolean
         checkSiloConstraint = True
     Else
         checkSiloConstraint = False
-        Print #logic3TextFile, "Effect: Silo Constraint violated by insertion": Space 0
+        ' Print #logic3TextFile, "Effect: Silo Constraint violated by insertion": Space 0
     End If
 End Function
 

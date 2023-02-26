@@ -13,10 +13,6 @@ Dim D2DefaultOriginal As Worksheet
 Dim D1TipStatPivotTable As pivotTable
 Dim D2TipStatPivotTable As pivotTable
 
-' Public logic1File As String
-' Public logic1TextFile As Integer
-' Dim reasonForStop As String
-
 Sub calculateAll()
     Application.CalculateFull
     If Not Application.CalculationState = xlDone Then 
@@ -66,15 +62,8 @@ Sub resetAll()
 End Sub
 
 Sub main()
-    'Debugging
-    ' logic1File = "/Users/ben/Desktop/logic1.txt"
-    ' logic1TextFile = FreeFile
-    ' Open logic1File For Output as logic1TextFile
-    
-    ' reportWS.Select
-
-    'turn off autosave
-    ' Application.AutoRecover.Enabled = False
+    ' turn off autosave
+    Application.AutoRecover.Enabled = False
     ' Print #logic1TextFile, "======== Initializing ========"
     ' Print #logic1TextFile, "Program Started @ " & Now
     initializeWorksheets
@@ -86,7 +75,7 @@ Sub main()
     If isLogic1Feasible = False Then
         resetAll
         ' Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6)."
-        reasonForStop = "22(6) Silo Constraint Reached."
+        reasonForStop = "Max PE Silo Constraint Reached."
         ' Print #logic1Textfile, "Terminating Program.": Space 0
     End If
     
@@ -157,9 +146,15 @@ Function logic1()
     
     Dim isFeasible As Boolean
     isFeasible = False
-    Do While mainSilo <= 22
+
+    Dim reportWS As Worksheet
+    Dim maxPESilos As Integer
+    Set reportWS = wb.Worksheets("Program Report Page")
+    maxPESilos = reportWS.range("B10").Value
+
+    Do While mainSilo <= maxPESilos
         ' Print #logic1TextFile, "Current PE Silo Allowance: " & mainSilo: Space 0
-        ' ' Print #logic1TextFile, "Current SG Silo Allowance: " & otherSilo: Space 0
+        ' Print #logic1TextFile, "Current SG Silo Allowance: " & otherSilo: Space 0
         isFeasible = insertPPCan100DBCampaigns(mainSilo, otherSilo)
         If isFeasible = True Then
             Exit Do

@@ -90,8 +90,8 @@ Sub checkExists(checkSheetName)
 End Sub
 
 Sub initializeOutputs()
-    Dim wbPath As String
-    wbPath = ThisWorkbook.Path
+    ' Dim wbPath As String
+    ' wbPath = ThisWorkbook.Path
 
     ' logic1File = wbPath & "/logic1.txt"
     ' logic1TextFile = FreeFile
@@ -111,7 +111,14 @@ End Sub
 Sub runStage1(toAttemptStage1)
     Dim stage1Progress As Range
     Set stage1Progress = reportWS.Range("B3")
-    
+
+    Dim maxPESilos as Integer
+    maxPESilos = reportWS.range("B10").Value
+    If IsNumeric(maxPESilos) = False Then 
+        reasonForStop = "Max PE Silos invalid. Please try again"
+        End
+    End If
+
     If toAttemptStage1 = "YES" Then
         stage1Progress.Value = "Running"
         programModule1.main        
@@ -180,4 +187,3 @@ Sub runStage4(toAttemptStage4)
         reportWS.Range("B8").Value = "PPCAN STRETCHING INSERT"
     End If
 End Sub
-
