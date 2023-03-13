@@ -13,12 +13,12 @@ Public mainSilo
 Public otherSilo
 
 ' Debugging
-' Public logic1File As String
-' Public logic1TextFile As String
-' Public logic3File As String
-' Public logic3TextFile As String
-' Public logic4File as String
-' Public logic4TextFile As String
+Public logic1File As String
+Public logic1TextFile As String
+Public logic3File As String
+Public logic3TextFile As String
+Public logic4File as String
+Public logic4TextFile As String
 
 Sub runLTP()
     Dim startTime As Double, endTime As Double, totalTime As Double 
