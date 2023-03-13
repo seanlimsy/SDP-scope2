@@ -124,7 +124,7 @@ Sub runStage1(toAttemptStage1)
         programModule1.main        
     Else
         stage1Progress.Value = "Chosen not to attempt"
-        End
+        Exit Sub
     End If
     
     If isLogic1Feasible = True Then
@@ -150,7 +150,7 @@ Sub runStage3(toAttemptStage3)
         programModule3.ppPouchMain
     Else
         stage3Progress.Value = "Chosen not to attempt"
-        End
+        Exit Sub
     End If
     
     If isLogic3Feasible = True Then
@@ -174,7 +174,7 @@ Sub runStage4(toAttemptStage4)
         programModule4.PPCanStretchMain
     ElseIf toAttemptStage4 = "NO" Then
         stage4Progress.Value = "Chosen not to attempt"
-        End
+        Exit Sub
     End If
     
     If isLogic4Feasible = True Then
