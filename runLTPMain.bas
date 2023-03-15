@@ -90,20 +90,20 @@ Sub checkExists(checkSheetName)
 End Sub
 
 Sub initializeOutputs()
-    ' Dim wbPath As String
-    ' wbPath = ThisWorkbook.Path
+    Dim wbPath As String
+    wbPath = ThisWorkbook.Path
 
-    ' logic1File = wbPath & "/logic1.txt"
-    ' logic1TextFile = FreeFile
-    ' Open logic1File For Output as logic1TextFile
+    logic1File = wbPath & "/logic1.txt"
+    logic1TextFile = FreeFile
+    Open logic1File For Output as logic1TextFile
 
-    ' logic3File = wbPath & "/logic3.txt"
-    ' logic3TextFile = FreeFile
-    ' Open logic3File For Output As logic3TextFile 
+    logic3File = wbPath & "/logic3.txt"
+    logic3TextFile = FreeFile
+    Open logic3File For Output As logic3TextFile 
 
-    ' logic4File = wbPath & "/logic4.txt"
-    ' logic4TextFile = FreeFile
-    ' Open logic4File For Output As logic4TextFile 
+    logic4File = wbPath & "/logic4.txt"
+    logic4TextFile = FreeFile
+    Open logic4File For Output As logic4TextFile 
 
 End Sub
 

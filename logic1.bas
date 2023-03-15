@@ -10,8 +10,8 @@ Dim PPTippingStation As Worksheet
 Dim Silos As Worksheet
 Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
-Dim D1TipStatPivotTable As pivotTable
-Dim D2TipStatPivotTable As pivotTable
+Dim D1TipStatPivotTable As PivotTable
+Dim D2TipStatPivotTable As PivotTable
 
 Sub calculateAll()
     Application.CalculateFull
@@ -38,7 +38,7 @@ Sub resetAll()
     D1Schedule.Range("A:N").Value = D1Default.Range("A:N").Value
     D2Schedule.Range("A:N").Value = D2Default.Range("A:N").Value
     calculateAll
-    ' Print #logic1TextFile, "Done."
+    Print #logic1TextFile, "Done."
 
     Print #logic1TextFile, "--- Reverting CIP & Blockage..."
     ' ===== reset cip and dryer blockage cells =====
@@ -202,6 +202,8 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         Print #logic1TextFile, "-- Finding CanStarveTime..."
         ' get row of insertion in schedule
         ' -1 if there is no can starve
+        calculateAll
+
         Dim D1FirstCanStarveTime As Double
         Dim D2FirstCanStarveTime As Double
         D1FirstCanStarveTime = findFirstCanStarveTime(D1Schedule, d1Skip)
@@ -665,6 +667,7 @@ Function findFirstCanStarveTime(Worksheet, dryerSkipArray) As Double
             findFirstCanStarveTime = cell.Row
             Exit Function
         End If
+
         If cell.Value = "" Then
             Exit For
         End If
