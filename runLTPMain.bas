@@ -50,6 +50,7 @@ Sub initializeRunLTP()
     Set wb = ThisWorkbook
     Set reportWS = wb.Worksheets("Program Report Page")
     checkWorksheetsRequired
+    checkUserValues
     clearPrevious
 End Sub 
 
@@ -89,6 +90,29 @@ Sub checkExists(checkSheetName)
     End
 End Sub
 
+Sub checkUserValues
+    Dim maxPESilos as Integer
+    maxPESilos = reportWS.range("B11").Value
+    If IsNumeric(maxPESilos) = False Then 
+        reasonForStop = "Max PE Silos invalid. Please try again."
+        End
+    End If
+
+    Dim decrementStepStage1 as Integer
+    decrementStepStage1 = reportWS.Range("B12").Value
+    If IsNumeric(decrementStepStage1) = False Then 
+        reasonForStop = "Decrement step for Stage 1 is not an integer number. Please try again."
+        End
+    End If 
+
+    Dim decrementStepStage4 as Integer
+    decrementStepStage4 = reportWS.Range("B13").Value
+    If IsNumeric(decrementStepStage4) = False Then 
+        reasonForStop = "Decrement step for Stage 4 is not an integer Number. Please try again."
+        End
+    End If
+End Sub
+
 Sub initializeOutputs()
     Dim wbPath As String
     wbPath = ThisWorkbook.Path
@@ -111,13 +135,6 @@ End Sub
 Sub runStage1(toAttemptStage1)
     Dim stage1Progress As Range
     Set stage1Progress = reportWS.Range("B3")
-
-    Dim maxPESilos as Integer
-    maxPESilos = reportWS.range("B10").Value
-    If IsNumeric(maxPESilos) = False Then 
-        reasonForStop = "Max PE Silos invalid. Please try again"
-        End
-    End If
 
     If toAttemptStage1 = "YES" Then
         stage1Progress.Value = "Running"

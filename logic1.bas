@@ -73,8 +73,8 @@ Sub main()
     ' Dim isLogic1Feasible As Boolean
     isLogic1Feasible = logic1()
     If isLogic1Feasible = False Then
-        resetAll
-        Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting silo constraint to 22(6)."
+        ' resetAll
+        Print #logic1TextFile, "PP-Can and 100DB Campaigns cannot be inserted even after setting max allowable silo constraint."
         reasonForStop = "Max PE Silo Constraint Reached."
         Print #logic1Textfile, "Terminating Program.": Space 0
     End If
@@ -150,7 +150,7 @@ Function logic1()
     Dim reportWS As Worksheet
     Dim maxPESilos As Integer
     Set reportWS = wb.Worksheets("Program Report Page")
-    maxPESilos = reportWS.range("B10").Value
+    maxPESilos = reportWS.range("B11").Value
 
     Do While mainSilo <= maxPESilos
         Print #logic1TextFile, "Current PE Silo Allowance: " & mainSilo: Space 0
@@ -159,7 +159,11 @@ Function logic1()
         If isFeasible = True Then
             Exit Do
         End If
-        resetAll
+        
+        If maxPESilos > 16 Then 
+            resetAll
+        End If 
+
         mainSilo = mainSilo + 1
     Loop
     logic1 = isFeasible
@@ -381,11 +385,13 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 End Function
 
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation) As Integer()
-    
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
-    decrementCounter = 0.2
+    Dim decrementStep As Integer
+    decrementStep = reportWs.Range("B12").Value
+    decrementCounter = WorksheetFunction.Round(1/decrementStep, 2)
 
+    ' decrementCounter = 0.1
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False

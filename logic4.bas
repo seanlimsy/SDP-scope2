@@ -402,8 +402,11 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
     ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
-    decrementCounter = 0.1
-
+    Dim decrementStep As Integer
+    decrementStep = reportWs.Range("B13").Value
+    decrementCounter = WorksheetFunction.Round(1/decrementStep, 2)
+    
+    'decrementCounter = 0.1
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False
