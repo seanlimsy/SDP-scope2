@@ -25,7 +25,7 @@ Sub runLTP()
     startTime = Timer
     
     initializeRunLTP
-    initializeOutputs
+    'initializeOutputs
 
     Dim toAttemptStage1 As String
     Dim toAttemptStage3 As String
