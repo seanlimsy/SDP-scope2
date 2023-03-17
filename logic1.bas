@@ -380,7 +380,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         End If
     Next
         
-    calculateAll    
+    calculateAll
     addDBCampaign = dryerSkipArray
 End Function
 
