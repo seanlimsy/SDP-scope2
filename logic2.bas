@@ -16,8 +16,8 @@ Sub calculateAll()
 End Sub
 
 Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
-    ' Print #logic1TextFile, " "
-    ' Print #logic1TextFile, "==== Initializing logic 2 ====": Space 0
+    Print #logic1TextFile, " "
+    Print #logic1TextFile, "==== Initializing logic 2 ====": Space 0
     
     Dim D1CipHrs As Double, D2CipHrs As Double
     Dim siteCpledCapCurrent As Double
@@ -39,12 +39,12 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
     
     Dim repeatedSolve As Integer
     repeatedSolve = 0
-
+    
     Do While True
         If repeatedSolve >= 40 Then 
-            ' Print #logic1TextFile, "Issues with resolving dryer blockage at point. Early Termination": Space 0
+            Print #logic1TextFile, "Issues with resolving dryer blockage at point. Early Termination": Space 0
             reasonForStop = "Unknown effects to delay stage -- Infinite Loop occurred. Restart program"
-            ' Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             End
         Else
             repeatedSolve = repeatedSolve + 1
@@ -56,8 +56,8 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
         DiCausingViolationSG = checkSGDryerResults
 
         If DiCausingViolationPE = "None" And DiCausingViolationSG = "None" Then
-            ' Print #logic1TextFile, "No more dryer blockages in the system."
-            ' Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
+            Print #logic1TextFile, "No more dryer blockages in the system."
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             Exit Sub
         Else
             If DiCausingViolationPE <> "None" And DiCausingViolationSG = "None" Then
@@ -83,28 +83,55 @@ Sub dryerBlockDelayMain(nextInsertTimeStep As Double)
                 End If
             End If
         End If
-        ' Print #logic1TextFile, "Next possible insert time step: " & nextInsertTimeStep: Space 0
-        ' Print #logic1TextFile, "Next dryer exceed time step: " & exceedTimeStep: Space 0
-        ' Print #logic1TextFile, "Cause of violation: " & DiCausingViolation: Space 0
+        Print #logic1TextFile, "Next possible insert time step: " & nextInsertTimeStep: Space 0
+        Print #logic1TextFile, "Next dryer exceed time step: " & exceedTimeStep: Space 0
+        Print #logic1TextFile, "Cause of violation: " & DiCausingViolation: Space 0
 
         'nextInsertTimeStep = getNextInsertionPointInSchedule(DiCausingViolation)
         dryerBlockBeforeNextInsert_bool = isDryerBlockBeforeNextInsert(exceedTimeStep, nextInsertTimeStep)
         
         If dryerBlockBeforeNextInsert_bool = False Then
-            ' Print #logic1TextFile, "Next potential insertion point is before the next time dryer is exceeded. Ending blockage.": Space 0
-            ' Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
+            Print #logic1TextFile, "Next potential insertion point is before the next time dryer is exceeded. Ending blockage.": Space 0
+            Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
             Exit Do
         Else
             idxToDelay = getIdxToDelay(exceedTimeStep)
             DiCIPHrs = getCIPHrs(DiCausingViolation, D1CipHrs, D2CipHrs)
-            ' Print #logic1TextFile, "Index to Delay: " & idxToDelay: Space 0
-            ' Print #logic1TextFile, "Solving Delay...": Space 0
+            Print #logic1TextFile, "Index to Delay: " & idxToDelay: Space 0
+            Print #logic1TextFile, "Solving Delay...": Space 0
+            
+            If checkIfLastRow(DiCausingViolation, idxToDelay) = True Then
+                Print #logic1TextFile, "No more dryer blockages in the system. Cause flagged is last index in schedule."
+                Print #logic1TextFile, "==== Ending logic 2 ====": Space 0
+                Exit Sub
+            End If
+
             resolveSiloContraint idxToDelay, DiCIPHrs, exceedTimeStep, DiCausingViolation, siteCpledCapCurrent
-            ' Print #logic1TextFile, "Resolved. Moving to next possible TimeStep.": Space 0
-            ' Print #logic1TextFile, " "
+            Print #logic1TextFile, "Resolved. Moving to next possible TimeStep.": Space 0
+            Print #logic1TextFile, " "
         End If
     Loop
 End Sub
+
+Function checkIfLastRow(DiCausingViolation, idxToDelay): 
+    Dim lastRow As Integer
+    If DiCausingViolation = "PED1" Then 
+        lastRow = D1Schedule.Range("A1").End(xlDown).Row
+    ElseIf DiCausingViolation = "PED2" Then 
+        lastRow = D2Schedule.Range("A1").End(xlDown).Row
+    ElseIf DiCausingViolation = "SGD1" Then 
+        lastRow = D1Schedule.Range("A1").End(xlDown).Row
+    ElseIf DiCausingViolation = "SGD2" Then 
+        lastRow = D2Schedule.Range("A1").End(xlDown).Row
+    End If
+
+    If idxToDelay = lastRow Then 
+        checkIfLastRow = True
+    Else
+        checkIfLastRow = False
+    End If
+
+End Function
 
 Sub initializeWorksheetsStage2()
     Set wb = ThisWorkbook
@@ -268,8 +295,8 @@ Sub resolveSiloContraint(index, CIPHrs, timeExceed, DiCausingViolation, siteCple
     delayToAdd = Silos.Range("R7")
     
     timeExceedNext = checkUpdatedCIP(DiCausingViolation)
-    ' Print #logic1Textfile, "Current time exceed: " & timeExceed: Space 0
-    ' Print #logic1TextFile, "Next time exceed: " & timeExceedNext: Space 0
+    Print #logic1Textfile, "Current time exceed: " & timeExceed: Space 0
+    Print #logic1TextFile, "Next time exceed: " & timeExceedNext: Space 0
     checkDryerBlock index, timeExceed, timeExceedNext, existingDryerCIPTimeBase, delayToAdd, CIPHrs, siteCpledCapUpdatedCIP, siteCpledCapCurrent
 End Sub
 
@@ -289,23 +316,23 @@ Sub checkDryerBlock(index, timeExceed, timeExceedNext, currentCIPTimeBase, delay
     Dim siteCpledCapUpdatedBlock As Double
     
     If timeExceedNext <> timeExceed Then
-        ' Print #logic1TextFile, "Next exceeded time step is after current exceed time step. Moving to check improvements.": Space 0
+        Print #logic1TextFile, "Next exceeded time step is after current exceed time step. Moving to check improvements.": Space 0
         If cpledCapCIP > currentCpledCap Then
-            ' Print #logic1TextFile, "--- Checking effect from adding Blockage Only."
+            Print #logic1TextFile, "--- Checking effect from adding Blockage Only."
             workingDryerSchedule.Cells(index, 32).Value = currentCIPTimeBase
             workingDryerSchedule.Cells(index, 35).Value = delay
             calculateAll
             
             siteCpledCapUpdatedBlock = Round(Silos.Range("R13"), 1)
             If siteCpledCapUpdatedBlock > cpledCapCIP Then
-                ' Print #logic1TextFile, "--- Additional Coupled Capacity incurred by Delay is worse. Reverting back to CIP Only"
+                Print #logic1TextFile, "--- Additional Coupled Capacity incurred by Delay is worse. Reverting back to CIP Only"
                 workingDryerSchedule.Cells(index, 35).Value = currentCIPTimeBase
                 workingDryerSchedule.Cells(index, 32) = CIPHrs
                 calculateAll
             End If
         End If
     Else
-        ' Print #logic1TextFile, "Delay at spot still exists. Adding Dryer Delay.": Space 0
+        Print #logic1TextFile, "Delay at spot still exists. Adding Dryer Delay.": Space 0
         workingDryerSchedule.Cells(index, 35).Value = delay
         calculateAll
     End If

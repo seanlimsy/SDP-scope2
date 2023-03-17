@@ -25,7 +25,7 @@ Sub runLTP()
     startTime = Timer
     
     initializeRunLTP
-    'initializeOutputs
+    initializeOutputs
 
     Dim toAttemptStage1 As String
     Dim toAttemptStage3 As String
@@ -196,8 +196,8 @@ Sub runStage4(toAttemptStage4)
     
     If isLogic4Feasible = True Then
         stage4Progress.Value = "Completed"
-        reportWS.Range("I3").Formula = "=SUMIFS(D2B1L3B3B4L45T!J:J, D2B1L3B3B4L45T!A:A, ""PP"", D2B1L3B3B4L45T!C:C, 5, D2B1L3B3B4L45T!H:H, ""CAN"")"
-        reportWS.Range("I4").Formula = "=SUMIFS(D2B1L3B3B4L45T!J:J, D2B1L3B3B4L45T!A:A, ""PP"", D2B1L3B3B4L45T!C:C, 5, D2B1L3B3B4L45T!H:H, ""CAN"") * 2"
+        reportWS.Range("I3").Formula = "=SUMIFS(D2B1L3B3B4L45T!J:J, D2B1L3B3B4L45T!A:A, ""PP"", D2B1L3B3B4L45T!C:C, 5, D2B1L3B3B4L45T!H:H, ""CAN"") + SUMIFS(D1B1L65T!J:J, D1B1L65T!A:A, ""PP"", D1B1L65T!C:C, 5, D1B1L65T!H:H, ""CAN"")"
+        reportWS.Range("I4").Formula = "=I3*2"
     Else
         stage4Progress.Value = "PPCAN / 100DB / PPPOUCHES Inserted. Unable to insert PPCAN (STRETCH). Terminated Here."
         reportWS.Range("B7").Value = reasonForStop
