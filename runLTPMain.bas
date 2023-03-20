@@ -111,6 +111,13 @@ Sub checkUserValues
         reasonForStop = "Decrement step for Stage 4 is not an integer Number. Please try again."
         End
     End If
+
+    Dim dryerThresholdLimit As Integer
+    dryerThresholdLimit = reportWS.Range("B14").Value
+    If IsNumeric(dryerThresholdLimit) = False Then 
+        reasonForStop = "Threshold Limit not correctly Set. Please try again."
+        End
+    End If
 End Sub
 
 Sub initializeOutputs()

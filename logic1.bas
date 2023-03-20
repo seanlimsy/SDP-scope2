@@ -152,10 +152,13 @@ Function logic1()
     Set reportWS = wb.Worksheets("Program Report Page")
     maxPESilos = reportWS.range("B11").Value
 
+    Dim dryerThresholdLimit As Integer
+    dryerThresholdLimit = reportWS.Range("B14").Value
+
     Do While mainSilo <= maxPESilos
         Print #logic1TextFile, "Current PE Silo Allowance: " & mainSilo: Space 0
         Print #logic1TextFile, "Current SG Silo Allowance: " & otherSilo: Space 0
-        isFeasible = insertPPCan100DBCampaigns(mainSilo, otherSilo)
+        isFeasible = insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit)
         If isFeasible = True Then
             Exit Do
         End If
@@ -169,7 +172,7 @@ Function logic1()
     logic1 = isFeasible
 End Function
     
-Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
+Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As Boolean
     
     ' arrays for determining which can starve to skip
     Dim d1Skip() As Integer
@@ -240,7 +243,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo) As Boolean
         Print #logic1TextFile, "-- Finding dryer campaign value..."
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime)
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit)
         Print #logic1TextFile, "Done."
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
@@ -482,7 +485,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     checkSiloConstraint = True
 End Function
       
-Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime) As Integer
+Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then
         determineDryerCampaign = -1
         Exit Function
@@ -519,7 +522,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then 'case both pp and db campaigns available
-            If D1CanStarveStartTime < D2CanStarveStartTime + 50 Then
+            If D1CanStarveStartTime < D2CanStarveStartTime + dryerThresholdLimit Then
                 If D1CanStarveStartTime >= tippingStationAvailableTime Then
                     determineDryerCampaign = 1 'd1pp
                 Else
