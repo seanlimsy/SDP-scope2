@@ -44,7 +44,7 @@ Sub ppPouchMain()
     End If
 
     Print #logic3TextFile, "logic3 Ended @ " & Now
-    ' Close #logic3TextFile
+    Close #logic3TextFile
 
 End Sub
 

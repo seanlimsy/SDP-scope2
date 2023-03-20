@@ -38,7 +38,7 @@ Sub PPCanStretchMain()
     End If
 
     Print #logic4TextFile, "logic4 Ended @ " & Now
-    ' Close #logic4TextFile
+    Close #logic4TextFile
 
 End Sub
 
@@ -273,7 +273,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
             Print #logic4TextFile, "Skipping D1": Space 0
             d1Skip = addItemToArray(D1FirstCanStarveTime, d1Skip)
         ElseIf dryerCampaign = 5 Then 'case: skip d2 can starve time
-            Print #logic4TextFile, "Skipping D1": Space 0
+            Print #logic4TextFile, "Skipping D2": Space 0
             d2Skip = addItemToArray(D2FirstCanStarveTime, d2Skip)
         ElseIf dryerCampaign = 6 Then 'case: skip d1 and d2 can starve time
             Print #logic4TextFile, "Skipping D1 or D1 or Both D1 and D2 slots": Space 0
@@ -321,12 +321,6 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
 
     Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
     Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
-
-    ' Not needed for logic4 as what-if scenario v requirement.
-    ' If D1CanStarveStartTime < tippingStationAvailableTime AND D1CanStarveStartTime <> 0 Then
-    '     determineDryerCampaignCanStretch = 4 'if d1 can starve if before tipping station start then skip d1 time
-    '     Exit Function
-    ' End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
         If D1CanStarveStartTime < D2CanStarveStartTime Then
