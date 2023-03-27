@@ -313,21 +313,21 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Dim D1CanStarveStartTime As Double
     Dim D2CanStarveStartTime As Double
     If D1FirstCanStarveTime <> -1 Then
-        D1CanStarveStartTime = D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
+        D1CanStarveStartTime = D1Schedule.Range("BI" & D1FirstCanStarveTime - 1).Value
     End If
     If D2FirstCanStarveTime <> -1 Then
-        D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
+        D2CanStarveStartTime = D2Schedule.Range("BI" & D2FirstCanStarveTime - 1).Value
     End If
 
     Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
     Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
 
     If D1CanStarveStartTime < tippingStationAvailableTime And D1CanStarveStartTime <> 0 Then
-        determineDryerCampaign = 4 'If d1 can starve is before tipping station start then skip d1 time
+        determineDryerCampaignCanStretch = 4 'If d1 can starve is before tipping station start then skip d1 time
         Exit Function
     End If
     If D2CanStarveStartTime < tippingStationAvailableTime And D2CanStarveStartTime <> 0 Then 
-        determineDryerCampaign = 5 'If d2 can starve is before tipping station start then skip d2 time
+        determineDryerCampaignCanStretch = 5 'If d2 can starve is before tipping station start then skip d2 time
         Exit Function 
     End If
 
