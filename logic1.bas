@@ -405,23 +405,17 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete xlShiftUp
         ' case nothing can be added
         If i <= DBCampaignToInsert Then
-            dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
-            dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-            Print #logic1TextFile, "Cannot be inserted at slot. Skipping."
-            Print #logic1TextFile, "++++++++++++++++++++++++"
-            Exit For
-
-            ' If PPCampaignToInsert = -1 Then
-            '     Print #logic1TextFile, "No more PP to insert. Skipping.": Space 0
-            '     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
-            '     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-            '     Print #logic1TextFile, "Cannot be inserted at slot. Skipping.": Space 0
-            '     Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
-            '     Exit For
-            ' End If
-            ' If isInPlace = False Then
-            '     dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, workingDryer, DBCampaignToInsert, True)
-            ' End If
+            If PPCampaignToInsert = -1 Then
+                Print #logic1TextFile, "No more PP to insert. Skipping.": Space 0
+                dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+                dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                Print #logic1TextFile, "Cannot be inserted at slot. Skipping.": Space 0
+                Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
+                Exit For
+            End If
+            If isInPlace = False Then
+                dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, workingDryer, DBCampaignToInsert, True)
+            End If
         End If
     Next
         
