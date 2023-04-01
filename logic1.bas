@@ -416,6 +416,11 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             End If
             If isInPlace = False Then
                 dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, workingDryer, DBCampaignToInsert, True)
+            Else
+                Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
+                dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+                dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
             End If
         End If
     Next
@@ -509,6 +514,11 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 End If
                 If isInPlace = False Then
                     dryerSkipArray = addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, PPCampaignToInsert, True)
+                Else
+                    Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
+                    dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+                    dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                    Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
                 End If
             End If
         End If
@@ -594,10 +604,10 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
                 If D1CanAvailHrs >= tippingStationAvailableTime Then
                     determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
                 Else ' Case: D1CanAvailHrs < D2CanAvailHrs + Limit; D1CanAvailHrs < tippingStationAvailableTime
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then
-                        determineDryerCampaign = 2                                           
+                    If D2CanAvailHrs >= tippingStationAvailableTime Then                                                                '' Case is redundant. Will never occur under hierachy of cases. Will always revert to 3
+                        determineDryerCampaign = 2 'Result: Insert PP Campaign into D2                                          
                     Else
-                        determineDryerCampaign = 3
+                        determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
                     End If
                 End If
             Else ' Case: D1CanAvailHrs > D2CanAvailHrs + Limit
