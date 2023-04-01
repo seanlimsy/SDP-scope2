@@ -243,20 +243,20 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
         Print #logic1TextFile, "-- Finding dryer campaign value..."
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit)
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit, d1Skip, D1Schedule)
         Print #logic1TextFile, "Done."
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
         
-        ' ' Manual Entries
-        ' If D1FirstCanStarveTime = 2437 And D2FirstCanStarveTime = 1183 Then 
-        '     manualAdd PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation
-        '     GoTo continueLoop 
-        ' End If
-        ' If D1FirstCanStarveTime = 2670 And D2FirstCanStarveTime = 2370 Then 
-        '     manualAdd PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation
-        '     GoTo continueLoop 
-        ' End If
+        ' Manual Entries
+        If D1FirstCanStarveTime = 2437 And D2FirstCanStarveTime = 1183 Then 
+            manualAdd PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation
+            GoTo continueLoop 
+        End If
+        If D1FirstCanStarveTime = 2670 And D2FirstCanStarveTime = 2370 Then 
+            manualAdd PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation
+            GoTo continueLoop 
+        End If
 
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
             Print #logic1TextFile, "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program.": Space 0
@@ -406,7 +406,9 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         ' case entire window cannot be added. Attempt to add PP Campaign.
         If i <= DBCampaignToInsert Then
+            Print #logic1TextFile, "100DB cannot be inserted at slot.": Space 0
             If PPCampaignToInsert = -1 Then
+                Print #logic1TextFile, "Attempting to insert PP in place.": Space 0
                 Print #logic1TextFile, "No more PP to insert. Skipping.": Space 0
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
@@ -416,6 +418,11 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             End If
             If isInPlace = False Then
                 dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, workingDryer, DBCampaignToInsert, True)
+            Else
+                Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
+                dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+                dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
             End If
         End If
     Next
@@ -499,6 +506,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                 Print #logic1TextFile, "100DB not valid as insertion into D1. Skipping.": Space 0
             Else
+                Print #logic1TextFile, "Attempting to insert 100DB in place.": Space 0
                 If DBCampaignToInsert = -1 Then 'Case when no more 100DB to insert when PP campaign cannot be inserted
                     Print #logic1TextFile, "No more 100DB to insert. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -509,6 +517,11 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 End If
                 If isInPlace = False Then
                     dryerSkipArray = addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, PPCampaignToInsert, True)
+                Else
+                    Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
+                    dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
+                    dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                    Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
                 End If
             End If
         End If
@@ -552,7 +565,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     checkSiloConstraint = True
 End Function
       
-Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit) As Integer
+Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit, d1Skip, D1Schedule) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then
         determineDryerCampaign = -1
         Exit Function
@@ -567,9 +580,9 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Dim tippingStationAvailableTime As Double
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
-    
     Print #logic1TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
 
+    ' get CanAvailHrs for both D1 & D2
     Dim D1CanAvailHrs As Double
     Dim D2CanAvailHrs As Double
     If D1FirstCanStarveTime <> -1 Then
@@ -578,106 +591,65 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     If D2FirstCanStarveTime <> -1 Then
         D2CanAvailHrs = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
-
     Print #logic1TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic1TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
-
+    
     If D1CanAvailHrs < tippingStationAvailableTime And D1CanAvailHrs <> 0 Then
         determineDryerCampaign = 4 'Case: D1CanAvailHrs before tipping station and not start of schedule
         Exit Function 
     End If
 
-    ' Case: D1CanAvailHrs > tipStatAvail if D1CanAvailHrs > 0
-    If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then ' Case: Both D1 & D2 have slots
-        If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then ' Case: Both PP & 100DB Campaigns remain
-            If D1CanAvailHrs < D2CanAvailHrs + dryerThresholdLimit Then     ' If True --> D1CanAvailHrs < D2CanAvailHrs
-                If D1CanAvailHrs >= tippingStationAvailableTime Then
-                    determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-                Else ' Case: D1CanAvailHrs < D2CanAvailHrs + Limit; D1CanAvailHrs < tippingStationAvailableTime
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then
-                        determineDryerCampaign = 2                                           
-                    Else
-                        determineDryerCampaign = 3
-                    End If
-                End If
-            Else ' Case: D1CanAvailHrs > D2CanAvailHrs + Limit
-                If D2CanAvailHrs >= tippingStationAvailableTime Then
-                    determineDryerCampaign = 2 'Result: Insert PP Campaign into D2
-                Else
-                    determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
-                End If
-            End If
-
-        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then ' Case: Only PP Campaigns remain
-            If D2CanAvailHrs < tippingStationAvailableTime And D2CanAvailHrs <> 0 Then 
-                determineDryerCampaign = 5 'Result: Skip D2 until both D1 & D2 are >= tipStatAvailTime
-                Exit Function
-            End If
-
-            If D1CanAvailHrs < D2CanAvailHrs Then
-                If D1CanAvailHrs >= tippingStationAvailableTime Then
-                    determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-                Else
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then
-                        determineDryerCampaign = 2 'Result: Insert PP Campaign into D2
-                    Else
-                        determineDryerCampaign = 6 'Result: Both D1 & D2 not possible for slotting. Skip both as no more 100DB to try.
-                    End If
-                End If
-            Else
-                If D2CanAvailHrs >= tippingStationAvailableTime Then
-                    determineDryerCampaign = 2 'Result: Insert PP Campaign into D2
-                Else
-                    If D1CanAvailHrs >= tippingStationAvailableTime Then
-                        determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-                    Else
-                        determineDryerCampaign = 6 'Result: Both D1 & D2 not possible for slotting. Skip both as no more 100DB to try.
-                    End If
-                End If
-            End If
-
-        ElseIf PPCampaignToInsert = -1 And DBCampaignToInsert <> -1 Then ' Case: Only 100DB Campaigns remain
-            determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
+    If D1CanAvailHrs < D2CanAvailHrs Then 
+        If PPCampaignToInsert = -1 Then 
+            determineDryerCampaign = 4                                                                              ' Scenario 10
+        Else
+            determineDryerCampaign = 1                                                                              ' Scenario 1,2,3,4,5,6,7,8,9
         End If
-
-    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then ' Case: Only D1 has slots
-        If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then ' Case: Both PP & 100DB Campaigns remain
-            If D1CanAvailHrs >= tippingStationAvailableTime Then
-                determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-            Else
-                determineDryerCampaign = 4 'Result: PP cannot be slotting into D1 + D2 has no more slots to try. Skip D1.
+    ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
+        If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then                 ' Both PP & 100DB Unavailable
+            determineDryerCampaign = -1                                                                             ' Scenario 54
+        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then           ' Both PP and 100DB Available
+            Dim nextD1CanAvailHrs As Double
+            nextD1CanAvailHrs = getNextD1CanAvailHrs(D1FirstCanStarveTime, d1Skip, D1Schedule)
+            Print #logic1TextFile, "-----": Space 0
+            Print #logic1TextFile, "Next D1CanAvailHrs: " & nextD1CanAvailHrs: Space 0
+            Print #logic1TextFile, "-----": Space 0                                     
+            If nextD1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then            ' Case: Next D1CanAvailHrs is within or equal to 50 hours of D2CanAvailHrs in question
+                determineDryerCampaign = 3                                                                          ' Scenario 20,21,22; Scenario 23,24,25,26; Scenario 27,28,29,30,31
+            Else                                                                        ' Case: Next D1CanAvailHrs is NOT within 50 hours of D2CanAvailHrs in question
+                If D2CanAvailHrs >= tippingStationAvailableTime Then 
+                    determineDryerCampaign = 2                                                                      ' Scenario 32,33,34; Scenario 35,36,37,38; Scenario 39,40,41,42,43,44,45
+                Else
+                    determineDryerCampaign = 3                                                                      ' Scenario 46,47,48,49
+                End If
             End If
-
-        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then ' Case: Only PP Campaigns remain
-            If D1CanAvailHrs >= tippingStationAvailableTime Then
-                determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-            Else
-                determineDryerCampaign = 4 'Result: PP cannot be slotting into D1 + D2 has no more slots to try. Skip D1.
+        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then            ' Only PP Left
+            If D2CanAvailHrs >= tippingStationAvailableTime Then 
+                determineDryerCampaign = 2                                                                          ' Scenario 11,12,13,14,15,16,17,18
+            Else 
+                determineDryerCampaign = 5                                                                          ' Scenario 19
             End If
-
-        ElseIf PPCampaignToInsert = -1 And DBCampaignToInsert <> -1 Then ' Case: Only 100DB Campaigns remain
-            determineDryerCampaign = -2 'Result: D2 has no more slots to try + remaining 100DB Campaigns. Infeasible LTP.
-        End If
-
-    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then ' Case: Only D2 has slots
-        If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then ' Case: Both PP & 100DB Campaigns remain
-            If D2CanAvailHrs >= tippingStationAvailableTime Then
-                determineDryerCampaign = 2 'Result: Insert PP Campaign into D2
-            Else
-                determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
-            End If
-
-        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then ' Case: Only PP Campaigns remain
-            If D2CanAvailHrs >= tippingStationAvailableTime Then
-                determineDryerCampaign = 2 'Result: Insert PP Campaign into D2
-            Else
-                determineDryerCampaign = 5 'Result: PP Tip Station not ready, no more 100DB Campaigns to slot. Skip D2.
-            End If
-            
-        ElseIf PPCampaignToInsert = -1 And DBCampaignToInsert <> -1 Then ' Case: Only 100DB Campaigns remain
-            determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
+        ElseIf PPCampaignToInsert = -1 And DBCampaignToInsert <> -1 Then            ' Only 100DB left
+            determineDryerCampaign = 3                                                                              ' Scenario 50,51,52,53
         End If
     End If
+End Function
+
+Function getNextD1CanAvailHrs(currD1CanStarveIndex, actualD1Skip, D1Schedule)
+    Dim tempD1Skip() As Integer
+    tempD1Skip = actualD1Skip
+    tempD1Skip = addItemToArray(currD1CanStarveIndex, tempD1Skip)
+
+    Dim D1NextCanStarveTime As Double
+    D1NextCanStarveTime = findFirstCanStarveTime(D1Schedule, tempD1Skip)
+
+    Dim D1NextCanAvailHrs As Double
+    If D1NextCanStarveTime = -1 Then 
+        D1NextCanAvailHrs = 9999999
+    Else 
+        D1NextCanAvailHrs = D1Schedule.Range("BK" & D1NextCanStarveTime - 1).Value    
+    End If
+    getNextD1CanAvailHrs = D1NextCanAvailHrs
 End Function
 
 Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
