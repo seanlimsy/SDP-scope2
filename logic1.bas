@@ -608,15 +608,10 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
         If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then                 ' Both PP & 100DB Unavailable
             determineDryerCampaign = -1                                                                             ' Scenario 54
-        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then           ' Both PP and 100DB Available
-            Dim nextD1CanAvailHrs As Double
-            nextD1CanAvailHrs = getNextD1CanAvailHrs(D1FirstCanStarveTime, d1Skip, D1Schedule)
-            Print #logic1TextFile, "-----": Space 0
-            Print #logic1TextFile, "Next D1CanAvailHrs: " & nextD1CanAvailHrs: Space 0
-            Print #logic1TextFile, "-----": Space 0                                     
-            If nextD1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then            ' Case: Next D1CanAvailHrs is within or equal to 50 hours of D2CanAvailHrs in question
+        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then           ' Both PP and 100DB Available                                   
+            If D1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then                ' Case: D1CanAvailHrs is within or equal to 50 hours of D2CanAvailHrs in question
                 determineDryerCampaign = 3                                                                          ' Scenario 20,21,22; Scenario 23,24,25,26; Scenario 27,28,29,30,31
-            Else                                                                        ' Case: Next D1CanAvailHrs is NOT within 50 hours of D2CanAvailHrs in question
+            Else                                                                        ' Case: D1CanAvailHrs is NOT within 50 hours of D2CanAvailHrs in question
                 If D2CanAvailHrs >= tippingStationAvailableTime Then 
                     determineDryerCampaign = 2                                                                      ' Scenario 32,33,34; Scenario 35,36,37,38; Scenario 39,40,41,42,43,44,45
                 Else
@@ -633,23 +628,6 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
             determineDryerCampaign = 3                                                                              ' Scenario 50,51,52,53
         End If
     End If
-End Function
-
-Function getNextD1CanAvailHrs(currD1CanStarveIndex, actualD1Skip, D1Schedule)
-    Dim tempD1Skip() As Integer
-    tempD1Skip = actualD1Skip
-    tempD1Skip = addItemToArray(currD1CanStarveIndex, tempD1Skip)
-
-    Dim D1NextCanStarveTime As Double
-    D1NextCanStarveTime = findFirstCanStarveTime(D1Schedule, tempD1Skip)
-
-    Dim D1NextCanAvailHrs As Double
-    If D1NextCanStarveTime = -1 Then 
-        D1NextCanAvailHrs = 9999999
-    Else 
-        D1NextCanAvailHrs = D1Schedule.Range("BK" & D1NextCanStarveTime - 1).Value    
-    End If
-    getNextD1CanAvailHrs = D1NextCanAvailHrs
 End Function
 
 Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
