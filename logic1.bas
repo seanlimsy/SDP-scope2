@@ -191,9 +191,11 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
     count = 1
 
     Do While True
+        If count = 2 Then 
+            End
+        End If
         Print #logic1TextFile, "======== Attempt " & count & " ========"
         count = count + 1
-        
         Print #logic1TextFile, "-- Finding PP / DB Campaign to insert..."
         ' get row of campaign to insert
         ' -1 if there is no campaign
@@ -536,7 +538,6 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-                    Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
                 End If
             End If
         End If
@@ -626,9 +627,10 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then           ' Both PP and 100DB Available                                   
             If D1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then                ' Case: D1CanAvailHrs is within or equal to 50 hours of D2CanAvailHrs in question
                 If D1CanAvailHrs >= tippingStationAvailableTime Then                    ' Case: Can insert into tipping station but try to insert 100DB first
-                    determineDryerCampaign = 7                                                                      'Scenario 23,24,25; Scenario 27,28,29,30
+                    determineDryerCampaign = 7                                                                      ' Scenario 23,24,25,26; Scenario 27,28,29,30
                 Else                                                                    ' Case: Tipping Station is not ready so just insert 100DB
-                    determineDryerCampaign = 3                                                                      ' Scenario 20,21,22; Scenario 26; Scenario 31
+                    determineDryerCampaign = 3                                                                      ' Scenario 20,21,22; Scenario 31
+                End If
             Else                                                                        ' Case: D1CanAvailHrs is NOT within 50 hours of D2CanAvailHrs in question
                 If D2CanAvailHrs >= tippingStationAvailableTime Then 
                     determineDryerCampaign = 2                                                                      ' Scenario 32,33,34; Scenario 35,36,37,38; Scenario 39,40,41,42,43,44,45
