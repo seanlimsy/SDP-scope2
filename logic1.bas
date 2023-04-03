@@ -594,7 +594,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Print #logic1TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic1TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
     
-    If D1CanAvailHrs < tippingStationAvailableTime And D1CanAvailHrs <> 0 Then
+    If D1CanAvailHrs < tippingStationAvailableTime And D1FirstCanStarveTime <> -1 Then
         determineDryerCampaign = 4 'Case: D1CanAvailHrs before tipping station and not start of schedule
         Exit Function 
     End If
