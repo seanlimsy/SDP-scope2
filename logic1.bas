@@ -248,15 +248,15 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
         
-        ' Manual Entries
-        If D1FirstCanStarveTime = 2437 And D2FirstCanStarveTime = 1183 Then 
-            manualAdd PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation
-            GoTo continueLoop 
-        End If
-        If D1FirstCanStarveTime = 2670 And D2FirstCanStarveTime = 2370 Then 
-            manualAdd PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation
-            GoTo continueLoop 
-        End If
+        ' ' Manual Entries
+        ' If D1FirstCanStarveTime = 2437 And D2FirstCanStarveTime = 1183 Then 
+        '     manualAdd PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation
+        '     GoTo continueLoop 
+        ' End If
+        ' If D1FirstCanStarveTime = 2670 And D2FirstCanStarveTime = 2370 Then 
+        '     manualAdd PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation
+        '     GoTo continueLoop 
+        ' End If
 
         If dryerCampaign = -2 Then 'case: db campaigns but no more d2 slots (infeasible solution)
             Print #logic1TextFile, "DB campaigns remaining but no more can starvation slots in dryer 2. Exiting Program.": Space 0
@@ -567,12 +567,12 @@ End Function
       
 Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit, d1Skip, D1Schedule) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then
-        determineDryerCampaign = -1
+        determineDryerCampaign = -1                                                 ' Case: Both PP & 100DB all inserted
         Exit Function
     End If
     
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then
-        determineDryerCampaign = 0
+        determineDryerCampaign = 0                                                  ' Case: Both D1 & D2 out of slots
         Exit Function
     End If
     
