@@ -605,8 +605,9 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
                     determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
                 Else
                     Print #logic1TextFile, "*************": Space 0
-                    Print #logic1TextFile, "Subjected to specific test case. Should never occur.": Space 0
+                    Print #logic1TextFile, "Subjected to specific test case. Should never occur. Force End.": Space 0
                     Print #logic1TextFile, "*************": Space 0
+                    End
 
                     If D2CanAvailHrs >= tippingStationAvailableTime Then
                         determineDryerCampaign = 2 'Result: Insert PP Campaign into D2                                          
