@@ -592,7 +592,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Print #logic1TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic1TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
 
-    If D1CanAvailHrs < tippingStationAvailableTime And D1CanAvailHrs <> 0 Then
+    If D1CanAvailHrs < tippingStationAvailableTime And D1FirstCanStarveTime <> -1 Then
         determineDryerCampaign = 4 'Case: D1CanAvailHrs before tipping station and not start of schedule
         Exit Function 
     End If
@@ -603,8 +603,12 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
             If D1CanAvailHrs < D2CanAvailHrs + dryerThresholdLimit Then     ' If True --> D1CanAvailHrs < D2CanAvailHrs
                 If D1CanAvailHrs >= tippingStationAvailableTime Then
                     determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-                Else ' Case: D1CanAvailHrs < D2CanAvailHrs + Limit; D1CanAvailHrs < tippingStationAvailableTime
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then '' Case is redundant. Will never occur under hierachy of cases. Will always revert to 3
+                Else
+                    Print #logic1TextFile, "*************": Space 0
+                    Print #logic1TextFile, "Subjected to specific test case. Should never occur.": Space 0
+                    Print #logic1TextFile, "*************": Space 0
+
+                    If D2CanAvailHrs >= tippingStationAvailableTime Then
                         determineDryerCampaign = 2 'Result: Insert PP Campaign into D2                                          
                     Else
                         determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
@@ -619,7 +623,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
             End If
 
         ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then ' Case: Only PP Campaigns remain
-            If D2CanAvailHrs < tippingStationAvailableTime And D2CanAvailHrs <> 0 Then 
+            If D2CanAvailHrs < tippingStationAvailableTime And D2FirstCanStarveTime <> -1 Then 
                 determineDryerCampaign = 5 'Result: Skip D2 until both D1 & D2 are >= tipStatAvailTime
                 Exit Function
             End If
