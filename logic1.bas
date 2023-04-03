@@ -223,19 +223,19 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
         Print #logic1TextFile, "-- Finding initial silo constraint..."
         ' get initial silo constraint violation time
         Dim initialSiloConstraintViolation As Double
-        if Silos.Range("K1").Value <> 0 and silos.range("K2").value <> 0 then
-            if silos.range("K1").value > silos.range("K2").value then
+        If Silos.Range("K1").Value <> 0 and silos.range("K2").value <> 0 then
+            If silos.range("K1").value > silos.range("K2").value then
                 initialSiloConstraintViolation = silos.range("K2").value
             Else
                 initialSiloConstraintViolation = silos.range("K1").value
-            end if
+            End If
         ElseIf Silos.Range("K1").Value = 0 then
             initialSiloConstraintViolation = Silos.Range("K2").Value
         ElseIf Silos.Range("K2").Value = 0 then
             initialSiloConstraintViolation = Silos.Range("K1").Value
-        else
+        Else
             initialSiloConstraintViolation = 0 
-        end if
+        End If
         Print #logic1TextFile, "Done."
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Initial Silo Constraint Violation: " & initialSiloConstraintViolation: Space 0
@@ -278,7 +278,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
             insertPPCan100DBCampaigns = False
             Exit Function
         ElseIf dryerCampaign = 1 Then 'case: d1 pp campaign
-            If D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+            If D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialSiloConstraintViolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
                     programModule2.dryerBlockDelayMain D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
                     Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
@@ -302,7 +302,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
             D2PrevInsertTime = D2FirstCanStarveTime
             D1PrevInsertTime = -1
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign
-            If D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
+            If D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialSiloConstraintViolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
                     programModule2.dryerBlockDelayMain D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
                     Print #logic1TextFile, "======== Attempt " & (count-1) & " Concluded ========": Space 0
@@ -605,7 +605,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
                     determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
                 Else
                     Print #logic1TextFile, "*************": Space 0
-                    Print #logic1TextFile, "Subjected to specific test case. Should never occur. Force End.": Space 0
+                    Print #logic1TextFile, "Subjected to specific test case. Should never occur. Force End. ": Space 0
                     Print #logic1TextFile, "*************": Space 0
                     End
 
