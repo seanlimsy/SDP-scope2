@@ -604,7 +604,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
                 If D1CanAvailHrs >= tippingStationAvailableTime Then
                     determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
                 Else ' Case: D1CanAvailHrs < D2CanAvailHrs + Limit; D1CanAvailHrs < tippingStationAvailableTime
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then                                                                '' Case is redundant. Will never occur under hierachy of cases. Will always revert to 3
+                    If D2CanAvailHrs >= tippingStationAvailableTime Then '' Case is redundant. Will never occur under hierachy of cases. Will always revert to 3
                         determineDryerCampaign = 2 'Result: Insert PP Campaign into D2                                          
                     Else
                         determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2
