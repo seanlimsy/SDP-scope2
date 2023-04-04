@@ -310,62 +310,58 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     
     Print #logic4TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
 
-    Dim D1CanStarveStartTime As Double
-    Dim D2CanStarveStartTime As Double
+    Dim D1CanAvailHrs As Double
+    Dim D2CanAvailHrs As Double
     If D1FirstCanStarveTime <> -1 Then
-        D1CanStarveStartTime = D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
+        D1CanAvailHrs = D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
     End If
     If D2FirstCanStarveTime <> -1 Then
-        D2CanStarveStartTime = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
+        D2CanAvailHrs = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
     End If
 
-    Print #logic4TextFile, "D1CanStarveStartTime: " & D1CanStarveStartTime: Space 0
-    Print #logic4TextFile, "D2CanStarveStartTime: " & D2CanStarveStartTime: Space 0
+    Print #logic4TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
+    Print #logic4TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
 
-    If D1CanStarveStartTime < tippingStationAvailableTime And D1CanStarveStartTime <> 0 Then
+    If D1CanAvailHrs < tippingStationAvailableTime And D1CanAvailHrs <> 0 Then
         determineDryerCampaignCanStretch = 4 'If d1 can starve is before tipping station start then skip d1 time
         Exit Function
     End If
-    If D2CanStarveStartTime < tippingStationAvailableTime And D2CanStarveStartTime <> 0 Then 
+    If D2CanAvailHrs < tippingStationAvailableTime And D2CanAvailHrs <> 0 Then 
         determineDryerCampaignCanStretch = 5 'If d2 can starve is before tipping station start then skip d2 time
         Exit Function 
     End If
 
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
-        If D1CanStarveStartTime < D2CanStarveStartTime Then
-            If D1CanStarveStartTime >= tippingStationAvailableTime Then
-                determineDryerCampaignCanStretch = 1 'd1pp
+        If D1CanAvailHrs < D2CanAvailHrs Then
+            If D1CanAvailHrs >= tippingStationAvailableTime Then 
+                determineDryerCampaignCanStretch = 1
+            ElseIf D2CanAvailHrs >= tippingStationAvailableTime Then 
+                determineDryerCampaignCanStretch = 2
             Else
-                If D2CanStarveStartTime >= tippingStationAvailableTime Then
-                    determineDryerCampaignCanStretch = 2 'd2pp
-                Else
-                    determineDryerCampaignCanStretch = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
-                End If
+                determineDryerCampaignCanStretch = 6
             End If
-        Else
-            If D2CanStarveStartTime >= tippingStationAvailableTime Then
-                determineDryerCampaignCanStretch = 2 'd2pp
+        ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
+            If D2CanAvailHrs >= tippingStationAvailableTime Then 
+                determineDryerCampaignCanStretch = 2
+            ElseIf D1CanAvailHrs >= tippingStationAvailableTime Then 
+                determineDryerCampaignCanStretch = 1
             Else
-                If D1CanStarveStartTime >= tippingStationAvailableTime Then
-                    determineDryerCampaignCanStretch = 1 'd1pp
-                Else
-                    determineDryerCampaignCanStretch = 6 'can't do pp on d1 and d2, no more db campaign so skip can starve time
-                End If
+                determineDryerCampaignCanStretch = 6
             End If
         End If
         
-    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then 'case only d1 has slots
-        If D1CanStarveStartTime >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 1 'd1pp
+    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then
+        If D1CanAvailHrs >= tippingStationAvailableTime Then
+            determineDryerCampaignCanStretch = 1
         Else
-            determineDryerCampaignCanStretch = 4 'can't do pp on d1 and d2 is not available so skip can starve time
+            determineDryerCampaignCanStretch = 4
         End If
 
-    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then 'case only d2 has slots
-        If D2CanStarveStartTime >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 2 'd2pp
+    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then
+        If D2CanAvailHrs >= tippingStationAvailableTime Then
+            determineDryerCampaignCanStretch = 2
         Else
-            determineDryerCampaignCanStretch = 5 'can't insert pp can and there are no more db campaigns so skip d2 can starve time
+            determineDryerCampaignCanStretch = 5
         End If
     End If
 End Function
@@ -419,7 +415,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Dim FPLoadingWeight As Double
     FPLoadingWeight = PPThreshold.Range("J" & PPCampaignToInsert).Value
     Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
-    For i = 1 To 0.05 Step -decrementCounter
+    For i = 1 To decrementCounter Step -decrementCounter
         Print #logic4TextFile, "Inserting " & i & "th amount. Calculating...": Space 0
 
         ' insert to the row before the can starvation time
@@ -442,7 +438,8 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         Print #logic4TextFile, "--": Space 0
         Print #logic4TextFile, "Reducing amount to " & (i - decrementCounter): Space 0
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
-        If i - decrementCounter < decrementCounter Then
+
+        If (i - decrementCounter) < (decrementCounter * decrementCounter) Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
             Print #logic4TextFile, "Cannot be inserted at slot. Skipping.": Space 0

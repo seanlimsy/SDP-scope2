@@ -407,27 +407,30 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     End If
                 End If
             End If
-            Print #logic1TextFile, "++++++++++++++++++++++++"
             Exit For
         End If
         
+        Print #logic1TextFile, "--": Space 0
         Print #logic1TextFile, "Reducing amount to " & (i - 2): Space 0
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime & ":" & (dryerFirstCanStarveTime + (i - DBCampaignToInsert))).EntireRow.Delete xlShiftUp
 
         ' case entire window cannot be added. Attempt to add PP Campaign.
         If i <= DBCampaignToInsert Then
+            Print #logic1TextFile, "100DB cannot be inserted at slot.": Space 0
             If PPCampaignToInsert = -1 Then
+                Print #logic1TextFile, "Attempting to insert PP in place.": Space 0
                 Print #logic1TextFile, "No more PP to insert. Skipping.": Space 0
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                 Print #logic1TextFile, "Cannot be inserted at slot. Skipping.": Space 0
-                Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
                 Exit For
             End If
+
             If isInPlace = False Then
                 If tippingStationReady = True Then
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station is ready. Attemping to add PP in Place.": Space 0
-                    dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, workingDryer, DBCampaignToInsert, True)
+                    Print #logic1TextFile, "----------------": Space 0
+                    dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, "D2" , DBCampaignToInsert, True)
                 Else
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station not ready. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -440,8 +443,11 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             End If
         End If
     Next
-        
+    Print #logic1TextFile, "++++++++++++++++++++++++"   
+    
     calculateAll
+    wb.refreshAll
+
     addDBCampaign = dryerSkipArray
 End Function
 
@@ -452,7 +458,6 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     decrementStep = reportWs.Range("B12").Value
     decrementCounter = WorksheetFunction.Round(1/decrementStep, 2)
 
-    ' decrementCounter = 0.1
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False
@@ -462,7 +467,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Dim firstPass as Boolean
     firstPass = True
     Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
-    For i = 1 To decrementCounter Step -decrementCounter
+    For i = 1 To 0 Step -decrementCounter
         If firstPass = True Then
             i = PPCanSchedule.Range("J" & PPCampaignToInsert).Value / PPCanSchedule.Range("E" & PPCampaignToInsert).Value
             firstPass = False
@@ -513,13 +518,14 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         Print #logic1TextFile, "Reducing amount to " & (i - decrementCounter): Space 0
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete xlShiftUp
 
-        If i - decrementCounter < decrementCounter Then
-            Print #logic1TextFile, "PP cannot be inserted at slot. Attempting to insert 100DB in place.": Space 0
+        If (i - decrementCounter) < (decrementCounter * decrementCounter) Then
+            Print #logic1TextFile, "PP cannot be inserted at slot.": Space 0
             If workingDryer = "D1" Then 
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                 Print #logic1TextFile, "100DB not valid as insertion into D1. Skipping.": Space 0
             Else
+                Print #logic1TextFile, "Attempting to insert 100DB in place.": Space 0
                 If DBCampaignToInsert = -1 Then 'Case when no more 100DB to insert when PP campaign cannot be inserted
                     Print #logic1TextFile, "No more 100DB to insert. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -529,12 +535,12 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Exit For
                 End If
                 If isInPlace = False Then
+                    Print #logic1TextFile, "----------------": Space 0
                     dryerSkipArray = addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, PPCampaignToInsert, True, True)
                 Else
                     Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
-                    Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
                 End If
             End If
         End If
@@ -542,7 +548,6 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Next
 
     calculateAll
-    ' this is to ensure that the pivot table is updated after adding pp campaigns
     wb.refreshAll
     
     addPPCampaign = dryerSkipArray
