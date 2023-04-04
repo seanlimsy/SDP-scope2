@@ -616,15 +616,15 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     ' Case: D1CanAvailHrs > tipStatAvail if D1CanAvailHrs > 0
     If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then ' Case: Both D1 & D2 have slots
         If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then ' Case: Both PP & 100DB Campaigns remain
-            If D1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then     ' If True --> D1CanAvailHrs < D2CanAvailHrs
-                If D1CanAvailHrs >= tippingStationAvailableTime Then
-                    determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
-                Else
-                    If D2CanAvailHrs >= tippingStationAvailableTime Then
-                        determineDryerCampaign = 7 'Result: Insert 100DB Campaign into D2 first. If unable move to insert PP                                          
+            If D1CanAvailHrs < D2CanAvailHrs + dryerThresholdLimit Then     ' If True --> D1CanAvailHrs < D2CanAvailHrs
+                If D2CanAvailHrs < D1CanAvailHrs Then 
+                    If D2CanAvailHrs >= tippingStationAvailableTime Then 
+                        determineDryerCampaign = 7 'Result: Insert 100DB Campaign into D2 first. If unable move to insert PP   
                     Else
                         determineDryerCampaign = 3 'Result: Insert 100DB Campaign into D2. If unable skip
                     End If
+                Else 
+                    determineDryerCampaign = 1 'Result: Insert PP Campaign into D1
                 End If
             Else ' Case: D1CanAvailHrs > D2CanAvailHrs + Limit
                 If D2CanAvailHrs >= tippingStationAvailableTime Then
