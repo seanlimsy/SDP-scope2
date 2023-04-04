@@ -339,6 +339,7 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
                 determineDryerCampaignCanStretch = 2
             Else
                 determineDryerCampaignCanStretch = 6
+            End If
         ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
             If D2CanAvailHrs >= tippingStationAvailableTime Then 
                 determineDryerCampaignCanStretch = 2
@@ -349,18 +350,18 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
             End If
         End If
         
-    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then 'case only d1 has slots
+    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then
         If D1CanAvailHrs >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 1 'd1pp
+            determineDryerCampaignCanStretch = 1
         Else
-            determineDryerCampaignCanStretch = 4 'can't do pp on d1 and d2 is not available so skip can starve time
+            determineDryerCampaignCanStretch = 4
         End If
 
-    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then 'case only d2 has slots
+    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then
         If D2CanAvailHrs >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 2 'd2pp
+            determineDryerCampaignCanStretch = 2
         Else
-            determineDryerCampaignCanStretch = 5 'can't insert pp can and there are no more db campaigns so skip d2 can starve time
+            determineDryerCampaignCanStretch = 5
         End If
     End If
 End Function
@@ -414,7 +415,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Dim FPLoadingWeight As Double
     FPLoadingWeight = PPThreshold.Range("J" & PPCampaignToInsert).Value
     Print #logic4TextFile, "++++++++++++++++++++++++": Space 0
-    For i = 1 To 0.05 Step -decrementCounter
+    For i = 1 To decrementCounter Step -decrementCounter
         Print #logic4TextFile, "Inserting " & i & "th amount. Calculating...": Space 0
 
         ' insert to the row before the can starvation time
@@ -437,7 +438,8 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         Print #logic4TextFile, "--": Space 0
         Print #logic4TextFile, "Reducing amount to " & (i - decrementCounter): Space 0
         dryerDefaultSchedule.Rows(dryerFirstCanStarveTime).EntireRow.Delete
-        If i - decrementCounter < decrementCounter Then
+
+        If (i - decrementCounter) < (decrementCounter * decrementCounter) Then
             dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
             dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
             Print #logic4TextFile, "Cannot be inserted at slot. Skipping.": Space 0
