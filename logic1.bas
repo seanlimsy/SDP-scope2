@@ -659,7 +659,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         If DBCampaignToInsert <> -1 Then
             determineDryerCampaign = -2
             Exit Function
-        End If 
+        End If
 
         If D1FirstCanStarveTime >= tippingStationAvailableTime Then 
             determineDryerCampaign = 1
@@ -676,7 +676,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
             End If
         ElseIf PPCampaignToInsert = -1 And DBCampaignToInsert <> -1 Then 
             determineDryerCampaign = 3
-        Else If PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then
+        ElseIf PPCampaignToInsert <> -1 And DBCampaignToInsert = -1 Then
             If D2CanAvailHrs >= tippingStationAvailableTime Then 
                 determineDryerCampaign = 2
             Else 
