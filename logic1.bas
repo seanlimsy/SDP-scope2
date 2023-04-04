@@ -191,9 +191,6 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
     count = 1
 
     Do While True
-        If count = 2 Then 
-            End
-        End If
         Print #logic1TextFile, "======== Attempt " & count & " ========"
         count = count + 1
         Print #logic1TextFile, "-- Finding PP / DB Campaign to insert..."
