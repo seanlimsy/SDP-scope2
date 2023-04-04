@@ -150,7 +150,7 @@ Function logic1()
     Dim reportWS As Worksheet
     Dim maxPESilos As Integer
     Set reportWS = wb.Worksheets("Program Report Page")
-    maxPESilos = reportWS.range("B11").Value
+    maxPESilos = reportWS.Range("B11").Value
 
     Dim dryerThresholdLimit As Integer
     dryerThresholdLimit = reportWS.Range("B14").Value
