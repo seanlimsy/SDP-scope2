@@ -242,7 +242,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
         Print #logic1TextFile, "-- Finding dryer campaign value..."
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit, d1Skip, D1Schedule)
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit)
         Print #logic1TextFile, "Done."
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
@@ -434,11 +434,13 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station not ready. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                    Exit For
                 End If
             Else
                 Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
+                Exit For
             End If
         End If
     Next
@@ -584,7 +586,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     checkSiloConstraint = True
 End Function
       
-Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit, d1Skip, D1Schedule) As Integer
+Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then
         determineDryerCampaign = -1                                                 ' Case: Both PP & 100DB all inserted
         Exit Function
