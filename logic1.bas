@@ -625,7 +625,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         Exit Function 
     End If
     
-    If D1CanAvailHrs < D2CanAvailHrs Then                                       ' D1 Earlier
+    If D1CanAvailHrs <= D2CanAvailHrs Then                                       ' D1 Earlier
         If PPCampaignToInsert = -1 Then 
             determineDryerCampaign = 4                                                                              ' Scenario 10
         Else
