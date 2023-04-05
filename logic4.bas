@@ -314,56 +314,33 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Dim D2CanAvailHrs As Double
     If D1FirstCanStarveTime <> -1 Then
         D1CanAvailHrs = D1Schedule.Range("BK" & D1FirstCanStarveTime - 1).Value
+    Else
+        D1CanAvailHrs = 9999999
     End If
     If D2FirstCanStarveTime <> -1 Then
         D2CanAvailHrs = D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value
+    Else
+        D2CanAvailHrs = 9999999
     End If
 
     Print #logic4TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic4TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
 
-    If D1CanAvailHrs < tippingStationAvailableTime And D1CanAvailHrs <> 0 Then
-        determineDryerCampaignCanStretch = 4 'If d1 can starve is before tipping station start then skip d1 time
+    If D1CanAvailHrs < tippingStationAvailableTime And D1FirstCanStarveTime <> -1 Then 
+        determineDryerCampaign = 4
         Exit Function
     End If
-    If D2CanAvailHrs < tippingStationAvailableTime And D2CanAvailHrs <> 0 Then 
-        determineDryerCampaignCanStretch = 5 'If d2 can starve is before tipping station start then skip d2 time
-        Exit Function 
+    If D2CanAvailHrs < tippingStationAvailableTime And D2FirstCanStarveTime <> -1 Then 
+        determineDryerCampaign = 5
+        Exit Function
     End If
 
-    If D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime <> -1 Then 'case d1 and d2 both have slots
-        If D1CanAvailHrs < D2CanAvailHrs Then
-            If D1CanAvailHrs >= tippingStationAvailableTime Then 
-                determineDryerCampaignCanStretch = 1
-            ElseIf D2CanAvailHrs >= tippingStationAvailableTime Then 
-                determineDryerCampaignCanStretch = 2
-            Else
-                determineDryerCampaignCanStretch = 6
-            End If
-        ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
-            If D2CanAvailHrs >= tippingStationAvailableTime Then 
-                determineDryerCampaignCanStretch = 2
-            ElseIf D1CanAvailHrs >= tippingStationAvailableTime Then 
-                determineDryerCampaignCanStretch = 1
-            Else
-                determineDryerCampaignCanStretch = 6
-            End If
-        End If
-        
-    ElseIf D1FirstCanStarveTime <> -1 And D2FirstCanStarveTime = -1 Then
-        If D1CanAvailHrs >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 1
-        Else
-            determineDryerCampaignCanStretch = 4
-        End If
-
-    ElseIf D1FirstCanStarveTime = -1 And D2FirstCanStarveTime <> -1 Then
-        If D2CanAvailHrs >= tippingStationAvailableTime Then
-            determineDryerCampaignCanStretch = 2
-        Else
-            determineDryerCampaignCanStretch = 5
-        End If
+    If D1CanAvailHrs <= D2CanAvailHrs Then 
+        determineDryerCampaign = 1
+    ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
+        determineDryerCampaign = 2
     End If
+
 End Function
 
 Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
