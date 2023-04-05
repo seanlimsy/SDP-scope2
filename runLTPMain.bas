@@ -214,4 +214,6 @@ Sub runStage4(toAttemptStage4)
         reportWS.Range("B7").Value = reasonForStop
         reportWS.Range("B8").Value = "PPCAN STRETCHING INSERT"
     End If
+
+    wb.Save
 End Sub
