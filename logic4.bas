@@ -327,18 +327,18 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Print #logic4TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
 
     If D1CanAvailHrs < tippingStationAvailableTime And D1FirstCanStarveTime <> -1 Then 
-        determineDryerCampaign = 4
+        determineDryerCampaignCanStretch = 4
         Exit Function
     End If
     If D2CanAvailHrs < tippingStationAvailableTime And D2FirstCanStarveTime <> -1 Then 
-        determineDryerCampaign = 5
+        determineDryerCampaignCanStretch = 5
         Exit Function
     End If
 
     If D1CanAvailHrs <= D2CanAvailHrs Then 
-        determineDryerCampaign = 1
+        determineDryerCampaignCanStretch = 1
     ElseIf D2CanAvailHrs < D1CanAvailHrs Then 
-        determineDryerCampaign = 2
+        determineDryerCampaignCanStretch = 2
     End If
 
 End Function
