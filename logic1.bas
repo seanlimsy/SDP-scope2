@@ -379,6 +379,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
     For i = lastRow To DBCampaignToInsert Step -1
         ' insert DB campaign
+        Print #logic1TextFile, "Inserting " & i & " campaigns from window. Calculating...": Space 0
         DBSchedule.Range("A" & DBCampaignToInsert, "N" & i).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
@@ -430,6 +431,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station is ready. Attemping to add PP in Place.": Space 0
                     Print #logic1TextFile, "----------------": Space 0
                     dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, "D2" , DBCampaignToInsert, True)
+                    Exit For
                 Else
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station not ready. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -491,7 +493,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             Print #logic1TextFile, "-----------": Space 0
             amountInserted = dryerDefaultSchedule.Range("J" & dryerFirstCanStarveTime).Value
             
-            If remainingAmount = amountInserted Then
+            If Round(remainingAmount,3) = Round(amountInserted,3) Then
                 PPCanSchedule.Range("A" & PPCampaignToInsert, "N" & PPCampaignToInsert).Delete xlShiftUp
             Else
                 PPCanSchedule.Range("J" & PPCampaignToInsert).Value = remainingAmount - amountInserted
@@ -539,6 +541,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 If isInPlace = False Then
                     Print #logic1TextFile, "----------------": Space 0
                     dryerSkipArray = addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, PPCampaignToInsert, True, True)
+                    Exit For
                 Else
                     Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
