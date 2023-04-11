@@ -379,7 +379,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
     For i = lastRow To DBCampaignToInsert Step -1
         ' insert DB campaign
-        Print #logic1TextFile, "Inserting " & i & " campaigns from window. Calculating...": Space 0
+        Print #logic1TextFile, "Inserting " & (i-1) & " campaigns from window. Calculating...": Space 0
         DBSchedule.Range("A" & DBCampaignToInsert, "N" & i).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
