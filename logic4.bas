@@ -350,7 +350,7 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Next
     Next PT
 
-    Print #logic1TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
+    Print #logic4TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
     Dim PPPrebuildDuration As Integer
     PPPrebuildDuration = PPRatesSheets.Range("D5").Value
     If tippingStationAvailableTime <> 0 Then
@@ -360,7 +360,7 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
             getTippingStationAvailableStartTime = tippingStationAvailableTime
         Else
             tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
-            Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
+            Print #logic4TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
         End If
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
