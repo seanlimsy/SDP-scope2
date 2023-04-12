@@ -43,6 +43,7 @@ Sub runLTP()
     totalTime = endTime - startTime
     reportWS.Range("F5").Value = Format(totalTime/3600, "0.00")
 
+    wb.RefreshAll
 End Sub
 
 ' ============================================= Setup Logic =============================================
@@ -76,6 +77,7 @@ Sub checkWorksheetsRequired()
     checkExists "PPRateDS"
     checkExists "PP CAN ADDED THRESHOLD"
     checkExists "PP PCH SPACE" 
+    checkExists "Postponement Rates"
 End Sub
 
 Sub checkExists(checkSheetName)
@@ -115,9 +117,19 @@ Sub checkUserValues
     Dim dryerThresholdLimit As Integer
     dryerThresholdLimit = reportWS.Range("B14").Value
     If IsNumeric(dryerThresholdLimit) = False Then 
-        reasonForStop = "Threshold Limit not correctly Set. Please try again."
+        reasonForStop = "Threshold Limit not correctly set. Please try again."
         End
     End If
+
+    Dim PPRatesSheets as Worksheet
+    Set PPRatesSheets = wb.Sheets("Postponement Rates")
+    Dim PPPrebuildDuration As Integer
+    PPPrebuildDuration = PPRatesSheets.Range("D5").Value
+    If IsNumeric(PPPrebuildDuration) = False Then 
+        reasonForStop = "PP Prebuilding Duration is not correctly set. Please try again."
+        End
+    End If
+
 End Sub
 
 Sub initializeOutputs()

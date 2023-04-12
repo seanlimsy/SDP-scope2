@@ -11,6 +11,7 @@ Dim workingDryerSchedule As Worksheet
 Dim Silos As Worksheet
 Dim D1TipStatPivotTable As pivotTable
 Dim D2TipStatPivotTable As pivotTable
+Dim PPRatesSheets As Worksheet
 
 Sub calculateAll()
     Application.CalculateFull
@@ -36,7 +37,7 @@ Sub PPCanStretchMain()
     If isLogic4Feasible = True Then
         Print #logic4TextFile, "Worst Case PP Can inserted. Terminating Program": Space 0
     End If
-
+    wb.RefreshAll
     Print #logic4TextFile, "logic4 Ended @ " & Now
     Close #logic4TextFile
 
@@ -54,6 +55,7 @@ Sub initializeWorksheets()
     setWorksheet PPTippingStation, "PP"
     setWorksheet Silos, "Silos"
     setWorksheet PPRateDSSheet, "PPRateDS"
+    setWorksheet PPRatesSheets, "Postponement Rates"
 
     ' Update pivot table to correct setting PP sheet
     Dim PT As pivotTable, PI As PivotItem
@@ -210,10 +212,6 @@ Function stretchingCampaigns(mainSilo, otherSilo)
 
     calculateAll
     wb.RefreshAll
-
-    ' Dim D1TipStatCanCOMax As Long, D2TipStatCanCOMax As Long
-    ' D1TipStatCanCOMax = infoFromDryers(D1TipStatPivotTable)
-    ' D2TipStatCanCOMax = infoFromDryers(D2TipStatPivotTable)
     
     ' arrays for determining which can starve to skip
     Dim d1Skip() As Integer
@@ -287,16 +285,6 @@ continueLoop:
     stretchingCampaigns = True
 End Function
 
-Function infoFromDryers(pivotTable)
-    Dim TipStatCanCORange As Range
-    Dim TipStatCanCOMax As Long
-    
-    Set TipStatCanCORange = pivotTable.PivotFields("Sum of Can After CO Hrs").DataRange
-    TipStatCanCOMax = Application.WorksheetFunction.Max(TipStatCanCORange)
-    
-    infoFromDryers = TipStatCanCOMax
-End Function
-
 Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Integer
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then
         determineDryerCampaignCanStretch = 0
@@ -308,8 +296,6 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
-    Print #logic4TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
-
     Dim D1CanAvailHrs As Double
     Dim D2CanAvailHrs As Double
     If D1FirstCanStarveTime <> -1 Then
@@ -347,6 +333,8 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
     tippingStationAvailableTime = 0
+    wb.refreshAll
+
     Dim PT As pivotTable
     For Each PT In PPTippingStation.PivotTables
         For Each Column In PT.ColumnRange
@@ -362,13 +350,17 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Next
     Next PT
 
+    Print #logic1TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
+    Dim PPPrebuildDuration As Integer
+    PPPrebuildDuration = PPRatesSheets.Range("D5").Value
     If tippingStationAvailableTime <> 0 Then
         If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then
             getTippingStationAvailableStartTime = tippingStationAvailableTime
         ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then
             getTippingStationAvailableStartTime = tippingStationAvailableTime
         Else
-            tippingStationAvailableTime = tippingStationAvailableTime + 40
+            tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+            Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
         End If
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
@@ -377,13 +369,11 @@ End Function
 Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray) As Integer()
     ' PPCampaignToInsert = 2 fixed & no need to delete sample campaign
 
-    ' decrement counter can be modified to determine the "steps" to reduce campaign load when it can't be inserted
     Dim decrementCounter As Double
     Dim decrementStep As Integer
     decrementStep = reportWs.Range("B13").Value
     decrementCounter = WorksheetFunction.Round(1/decrementStep, 2)
     
-    'decrementCounter = 0.1
     ' boolean flag to determine if silo constraint is being violated
     Dim canAdd As Boolean
     canAdd = False
@@ -424,7 +414,6 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
         End If
     Next
     calculateAll
-    
     ' this is to ensure that the pivot table is updated after adding pp campaigns
     wb.RefreshAll
     

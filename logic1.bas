@@ -12,6 +12,7 @@ Dim D1DefaultOriginal As Worksheet
 Dim D2DefaultOriginal As Worksheet
 Dim D1TipStatPivotTable As PivotTable
 Dim D2TipStatPivotTable As PivotTable
+Dim PPRatesSheets As Worksheet
 
 Sub calculateAll()
     Application.CalculateFull
@@ -54,8 +55,9 @@ Sub resetAll()
     D1Schedule.Range("AI2:AI" & lastRowD1).Value = 0
     D2Schedule.Range("AI2:AI" & lastRowD2).Value = 0
     calculateAll
-    wb.refreshAll
+    wb.RefreshAll
     wb.Save
+
     Print #logic1TextFile, "Done."
     Print #logic1TextFile, "++++ Reset Done. Reattempting ++++": Space 0
     Print #logic1TextFile, " ": Space 0
@@ -78,7 +80,7 @@ Sub main()
         reasonForStop = "Max PE Silo Constraint Reached."
         Print #logic1Textfile, "Terminating Program.": Space 0
     End If
-    
+    wb.RefreshAll
     Print #logic1TextFile, "logic1 Ended @ " & Now
     Close #logic1TextFile
 End Sub
@@ -97,6 +99,7 @@ Sub initializeWorksheets()
     setWorksheet PPTippingStation, "PP"
     setWorksheet D1DefaultOriginal, "D1Sched (2)"
     setWorksheet D2DefaultOriginal, "D2Sched (2)"
+    setWorksheet PPRatesSheets, "Postponement Rates"
     ' update pivot table to correct setting PP sheet
     Dim PT As PivotTable
     For Each PT In PPTippingStation.PivotTables
@@ -379,7 +382,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
     Print #logic1TextFile, "++++++++++++++++++++++++": Space 0
     For i = lastRow To DBCampaignToInsert Step -1
         ' insert DB campaign
-        Print #logic1TextFile, "Inserting " & (i-1) & " campaigns from window. Calculating...": Space 0
+        Print #logic1TextFile, "Inserting " & (i - 1) & " campaigns from window. Calculating...": Space 0
         DBSchedule.Range("A" & DBCampaignToInsert, "N" & i).Copy
         dryerDefaultSchedule.Range("A" & dryerFirstCanStarveTime).Insert xlShiftDown
         dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
@@ -391,7 +394,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             DBSchedule.Range("A" & DBCampaignToInsert, "O" & i).Delete xlShiftUp
             Print #logic1TextFile, "-----------": Space 0
             Print #logic1TextFile, "Inserted @ " & dryerFirstCanStarveTime: Space 0
-            Print #logic1TextFile, "Inserted " & (i-1) & " campaign(s) from window": Space 0
+            Print #logic1TextFile, "Inserted " & (i - 1) & " campaign(s) from window": Space 0
             Print #logic1TextFile, "-----------": Space 0
             ' case not 16(6) - run dryer blockage
             If mainSilo <> 16 Then
@@ -604,7 +607,6 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Dim tippingStationAvailableTime As Double
     tippingStationAvailableTime = 0
     tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
-    Print #logic1TextFile, "Tipping Station Available Time: " & tippingStationAvailableTime: Space 0
 
     ' get CanAvailHrs for both D1 & D2
     Dim D1CanAvailHrs As Double
@@ -664,6 +666,7 @@ End Function
 Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
+    wb.refreshAll
 
     tippingStationAvailableTime = 0
     Dim PT As PivotTable
@@ -680,13 +683,18 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
             End If
         Next
     Next PT
+
+    Print #logic1TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
+    Dim PPPrebuildDuration As Integer
+    PPPrebuildDuration = PPRatesSheets.Range("D5").Value
     If tippingStationAvailableTime <> 0 Then
         If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then
             getTippingStationAvailableStartTime = tippingStationAvailableTime
         ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then
             getTippingStationAvailableStartTime = tippingStationAvailableTime
         Else
-            tippingStationAvailableTime = tippingStationAvailableTime + 40
+            tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+            Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
         End If
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
