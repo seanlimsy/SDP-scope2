@@ -161,6 +161,7 @@ Function logic1()
     Do While mainSilo <= maxPESilos
         Print #logic1TextFile, "Current PE Silo Allowance: " & mainSilo: Space 0
         Print #logic1TextFile, "Current SG Silo Allowance: " & otherSilo: Space 0
+        Print #logic1TextFile, "": Space 0
         isFeasible = insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit)
         If isFeasible = True Then
             Exit Do
@@ -184,11 +185,6 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
     ReDim d2Skip(1)
     d1Skip(0) = 0
     d2Skip(0) = 0
-    
-    Dim D1PrevInsertTime as Double
-    Dim D2PrevInsertTime as Double
-    D1PrevInsertTime = -1
-    D2PrevInsertTime = -1
 
     Dim count As Integer
     count = 1
@@ -245,7 +241,7 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
         Print #logic1TextFile, "-- Finding dryer campaign value..."
         ' get which dryer and which campaign to insert
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit)
+        dryerCampaign = determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, dryerThresholdLimit)
         Print #logic1TextFile, "Done."
         Print #logic1TextFile, "-------"
         Print #logic1TextFile, "Dryer Campaign Value: " & dryerCampaign
@@ -289,8 +285,6 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 1"
             d1Skip = addPPCampaign(PPCampaignToInsert, D1Schedule, D1Default, D1FirstCanStarveTime, mainSilo, otherSilo, d1Skip, initialSiloConstraintViolation, "D1", DBCampaignToInsert, False)
-            D1PrevInsertTime = D1FirstCanStarveTime
-            D2PrevInsertTime = -1
         ElseIf dryerCampaign = 2 Then 'case: d2 pp campaign
            If D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialSiloConstraintViolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
@@ -301,8 +295,6 @@ Function insertPPCan100DBCampaigns(mainSilo, otherSilo, dryerThresholdLimit) As 
             End If
             Print #logic1TextFile, "Adding PP campaign to dryer 2"
             d2Skip = addPPCampaign(PPCampaignToInsert, D2Schedule, D2Default, D2FirstCanStarveTime, mainSilo, otherSilo, d2Skip, initialSiloConstraintViolation, "D2", DBCampaignToInsert, False)
-            D2PrevInsertTime = D2FirstCanStarveTime
-            D1PrevInsertTime = -1
         ElseIf dryerCampaign = 3 Then 'case: d2 db campaign but tipping station not ready, only try to insert 100DB
             If D2Schedule.Range("BK" & D2FirstCanStarveTime - 1).Value > initialSiloConstraintViolation and initialsiloconstraintviolation <> 0 Then
                     Print #logic1TextFile, "Effect: Encountered silo constraint violation prior to insertion point. Moving to solve violation first.": Space 0
@@ -592,21 +584,21 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     checkSiloConstraint = True
 End Function
       
-Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, D1PrevInsertTime, D2PrevInsertTime, dryerThresholdLimit) As Integer
+Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCampaignToInsert, DBCampaignToInsert, dryerThresholdLimit) As Integer
     If PPCampaignToInsert = -1 And DBCampaignToInsert = -1 Then                         ' Case: Both PP & 100DB all inserted
         determineDryerCampaign = -1                                                                         ' Scenario 54 
         Exit Function
     End If
     
+    If PPCampaignToInsert = -1 And DBCampaignToInsert = 2 Then                         ' Case: Both PP & 100DB all inserted
+        determineDryerCampaign = -1                                                                         ' Scenario 54 
+        Exit Function
+    End If
+
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then                     ' Case: Both D1 & D2 out of slots
         determineDryerCampaign = 0                                                                          ' Scenario 55
         Exit Function
     End If
-    
-    ' check PP sheet pivot table to determine tipping station availability
-    Dim tippingStationAvailableTime As Double
-    tippingStationAvailableTime = 0
-    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
 
     ' get CanAvailHrs for both D1 & D2
     Dim D1CanAvailHrs As Double
@@ -621,6 +613,11 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     Else
         D2CanAvailHrs = 9999999
     End If
+
+    ' check PP sheet pivot table to determine tipping station availability
+    Dim tippingStationAvailableTime As Double
+    tippingStationAvailableTime = 0
+    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1CanAvailHrs, D2CanAvailHrs)
 
     Print #logic1TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic1TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
@@ -663,7 +660,7 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     End If
 End Function
 
-Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
+Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1CanAvailHrs, D2CanAvailHrs) As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
     wb.refreshAll
@@ -684,18 +681,41 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Next
     Next PT
 
+    Dim D1PrevInsertTime as Double
+    Dim D2PrevInsertTime as Double
+    If D1FirstCanStarveTime > 2 Then 
+        D1PrevInsertTime = D1FirstCanStarveTime - 1
+    Else
+        D1PrevInsertTime = -1
+    End If
+
+    If D2FirstCanStarveTime > 2 Then 
+        D2PrevInsertTime = D2FirstCanStarveTime - 1
+    Else
+        D2PrevInsertTime = -1
+    End If
+
     Print #logic1TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
     Dim PPPrebuildDuration As Integer
     PPPrebuildDuration = PPRatesSheets.Range("D5").Value
     If tippingStationAvailableTime <> 0 Then
-        If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then
-            getTippingStationAvailableStartTime = tippingStationAvailableTime
-        ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then
-            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        If D1CanAvailHrs <= D2CanAvailHrs Then 
+            If D1PrevInsertTime <> -1 And D1Schedule.Range("A" & D1PrevInsertTime).Value = "PP" Then
+                tippingStationAvailableTime = tippingStationAvailableTime
+            Else 
+                tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+                Print #logic1TextFile, "--- Triggered by Dryer 1 ---": Space 0
+                Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
+            End If
         Else
-            tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
-            Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
-        End If
+            If D2PrevInsertTime <> -1 And D2Schedule.Range("A" & D2PrevInsertTime).Value = "PP" Then
+                tippingStationAvailableTime = tippingStationAvailableTime
+            Else 
+                tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+                Print #logic1TextFile, "--- Triggered by Dryer 2 ---": Space 0
+                Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
+            End If
+        End If 
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function

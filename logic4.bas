@@ -221,11 +221,6 @@ Function stretchingCampaigns(mainSilo, otherSilo)
     d1Skip(0) = 0
     d2Skip(0) = 0
 
-    Dim D1PrevInsertTime As Double
-    Dim D2PrevInsertTime As Double
-    D1PrevInsertTime = -1
-    D2PrevInsertTime = -2
-
     Dim count As Integer
     count = 1
 
@@ -249,7 +244,7 @@ Function stretchingCampaigns(mainSilo, otherSilo)
         Print #logic4TextFile, "D2 First Can Starve Time Index: " & D2FirstCanStarveTime: Space 0
 
         Dim dryerCampaign As Integer
-        dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
+        dryerCampaign = determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime)
         Print #logic4TextFile, "Dryer Campaign Value: " & dryerCampaign: Space 0
         
         If dryerCampaign = 0 Then 'case: no more dryer slots
@@ -285,16 +280,11 @@ continueLoop:
     stretchingCampaigns = True
 End Function
 
-Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Integer
+Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarveTime) As Integer
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then
         determineDryerCampaignCanStretch = 0
         Exit Function
     End If
-    
-    ' check PP sheet pivot table to determine tipping station availability
-    Dim tippingStationAvailableTime As Double
-    tippingStationAvailableTime = 0
-    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime)
     
     Dim D1CanAvailHrs As Double
     Dim D2CanAvailHrs As Double
@@ -308,6 +298,11 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
     Else
         D2CanAvailHrs = 9999999
     End If
+
+    ' check PP sheet pivot table to determine tipping station availability
+    Dim tippingStationAvailableTime As Double
+    tippingStationAvailableTime = 0
+    tippingStationAvailableTime = getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1CanAvailHrs, D2CanAvailHrs)
 
     Print #logic4TextFile, "D1CanAvailHrs: " & D1CanAvailHrs: Space 0
     Print #logic4TextFile, "D2CanAvailHrs: " & D2CanAvailHrs: Space 0
@@ -329,11 +324,12 @@ Function determineDryerCampaignCanStretch(D1FirstCanStarveTime, D2FirstCanStarve
 
 End Function
 
-Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1PrevInsertTime, D2PrevInsertTime) As Double
+Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanStarveTime, D1CanAvailHrs, D2CanAvailHrs) As Double
     Dim tippingStationAvailableTime As Double
     Dim Column As Range, row As Range
     tippingStationAvailableTime = 0
     wb.refreshAll
+
 
     Dim PT As pivotTable
     For Each PT In PPTippingStation.PivotTables
@@ -350,18 +346,41 @@ Function getTippingStationAvailableStartTime(D1FirstCanStarveTime, D2FirstCanSta
         Next
     Next PT
 
-    Print #logic4TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
+    Dim D1PrevInsertTime as Double
+    Dim D2PrevInsertTime as Double
+    If D1FirstCanStarveTime > 2 Then 
+        D1PrevInsertTime = D1FirstCanStarveTime - 1
+    Else
+        D1PrevInsertTime = -1
+    End If
+
+    If D2FirstCanStarveTime > 2 Then 
+        D2PrevInsertTime = D2FirstCanStarveTime - 1
+    Else
+        D2PrevInsertTime = -1
+    End If
+
+    Print #logic1TextFile, "Tipping Station Availability from Pivot Tables: " & tippingStationAvailableTime: Space 0
     Dim PPPrebuildDuration As Integer
     PPPrebuildDuration = PPRatesSheets.Range("D5").Value
     If tippingStationAvailableTime <> 0 Then
-        If D1PrevInsertTime <> -1 And D1FirstCanStarveTime = D1PrevInsertTime + 1 Then
-            getTippingStationAvailableStartTime = tippingStationAvailableTime
-        ElseIf D2PrevInsertTime <> -1 And D2FirstCanStarveTime = D2PrevInsertTime + 1 Then
-            getTippingStationAvailableStartTime = tippingStationAvailableTime
+        If D1CanAvailHrs <= D2CanAvailHrs Then 
+            If D1PrevInsertTime <> -1 And D1Schedule.Range("A" & D1PrevInsertTime).Value = "PP" Then
+                tippingStationAvailableTime = tippingStationAvailableTime
+            Else 
+                tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+                Print #logic1TextFile, "--- Triggered by Dryer 1 ---": Space 0
+                Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
+            End If
         Else
-            tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
-            Print #logic4TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
-        End If
+            If D2PrevInsertTime <> -1 And D2Schedule.Range("A" & D2PrevInsertTime).Value = "PP" Then
+                tippingStationAvailableTime = tippingStationAvailableTime
+            Else 
+                tippingStationAvailableTime = tippingStationAvailableTime + PPPrebuildDuration
+                Print #logic1TextFile, "--- Triggered by Dryer 2 ---": Space 0
+                Print #logic1TextFile, "Tipping Station Availability affected by Prebuilding. New Availability: " & tippingStationAvailableTime: Space 0
+            End If
+        End If 
     End If
     getTippingStationAvailableStartTime = tippingStationAvailableTime
 End Function
