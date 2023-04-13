@@ -589,12 +589,6 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
         determineDryerCampaign = -1                                                                         ' Scenario 54 
         Exit Function
     End If
-    
-    If PPCampaignToInsert = -1 And DBCampaignToInsert = 2 Then                         ' Case: Both PP & 100DB all inserted
-        determineDryerCampaign = -1                                                                         ' Scenario 54 
-        Exit Function
-    End If
-
     If D1FirstCanStarveTime = -1 And D2FirstCanStarveTime = -1 Then                     ' Case: Both D1 & D2 out of slots
         determineDryerCampaign = 0                                                                          ' Scenario 55
         Exit Function
