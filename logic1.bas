@@ -630,8 +630,8 @@ Function determineDryerCampaign(D1FirstCanStarveTime, D2FirstCanStarveTime, PPCa
     ElseIf D2CanAvailHrs < D1CanAvailHrs Then                                   ' D2 Earlier
         If PPCampaignToInsert <> -1 And DBCampaignToInsert <> -1 Then           ' Both PP and 100DB Available                                   
             If D1CanAvailHrs <= D2CanAvailHrs + dryerThresholdLimit Then                ' Case: D1CanAvailHrs is within or equal to 50 hours of D2CanAvailHrs in question
-                If D1CanAvailHrs >= tippingStationAvailableTime Then                    ' Case: Can insert into tipping station but try to insert 100DB first
-                    determineDryerCampaign = 7                                                                      ' Scenario 23,24,25,26; Scenario 27,28,29,30
+                If D2CanAvailHrs >= tippingStationAvailableTime Then                    ' Case: Can insert into tipping station but try to insert 100DB first 
+                    determineDryerCampaign = 7                                                                     ' Scenario 23,24,25,26; Scenario 27,28,29,30
                 Else                                                                    ' Case: Tipping Station is not ready so just insert 100DB
                     determineDryerCampaign = 3                                                                      ' Scenario 20,21,22; Scenario 31
                 End If
