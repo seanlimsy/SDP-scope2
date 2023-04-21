@@ -144,9 +144,9 @@ End Sub
 Function logic1()
     ' Dim mainSilo As Integer
     ' Dim otherSilo As Integer
-    mainSilo = Silos.Range("M2").Value
-    fixedMainSilo = Silos.Range("M2").Value
-    otherSilo = Silos.Range("M3").Value
+    mainSilo = Silos.Range("M1").Value
+    fixedMainSilo = Silos.Range("M1").Value
+    otherSilo = Silos.Range("M2").Value
     
     Dim isFeasible As Boolean
     isFeasible = False

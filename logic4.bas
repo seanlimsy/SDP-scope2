@@ -198,8 +198,8 @@ Function logic4()
     Dim mainSilo As Integer
     Dim otherSilo As Integer
     
-    mainSilo = Silos.Range("M2").Value
-    otherSilo = Silos.Range("M3").Value
+    mainSilo = Silos.Range("M1").Value
+    otherSilo = Silos.Range("M2").Value
 
     Dim isFeasible As Boolean
     isFeasible = stretchingCampaigns(mainSilo, otherSilo)

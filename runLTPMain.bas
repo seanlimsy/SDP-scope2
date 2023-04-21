@@ -133,13 +133,13 @@ Sub checkUserValues
 
     Dim Silos As Worksheet
     Set Silos = wb.Sheets("Silos")
-    mainSilo = Silos.Range("M2").Value
+    mainSilo = Silos.Range("M1").Value
     If IsNumeric(mainSilo) = False Then 
         reasonForStop = "PE Silo Setting in ""Silos"" worksheet not set properly (M1). Please try again." 
         End
     End If
     
-    otherSilo = Silos.Range("M3").Value
+    otherSilo = Silos.Range("M2").Value
     If IsNumeric(otherSilo) = False Then 
         reasonForStop = "SG Silo Setting in ""Silos"" worksheet not set properly (M2). Please try again." 
         End
