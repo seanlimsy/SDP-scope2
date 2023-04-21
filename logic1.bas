@@ -420,7 +420,9 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                 Print #logic1TextFile, "Cannot be inserted at slot. Skipping.": Space 0
                 Exit For
             End If
-
+            
+            ' Case: If first pass -- isInPlace = False. 
+            ' If Dryer Value = 7 --> tippingStationReady = 7. Case when 100DB cannot be added but tipping is ready so attempt to add PP in place after 100DB fails
             If isInPlace = False Then
                 If tippingStationReady = True Then
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station is ready. Attemping to add PP in Place.": Space 0
@@ -428,12 +430,14 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     dryerSkipArray = addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, "D2" , DBCampaignToInsert, True)
                     Exit For
                 Else
+                    ' Case: 100DB attempted first + cannot slot. Tipping Station not available to slot PP so skip
                     Print #logic1TextFile, "100DB cannot be inserted & Tipping Station not ready. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                     Exit For
                 End If
             Else
+            ' Case: Came from PP campaign first. PP campaign failed so attempted to slot 100DB in place but also failed --> Case: Both 100DB & PP cannot be added
                 Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
@@ -518,11 +522,14 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
 
         If (i - decrementCounter) < (decrementCounter * decrementCounter) Then
             Print #logic1TextFile, "PP cannot be inserted at slot.": Space 0
+            ' Case: Current insertion attempt is at D1 so cannot insert 100DB if PP fails --> skip D1
             If workingDryer = "D1" Then 
                 dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
                 dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                 Print #logic1TextFile, "100DB not valid as insertion into D1. Skipping.": Space 0
                 Exit For
+            
+            ' Case: Current insertion attempt is at D2. PP cannot be added so moving to insert in place
             Else
                 Print #logic1TextFile, "Attempting to insert 100DB in place.": Space 0
                 If DBCampaignToInsert = -1 Then 'Case when no more 100DB to insert when PP campaign cannot be inserted
@@ -533,10 +540,14 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
                     dryerSchedule.Range("A:N").Value = dryerDefaultSchedule.Range("A:N").Value
                     Exit For
                 End If
+
+                ' Case: PP is first but failed, so moving to insert 100DB in place. Only D2 will reach here
                 If isInPlace = False Then
                     Print #logic1TextFile, "----------------": Space 0
                     dryerSkipArray = addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, dryerFirstCanStarveTime, mainSilo, otherSilo, dryerSkipArray, initialSiloConstraintViolation, PPCampaignToInsert, True, True)
                     Exit For
+                ' Program came from 100DB. 100DB failed so PP is attempted in place. 
+                ' Case: if reached here, meaning that 100DB had failed + PP insertion in place had also failed so skip. 
                 Else
                     Print #logic1TextFile, "Both PP and 100DB cannot be inserted in slot. Skipping.": Space 0
                     dryerSkipArray = addItemToArray(dryerFirstCanStarveTime, dryerSkipArray)
@@ -570,7 +581,7 @@ Function checkSiloConstraint(mainSilo, otherSilo, dryerSchedule, dryerInsertRow,
     
     ' iterate through silos sheet to find If the silo constraint is being violated by the campaign insertion
     Dim i As Double
-    For i = 2 To (2 ^ 15) - 1 Step 1
+    For i = 2 To (2 ^ 15) - 1 Step 1 ' Will not traverse until 2^15. Will stop where initial Silo Constraint is reached
         If Silos.Range("A" & i).Value >= siloCheckTimeStart And Silos.Range("A" & i).Value < initialSiloConstraintViolation Then
             If Silos.Range("D" & i).Value > mainSilo Or Silos.Range("G" & i).Value > otherSilo Then
                 Print #logic1TextFile, "Effect: Silo Constraint violated by insertion.": Space 0
