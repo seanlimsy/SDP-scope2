@@ -144,8 +144,9 @@ End Sub
 Function logic1()
     ' Dim mainSilo As Integer
     ' Dim otherSilo As Integer
-    mainSilo = 16
-    otherSilo = 6
+    mainSilo = Silos.Range("M2").Value
+    fixedMainSilo = Silos.Range("M2").Value
+    otherSilo = Silos.Range("M3").Value
     
     Dim isFeasible As Boolean
     isFeasible = False
@@ -167,7 +168,7 @@ Function logic1()
             Exit Do
         End If
         
-        If maxPESilos > 16 Then 
+        If maxPESilos > fixedMainSilo Then 
             resetAll
         End If 
 
@@ -389,7 +390,7 @@ Function addDBCampaign(DBCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             Print #logic1TextFile, "Inserted " & (i - 1) & " campaign(s) from window": Space 0
             Print #logic1TextFile, "-----------": Space 0
             ' case not 16(6) - run dryer blockage
-            If mainSilo <> 16 Then
+            If mainSilo <> fixedMainSilo Then
                 Print #logic1TextFile, "Silo allowance attained. Inducing dryer blockage/delay.": Space 0
                 Print #logic1TextFile, "Induced Delay/Block @ " & initialSiloConstraintViolation: Space 0
                 If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then
@@ -499,7 +500,7 @@ Function addPPCampaign(PPCampaignToInsert, dryerSchedule, dryerDefaultSchedule, 
             End If
 
             ' case not 16(6) - run dryer blockage
-            If mainSilo <> 16 Then
+            If mainSilo <> fixedMainSilo Then
                 Print #logic1TextFile, "Silo allowance retained. Inducing dryer blockage/delay.": Space 0
                 Print #logic1TextFile, "Induced Delay/Block @ " & initialSiloConstraintViolation: Space 0
                 If initialSiloConstraintViolation = Silos.Range("K1").Value Or initialSiloConstraintViolation = Silos.Range("K2").Value Then

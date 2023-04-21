@@ -9,8 +9,9 @@ Public isLogic4Feasible As Boolean
 
 ' Reason for premature stoppage
 Public reasonForStop As String
-Public mainSilo
-Public otherSilo
+Public mainSilo As Integer
+Public fixedMainSilo As Integer
+Public otherSilo AS Integer
 
 ' Debugging
 Public logic1File As String
@@ -130,6 +131,19 @@ Sub checkUserValues
         End
     End If
 
+    Dim Silos As Worksheet
+    Set Silos = wb.Sheets("Silos")
+    mainSilo = Silos.Range("M2").Value
+    If IsNumeric(mainSilo) = False Then 
+        reasonForStop = "PE Silo Setting in ""Silos"" worksheet not set properly (M1). Please try again." 
+        End
+    End If
+    
+    otherSilo = Silos.Range("M3").Value
+    If IsNumeric(otherSilo) = False Then 
+        reasonForStop = "SG Silo Setting in ""Silos"" worksheet not set properly (M2). Please try again." 
+        End
+    End If
 End Sub
 
 Sub initializeOutputs()

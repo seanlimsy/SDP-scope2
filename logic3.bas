@@ -346,8 +346,9 @@ End Sub
 Function logic3(countPouchCampaigns)
     Dim mainSilo As Integer
     Dim otherSilo As Integer
-    mainSilo = 16
-    otherSilo = 6
+    
+    mainSilo = Silos.Range("M2").Value
+    otherSilo = Silos.Range("M3").Value
 
     Dim isFeasible As Boolean
     isFeasible = insertPPPouchCampaigns(mainSilo, otherSilo)
